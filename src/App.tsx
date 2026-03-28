@@ -14,7 +14,7 @@ import {
 import { format, addDays, startOfDay, isSameDay, isBefore, startOfHour } from 'date-fns';
 
 const LOCATION_GEOHASH = 'gcn86rd2z';
-const LOCATION_NAME = 'Barry Island';
+const LOCATION_NAME = 'Poole Harbour';
 const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
