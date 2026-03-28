@@ -8,7 +8,7 @@ import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
 import {
-  Anchor, KeyRound, AlertTriangle, Waves, RefreshCw, Loader2,
+  Anchor, AlertTriangle, Waves, RefreshCw, Loader2,
   LayoutDashboard, Wind, CalendarDays,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay, isBefore, startOfHour } from 'date-fns';
@@ -87,45 +87,9 @@ function LoadingSkeleton() {
   );
 }
 
-function ApiKeyMissing({ missingKeys }: { missingKeys: string[] }) {
-  return (
-    <div className="p-6 text-center space-y-4">
-      <KeyRound className="mx-auto h-10 w-10 text-muted-foreground" />
-      <h2 className="text-foreground text-xl font-semibold">API Keys Required</h2>
-      <p className="text-muted-foreground text-sm max-w-sm mx-auto">
-        Create a <code className="text-primary">.env</code> file in the project root based on{' '}
-        <code className="text-primary">.env.example</code> and add:
-      </p>
-      <div className="bg-muted rounded-lg p-4 text-left max-w-sm mx-auto">
-        {missingKeys.map(k => (
-          <p key={k} className="text-foreground font-mono text-xs">{k}=your_key_here</p>
-        ))}
-      </div>
-      <div className="text-left max-w-sm mx-auto space-y-2 text-xs text-muted-foreground">
-        <p>• <span className="text-foreground">Met Office:</span>{' '}
-          <a href="https://datahub.metoffice.gov.uk/" target="_blank" className="text-primary underline">
-            datahub.metoffice.gov.uk
-          </a>
-        </p>
-        <p>• <span className="text-foreground">WorldTides:</span>{' '}
-          <a href="https://www.worldtides.info/developer" target="_blank" className="text-primary underline">
-            worldtides.info/developer
-          </a>
-        </p>
-      </div>
-    </div>
-  );
-}
 
 export default function App() {
   useDarkMode();
-
-  const metKey = import.meta.env.VITE_METOFFICE_API_KEY ?? '';
-  const tideKey = import.meta.env.VITE_UKHO_API_KEY ?? '';
-
-  const missingKeys: string[] = [];
-  if (!metKey || metKey === 'your_metoffice_api_key_here') missingKeys.push('VITE_METOFFICE_API_KEY');
-  if (!tideKey || tideKey === 'your_ukho_api_key_here') missingKeys.push('VITE_UKHO_API_KEY');
 
   const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
   const [tideData, setTideData] = useState<TideData | null>(null);
@@ -137,13 +101,12 @@ export default function App() {
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
 
   const loadData = useCallback(async () => {
-    if (missingKeys.length) return;
     setLoadState('loading');
     setError(null);
     try {
       const [fc, td, sun] = await Promise.allSettled([
-        fetchMetOfficeHourly(lat, lon, metKey),
-        fetchTides(lat, lon, tideKey),
+        fetchMetOfficeHourly(lat, lon),
+        fetchTides(lat, lon),
         fetchSunInfo(lat, lon),
       ]);
 
@@ -161,7 +124,7 @@ export default function App() {
       setError((e as Error).message);
       setLoadState('error');
     }
-  }, [metKey, tideKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     loadData();
@@ -210,9 +173,7 @@ export default function App() {
 
       {/* Scrollable content — pad bottom so nav doesn't obscure it */}
       <main className="max-w-2xl mx-auto px-4 pt-4" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
-        {missingKeys.length > 0 ? (
-          <ApiKeyMissing missingKeys={missingKeys} />
-        ) : isLoading && !forecasts.length ? (
+        {isLoading && !forecasts.length ? (
           <LoadingSkeleton />
         ) : loadState === 'error' ? (
           <div className="text-center py-12 space-y-3">

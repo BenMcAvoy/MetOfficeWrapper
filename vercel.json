@@ -1,16 +1,1 @@
-{
-  "rewrites": [
-    {
-      "source": "/metoffice/:path*",
-      "destination": "https://data.hub.api.metoffice.gov.uk/:path*"
-    },
-    {
-      "source": "/ukho/:path*",
-      "destination": "https://admiraltyapi.azure-api.net/:path*"
-    },
-    {
-      "source": "/sunrisesunset/:path*",
-      "destination": "https://api.sunrise-sunset.org/:path*"
-    }
-  ]
-}
+{}

@@ -37,23 +37,4 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    proxy: {
-      '/metoffice': {
-        target: 'https://data.hub.api.metoffice.gov.uk',
-        changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/metoffice/, ''),
-      },
-      '/ukho': {
-        target: 'https://admiraltyapi.azure-api.net',
-        changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/ukho/, ''),
-      },
-      '/sunrisesunset': {
-        target: 'https://api.sunrise-sunset.org',
-        changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/sunrisesunset/, ''),
-      },
-    },
-  },
 })
