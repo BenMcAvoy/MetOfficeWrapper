@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: "Sailor's Wx",
-        short_name: "Sailor's Wx",
+        name: "Weather App",
+        short_name: "Weather App",
         description: 'Sailing-focused weather — tides, wind, rain',
         theme_color: '#2563eb',
         background_color: '#ffffff',

@@ -130,6 +130,14 @@
 }
 
 /* Recharts SVG elements are not covered by Tailwind's select-none on parent divs */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .recharts-wrapper,
 .recharts-wrapper * {
   user-select: none;

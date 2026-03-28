@@ -55,44 +55,30 @@ export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
       {/* Day summary */}
       <Card>
         <CardContent className="pt-4 pb-4">
-          <p className="text-muted-foreground text-xs uppercase tracking-wide mb-3">
-            {isToday ? 'Today\'s' : `${format(selectedDay, 'EEEE\'s')}`} Wind Summary
+          <p className="text-muted-foreground text-xs uppercase tracking-wide mb-4">
+            {isToday ? "Today's" : format(selectedDay, "EEEE's")} Wind
           </p>
-          <div className="grid grid-cols-2 gap-4">
-            {/* Peak gust */}
-            <div className="space-y-1">
-              <p className="text-muted-foreground text-xs">Peak Gust</p>
+          <div className="flex items-end justify-between gap-2">
+            <div>
+              <p className="text-muted-foreground text-xs mb-1">Day Average</p>
               <div className="flex items-baseline gap-1.5">
-                <span className={`text-4xl font-bold ${beaufortColor(peakBf.force)}`}>
-                  {Math.round(peakKnots)}
-                </span>
-                <span className="text-muted-foreground text-sm">kt</span>
+                <span className={`text-5xl font-bold ${beaufortColor(avgBf.force)}`}>{Math.round(avgKnots)}</span>
+                <span className="text-muted-foreground">kt</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${beaufortBg(peakBf.force)}`}>
-                  F{peakBf.force}
-                </span>
-                <span className="text-muted-foreground text-xs">{peakBf.description}</span>
-              </div>
-              <p className="text-muted-foreground text-xs">
-                @ {format(peakGustEntry.time, 'HH:mm')} from {degreesToCardinal(peakGustEntry.windDirectionFrom10m)}
-              </p>
-            </div>
-            {/* Avg wind */}
-            <div className="space-y-1">
-              <p className="text-muted-foreground text-xs">Day Average</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className={`text-4xl font-bold ${beaufortColor(avgBf.force)}`}>
-                  {Math.round(avgKnots)}
-                </span>
-                <span className="text-muted-foreground text-sm">kt</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${beaufortBg(avgBf.force)}`}>
-                  F{avgBf.force}
-                </span>
+              <div className="flex items-center gap-1.5 mt-1.5">
+                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${beaufortBg(avgBf.force)}`}>F{avgBf.force}</span>
                 <span className="text-muted-foreground text-xs">{avgBf.description}</span>
               </div>
+            </div>
+            <div className="text-right">
+              <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
+              <div className="flex items-baseline gap-1.5 justify-end">
+                <span className={`text-5xl font-bold ${beaufortColor(peakBf.force)}`}>{Math.round(peakKnots)}</span>
+                <span className="text-muted-foreground">kt</span>
+              </div>
+              <p className="text-muted-foreground text-xs mt-1.5">
+                {format(peakGustEntry.time, 'HH:mm')} · {degreesToCardinal(peakGustEntry.windDirectionFrom10m)}
+              </p>
             </div>
           </div>
         </CardContent>

@@ -36,7 +36,7 @@ function DateSelector({ selected, onChange, availableDays }: {
   availableDays: Date[];
 }) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 pt-1">
+    <div className="flex gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar">
       {availableDays.map((day, i) => {
         const active = isSameDay(day, selected);
         const label = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : format(day, 'EEE d');
@@ -145,7 +145,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <Anchor className="h-5 w-5 text-primary" />
             <div>
-              <h1 className="font-semibold text-sm leading-tight">Sailor's Wx</h1>
+              <h1 className="font-semibold text-sm leading-tight">Weather App</h1>
               <p className="text-muted-foreground text-xs">
                 {lat.toFixed(3)}°N {Math.abs(lon).toFixed(3)}°W
               </p>
