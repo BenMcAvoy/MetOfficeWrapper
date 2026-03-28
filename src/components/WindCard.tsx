@@ -156,7 +156,7 @@ export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
                 <XAxis dataKey="time" tick={<XAxisTick />} interval={2} />
                 <YAxis tick={<YAxisTick unit="kt" />} width={44} />
                 <Tooltip {...tooltipStyle} />
-                <Legend wrapperStyle={{ color: 'hsl(var(--muted-foreground))', fontSize: '11px' }} />
+                <Legend wrapperStyle={{ color: 'var(--muted-foreground)', fontSize: '11px' }} />
                 <Area type="monotone" dataKey="avg" name="Avg" stroke="#2563eb" fill="url(#avgGrad)" strokeWidth={2} dot={false} />
                 <Area type="monotone" dataKey="gust" name="Gust" stroke="#ea580c" fill="url(#gustGrad)" strokeWidth={2} dot={false} />
               </AreaChart>

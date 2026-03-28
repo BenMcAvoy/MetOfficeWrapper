@@ -123,10 +123,10 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
                 {currentHeight !== null && (
                   <ReferenceLine
                     y={currentHeight}
-                    stroke="hsl(var(--primary))"
+                    stroke="var(--primary)"
                     strokeDasharray="4 4"
                     label={(props) => (
-                      <text x={props.viewBox?.x} y={(props.viewBox?.y ?? 0) - 4} style={{ fill: 'hsl(var(--primary))' }} fontSize={10} textAnchor="middle">Now</text>
+                      <text x={props.viewBox?.x} y={(props.viewBox?.y ?? 0) - 4} style={{ fill: 'var(--primary)' }} fontSize={10} textAnchor="middle">Now</text>
                     )}
                   />
                 )}

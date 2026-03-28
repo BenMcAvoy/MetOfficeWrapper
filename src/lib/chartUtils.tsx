@@ -24,11 +24,11 @@ export function YAxisTick({ x = 0, y = 0, payload, unit = '' }: TickProps) {
 
 export const tooltipStyle = {
   contentStyle: {
-    backgroundColor: 'hsl(var(--card))',
-    border: '1px solid hsl(var(--border))',
+    backgroundColor: 'var(--card)',
+    border: '1px solid var(--border)',
     borderRadius: '8px',
-    color: 'hsl(var(--card-foreground))',
+    color: 'var(--card-foreground)',
   },
-  labelStyle: { color: 'hsl(var(--muted-foreground))' },
-  itemStyle: { color: 'hsl(var(--foreground))' },
+  labelStyle: { color: 'var(--muted-foreground)' },
+  itemStyle: { color: 'var(--foreground)' },
 };
