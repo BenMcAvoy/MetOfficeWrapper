@@ -177,7 +177,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-background/90 backdrop-blur border-b">
+      <header className="sticky top-0 z-10 bg-background/90 backdrop-blur border-b" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Anchor className="h-5 w-5 text-primary" />
@@ -209,7 +209,7 @@ export default function App() {
       </header>
 
       {/* Scrollable content — pad bottom so nav doesn't obscure it */}
-      <main className="max-w-2xl mx-auto px-4 pt-4 pb-24">
+      <main className="max-w-2xl mx-auto px-4 pt-4" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         {missingKeys.length > 0 ? (
           <ApiKeyMissing missingKeys={missingKeys} />
         ) : isLoading && !forecasts.length ? (
@@ -261,7 +261,7 @@ export default function App() {
       </main>
 
       {/* Bottom nav */}
-      <nav className="fixed bottom-0 inset-x-0 z-20 bg-background/95 backdrop-blur border-t">
+      <nav className="fixed bottom-0 inset-x-0 z-20 bg-background/95 backdrop-blur border-t" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="max-w-2xl mx-auto flex">
           {NAV_ITEMS.map(({ id, label, Icon }) => {
             const active = activeTab === id;
