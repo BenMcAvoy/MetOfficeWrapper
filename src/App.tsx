@@ -1,121 +1,287 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState, useCallback } from 'react';
+import type { HourlyForecast, TideData, SunInfo } from '@/lib/api';
+import { fetchMetOfficeHourly, fetchTides, fetchSunInfo } from '@/lib/api';
+import { decodeGeohash } from '@/lib/geohash';
+import { Skeleton } from '@/components/ui/skeleton';
+import WeatherOverview from '@/components/WeatherOverview';
+import WindCard from '@/components/WindCard';
+import TideChart from '@/components/TideChart';
+import ForecastStrip from '@/components/ForecastStrip';
+import {
+  Anchor, KeyRound, AlertTriangle, Waves, RefreshCw, Loader2,
+  LayoutDashboard, Wind, CalendarDays,
+} from 'lucide-react';
+import { format, addDays, startOfDay, isSameDay, isBefore, startOfHour } from 'date-fns';
 
-function App() {
-  const [count, setCount] = useState(0)
+const LOCATION_GEOHASH = 'gcn86rd2z';
+const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+type LoadState = 'idle' | 'loading' | 'error' | 'ok';
+type Tab = 'overview' | 'wind' | 'tides' | 'forecast';
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+function useDarkMode() {
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = (dark: boolean) =>
+      document.documentElement.classList.toggle('dark', dark);
+    apply(mq.matches);
+    mq.addEventListener('change', e => apply(e.matches));
+    return () => mq.removeEventListener('change', e => apply(e.matches));
+  }, []);
 }
 
-export default App
+function DateSelector({ selected, onChange, availableDays }: {
+  selected: Date;
+  onChange: (d: Date) => void;
+  availableDays: Date[];
+}) {
+  return (
+    <div className="flex gap-2 overflow-x-auto pb-1 pt-1">
+      {availableDays.map((day, i) => {
+        const active = isSameDay(day, selected);
+        const label = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : format(day, 'EEE d');
+        return (
+          <button
+            key={i}
+            onClick={() => onChange(day)}
+            className={`flex-shrink-0 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            {label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+export function filterForDay(forecasts: HourlyForecast[], day: Date): HourlyForecast[] {
+  const isToday = isSameDay(day, new Date());
+  return forecasts.filter(f =>
+    isToday
+      ? isSameDay(f.time, day) && !isBefore(f.time, startOfHour(new Date()))
+      : isSameDay(f.time, day)
+  );
+}
+
+const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
+  { id: 'overview', label: 'Overview', Icon: LayoutDashboard },
+  { id: 'wind',     label: 'Wind',     Icon: Wind },
+  { id: 'tides',    label: 'Tides',    Icon: Waves },
+  { id: 'forecast', label: '5-Day',    Icon: CalendarDays },
+];
+
+function LoadingSkeleton() {
+  return (
+    <div className="space-y-3 p-4">
+      <Skeleton className="h-48 w-full" />
+      <Skeleton className="h-24 w-full" />
+      <div className="grid grid-cols-2 gap-3">
+        <Skeleton className="h-24" />
+        <Skeleton className="h-24" />
+      </div>
+    </div>
+  );
+}
+
+function ApiKeyMissing({ missingKeys }: { missingKeys: string[] }) {
+  return (
+    <div className="p-6 text-center space-y-4">
+      <KeyRound className="mx-auto h-10 w-10 text-muted-foreground" />
+      <h2 className="text-foreground text-xl font-semibold">API Keys Required</h2>
+      <p className="text-muted-foreground text-sm max-w-sm mx-auto">
+        Create a <code className="text-primary">.env</code> file in the project root based on{' '}
+        <code className="text-primary">.env.example</code> and add:
+      </p>
+      <div className="bg-muted rounded-lg p-4 text-left max-w-sm mx-auto">
+        {missingKeys.map(k => (
+          <p key={k} className="text-foreground font-mono text-xs">{k}=your_key_here</p>
+        ))}
+      </div>
+      <div className="text-left max-w-sm mx-auto space-y-2 text-xs text-muted-foreground">
+        <p>• <span className="text-foreground">Met Office:</span>{' '}
+          <a href="https://datahub.metoffice.gov.uk/" target="_blank" className="text-primary underline">
+            datahub.metoffice.gov.uk
+          </a>
+        </p>
+        <p>• <span className="text-foreground">WorldTides:</span>{' '}
+          <a href="https://www.worldtides.info/developer" target="_blank" className="text-primary underline">
+            worldtides.info/developer
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  useDarkMode();
+
+  const metKey = import.meta.env.VITE_METOFFICE_API_KEY ?? '';
+  const tideKey = import.meta.env.VITE_UKHO_API_KEY ?? '';
+
+  const missingKeys: string[] = [];
+  if (!metKey || metKey === 'your_metoffice_api_key_here') missingKeys.push('VITE_METOFFICE_API_KEY');
+  if (!tideKey || tideKey === 'your_ukho_api_key_here') missingKeys.push('VITE_UKHO_API_KEY');
+
+  const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
+  const [tideData, setTideData] = useState<TideData | null>(null);
+  const [sunInfo, setSunInfo] = useState<SunInfo | null>(null);
+  const [loadState, setLoadState] = useState<LoadState>('idle');
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [activeTab, setActiveTab] = useState<Tab>('overview');
+  const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
+
+  const loadData = useCallback(async () => {
+    if (missingKeys.length) return;
+    setLoadState('loading');
+    setError(null);
+    try {
+      const [fc, td, sun] = await Promise.allSettled([
+        fetchMetOfficeHourly(lat, lon, metKey),
+        fetchTides(lat, lon, tideKey),
+        fetchSunInfo(lat, lon),
+      ]);
+
+      if (fc.status === 'fulfilled') setForecasts(fc.value);
+      else throw new Error(`Weather: ${(fc.reason as Error).message}`);
+
+      if (td.status === 'fulfilled') setTideData(td.value);
+      else console.warn('Tides failed:', (td.reason as Error).message);
+
+      if (sun.status === 'fulfilled') setSunInfo(sun.value);
+
+      setLoadState('ok');
+      setLastUpdated(new Date());
+    } catch (e) {
+      setError((e as Error).message);
+      setLoadState('error');
+    }
+  }, [metKey, tideKey]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    loadData();
+    const interval = setInterval(loadData, 30 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [loadData]);
+
+  const availableDays = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
+  const dayForecasts = filterForDay(forecasts, selectedDay);
+  const isLoading = loadState === 'loading';
+  const showDateSelector = activeTab !== 'forecast';
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Header */}
+      <header className="sticky top-0 z-10 bg-background/90 backdrop-blur border-b">
+        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Anchor className="h-5 w-5 text-primary" />
+            <div>
+              <h1 className="font-semibold text-sm leading-tight">Sailor's Wx</h1>
+              <p className="text-muted-foreground text-xs">
+                {lat.toFixed(3)}°N {Math.abs(lon).toFixed(3)}°W
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {lastUpdated && (
+              <span className="text-muted-foreground text-xs hidden sm:inline">
+                Updated {format(lastUpdated, 'HH:mm')}
+              </span>
+            )}
+            <button
+              onClick={loadData}
+              disabled={isLoading}
+              className="text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40"
+              title="Refresh"
+            >
+              {isLoading
+                ? <Loader2 className="h-4 w-4 animate-spin" />
+                : <RefreshCw className="h-4 w-4" />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Scrollable content — pad bottom so nav doesn't obscure it */}
+      <main className="max-w-2xl mx-auto px-4 pt-4 pb-24">
+        {missingKeys.length > 0 ? (
+          <ApiKeyMissing missingKeys={missingKeys} />
+        ) : isLoading && !forecasts.length ? (
+          <LoadingSkeleton />
+        ) : loadState === 'error' ? (
+          <div className="text-center py-12 space-y-3">
+            <AlertTriangle className="mx-auto h-10 w-10 text-destructive" />
+            <p className="text-destructive font-medium">Failed to load</p>
+            <p className="text-muted-foreground text-sm">{error}</p>
+            <button
+              onClick={loadData}
+              className="mt-2 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-sm font-medium transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {showDateSelector && (
+              <DateSelector selected={selectedDay} onChange={setSelectedDay} availableDays={availableDays} />
+            )}
+
+            {activeTab === 'overview' && (
+              <WeatherOverview
+                forecasts={dayForecasts}
+                allForecasts={forecasts}
+                sunInfo={sunInfo}
+                selectedDay={selectedDay}
+              />
+            )}
+            {activeTab === 'wind' && (
+              <WindCard forecasts={dayForecasts} selectedDay={selectedDay} />
+            )}
+            {activeTab === 'tides' && (
+              tideData ? (
+                <TideChart tideData={tideData} selectedDay={selectedDay} />
+              ) : (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Waves className="mx-auto h-10 w-10 mb-3" />
+                  Tide data unavailable — check UKHO API key
+                </div>
+              )
+            )}
+            {activeTab === 'forecast' && (
+              <ForecastStrip forecasts={forecasts} />
+            )}
+          </div>
+        )}
+      </main>
+
+      {/* Bottom nav */}
+      <nav className="fixed bottom-0 inset-x-0 z-20 bg-background/95 backdrop-blur border-t">
+        <div className="max-w-2xl mx-auto flex">
+          {NAV_ITEMS.map(({ id, label, Icon }) => {
+            const active = activeTab === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setActiveTab(id)}
+                className={`flex-1 flex flex-col items-center gap-1 py-3 transition-colors ${
+                  active ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 1.75} />
+                <span className={`text-xs ${active ? 'font-semibold' : 'font-normal'}`}>{label}</span>
+              </button>
+            );
+          })}
+        </div>
+        {/* Safe area for devices with home indicator */}
+        <div className="h-safe-bottom" />
+      </nav>
+    </div>
+  );
+}

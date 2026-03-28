@@ -128,3 +128,10 @@
     @apply font-sans;
     }
 }
+
+/* Recharts SVG elements are not covered by Tailwind's select-none on parent divs */
+.recharts-wrapper,
+.recharts-wrapper * {
+  user-select: none;
+  -webkit-user-select: none;
+}
