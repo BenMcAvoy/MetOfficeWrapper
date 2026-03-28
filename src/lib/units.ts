@@ -28,6 +28,13 @@ export function beaufortColor(force: number): string {
   return 'text-red-500';
 }
 
+export function beaufortBg(force: number): string {
+  if (force <= 3) return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300';
+  if (force <= 5) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
+  if (force <= 7) return 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
+  return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
+}
+
 export function degreesToCardinal(deg: number): string {
   const dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
                 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];

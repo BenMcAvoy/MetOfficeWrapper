@@ -1,5 +1,5 @@
 import type { HourlyForecast } from '@/lib/api';
-import { msToKnots, beaufortScale, beaufortColor, degreesToCardinal } from '@/lib/units';
+import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind, ArrowUp } from 'lucide-react';
 import {
@@ -14,12 +14,6 @@ interface WindCardProps {
 }
 
 
-function beaufortBg(force: number): string {
-  if (force <= 3) return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300';
-  if (force <= 5) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
-  if (force <= 7) return 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
-  return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
-}
 
 export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
   if (!forecasts.length) return (

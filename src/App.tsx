@@ -8,12 +8,13 @@ import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
 import {
-  Anchor, AlertTriangle, Waves, RefreshCw, Loader2,
+  MapPin, AlertTriangle, Waves, RefreshCw, Loader2,
   LayoutDashboard, Wind, CalendarDays,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay, isBefore, startOfHour } from 'date-fns';
 
 const LOCATION_GEOHASH = 'gcn86rd2z';
+const LOCATION_NAME = 'Barry Island';
 const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
@@ -139,22 +140,19 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
       <header className="sticky top-0 z-10 bg-background/90 backdrop-blur border-b" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Anchor className="h-5 w-5 text-primary" />
+            <MapPin className="h-4 w-4 text-primary shrink-0" />
             <div>
               <h1 className="font-semibold text-sm leading-tight">Weather App</h1>
-              <p className="text-muted-foreground text-xs">
-                {lat.toFixed(3)}°N {Math.abs(lon).toFixed(3)}°W
-              </p>
+              <p className="text-muted-foreground text-xs">{LOCATION_NAME}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             {lastUpdated && (
-              <span className="text-muted-foreground text-xs hidden sm:inline">
-                Updated {format(lastUpdated, 'HH:mm')}
+              <span className="text-muted-foreground text-xs">
+                {format(lastUpdated, 'HH:mm')}
               </span>
             )}
             <button
@@ -171,7 +169,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* Scrollable content — pad bottom so nav doesn't obscure it */}
       <main className="max-w-2xl mx-auto px-4 pt-4" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         {isLoading && !forecasts.length ? (
           <LoadingSkeleton />
@@ -221,7 +218,6 @@ export default function App() {
         )}
       </main>
 
-      {/* Bottom nav */}
       <nav className="fixed bottom-0 inset-x-0 z-20 bg-background/95 backdrop-blur border-t" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="max-w-2xl mx-auto flex">
           {NAV_ITEMS.map(({ id, label, Icon }) => {
@@ -240,8 +236,6 @@ export default function App() {
             );
           })}
         </div>
-        {/* Safe area for devices with home indicator */}
-        <div className="h-safe-bottom" />
       </nav>
     </div>
   );

@@ -78,6 +78,7 @@ function getTidalCharacter(extremes: import('@/lib/api').TideExtreme[], forDay: 
 
   // Compute actual range from nearest HW/LW pair for display only
   let range: number | null = null;
+  let minDiff = Infinity;
   for (let i = 0; i < extremes.length; i++) {
     if (extremes[i].type !== 'High') continue;
     const prev = extremes[i - 1];
@@ -85,10 +86,10 @@ function getTidalCharacter(extremes: import('@/lib/api').TideExtreme[], forDay: 
     const lws = [prev, next].filter(e => e?.type === 'Low').map(e => e.height);
     if (!lws.length) continue;
     const avgLw = lws.reduce((a, b) => a + b, 0) / lws.length;
-    const r = extremes[i].height - avgLw;
     const diff = Math.abs(extremes[i].time.getTime() - forDay.getTime());
-    if (range === null || diff < Math.abs(extremes[i].time.getTime() - forDay.getTime())) {
-      range = r;
+    if (diff < minDiff) {
+      minDiff = diff;
+      range = extremes[i].height - avgLw;
     }
   }
 
@@ -169,7 +170,7 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
         <CardHeader className="pb-2">
           <CardTitle className="text-base flex items-center gap-2 flex-wrap">
             <Waves className="h-4 w-4" />
-            Tide Curve
+            {tideData.stationName}
             {tidalCharacter && (
               <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ml-1 ${tidalCharacter.className}`}>
                 {tidalCharacter.label}{tidalCharacter.range !== null ? ` · ${tidalCharacter.range.toFixed(1)}m` : ''}

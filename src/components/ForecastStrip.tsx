@@ -1,5 +1,5 @@
 import type { HourlyForecast } from '@/lib/api';
-import { msToKnots, beaufortScale, beaufortColor, degreesToCardinal } from '@/lib/units';
+import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, CalendarDays } from 'lucide-react';
@@ -9,12 +9,6 @@ interface ForecastStripProps {
   forecasts: HourlyForecast[];
 }
 
-function beaufortBg(force: number): string {
-  if (force <= 3) return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300';
-  if (force <= 5) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
-  if (force <= 7) return 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
-  return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
-}
 
 export default function ForecastStrip({ forecasts }: ForecastStripProps) {
   const days = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
@@ -107,7 +101,7 @@ export default function ForecastStrip({ forecasts }: ForecastStripProps) {
 
                 {/* Rain */}
                 <span className={`text-xs font-medium tabular-nums text-right ${
-                  maxRain > 60 ? 'text-blue-600 dark:text-blue-400' : 'text-muted-foreground'
+                  maxRain > 60 ? 'text-blue-500' : 'text-muted-foreground'
                 }`}>
                   {maxRain}%
                 </span>
