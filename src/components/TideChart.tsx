@@ -32,6 +32,69 @@ function TideExtremeRow({ time, height, type }: { time: Date; height: number; ty
   );
 }
 
+function getTidalCharacter(extremes: import('@/lib/api').TideExtreme[], forDay: Date): {
+  label: string;
+  range: number | null;
+  className: string;
+} | null {
+  // Moon phase approach: springs lag ~1.5 days behind new/full moon, neaps behind quarter moons.
+  // Known new moon: 6 Jan 2000 18:14 UTC. Synodic period: 29.53059 days.
+  const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14);
+  const synodic = 29.53059;
+  const daysSince = (forDay.getTime() - knownNewMoon) / 86400000;
+  const cycleDay = ((daysSince % synodic) + synodic) % synodic;
+
+  // Fold into 0–14.77 day half-cycle (new→full or full→new)
+  const half = synodic / 2;
+  const posInHalf = cycleDay % half;
+
+  // posInHalf 0 = new or full moon. Springs peak ~1.5 days later, neaps ~1.5 days after quarter (~7.38 days in).
+  // 0–2.5: approaching springs / just sprung
+  // 2.5–5: springs (peak and early ebb)
+  // 5–7.5: easing toward neaps
+  // 7.5–10: neaps
+  // 10–12.5: building toward springs
+  // 12.5–14.77: approaching springs
+
+  let label: string;
+  let className: string;
+
+  if (posInHalf < 2.5 || posInHalf >= 12.5) {
+    label = 'Building to Springs';
+    className = 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300';
+  } else if (posInHalf < 5.5) {
+    label = 'Springs';
+    className = 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300';
+  } else if (posInHalf < 7.5) {
+    label = 'Easing to Neaps';
+    className = 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400';
+  } else if (posInHalf < 10) {
+    label = 'Neaps';
+    className = 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
+  } else {
+    label = 'Building to Springs';
+    className = 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300';
+  }
+
+  // Compute actual range from nearest HW/LW pair for display only
+  let range: number | null = null;
+  for (let i = 0; i < extremes.length; i++) {
+    if (extremes[i].type !== 'High') continue;
+    const prev = extremes[i - 1];
+    const next = extremes[i + 1];
+    const lws = [prev, next].filter(e => e?.type === 'Low').map(e => e.height);
+    if (!lws.length) continue;
+    const avgLw = lws.reduce((a, b) => a + b, 0) / lws.length;
+    const r = extremes[i].height - avgLw;
+    const diff = Math.abs(extremes[i].time.getTime() - forDay.getTime());
+    if (range === null || diff < Math.abs(extremes[i].time.getTime() - forDay.getTime())) {
+      range = r;
+    }
+  }
+
+  return { label, range, className };
+}
+
 export default function TideChart({ tideData, selectedDay }: TideChartProps) {
   const now = new Date();
   const isToday = isSameDay(selectedDay, now);
@@ -57,6 +120,8 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
     const ratio = (now.getTime() - before.time.getTime()) / (after.time.getTime() - before.time.getTime());
     return before.height + ratio * (after.height - before.height);
   })();
+
+  const tidalCharacter = getTidalCharacter(tideData.extremes, isToday ? now : selectedDay);
 
   const upcomingExtremes = tideData.extremes
     .filter(e => isToday
@@ -102,8 +167,14 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
 
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-base flex items-center gap-2">
-            <Waves className="h-4 w-4" /> Tide Curve — 48 hours
+          <CardTitle className="text-base flex items-center gap-2 flex-wrap">
+            <Waves className="h-4 w-4" />
+            Tide Curve
+            {tidalCharacter && (
+              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ml-1 ${tidalCharacter.className}`}>
+                {tidalCharacter.label}{tidalCharacter.range !== null ? ` · ${tidalCharacter.range.toFixed(1)}m` : ''}
+              </span>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>
