@@ -98,18 +98,26 @@ export async function fetchMetOfficeHourly(lat: number, lon: number): Promise<Ho
 }
 
 type SerialisedExtreme = Omit<TideExtreme, 'time'> & { time: string };
+type SerialisedHeight = Omit<TideHeight, 'time'> & { time: string };
 
 export async function fetchTides(lat: number, lon: number): Promise<TideData> {
   const cacheKey = `ukho_tides_${lat.toFixed(3)}_${lon.toFixed(3)}`;
-  const cached = getCached<{ extremes: SerialisedExtreme[]; stationName: string }>(cacheKey);
+  const cached = getCached<{ extremes: SerialisedExtreme[]; heights: SerialisedHeight[]; stationName: string }>(cacheKey);
   if (cached) {
     const extremes = cached.extremes.map(e => ({ ...e, time: new Date(e.time) }));
-    return { extremes, heights: interpolateTideCurve(extremes), stationName: cached.stationName };
+    const heights = cached.heights.length
+      ? cached.heights.map(h => ({ height: h.height, time: new Date(h.time) }))
+      : interpolateTideCurve(extremes);
+    return { extremes, heights, stationName: cached.stationName };
   }
 
   const res = await fetch(`/api/tides?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}`);
   if (!res.ok) throw new Error(`Tides API error: ${res.status}`);
-  const data = await res.json() as { stationName: string; events: Record<string, unknown>[] };
+  const data = await res.json() as {
+    stationName: string;
+    events: Record<string, unknown>[];
+    heights?: Record<string, unknown>[];
+  };
 
   const extremes: TideExtreme[] = data.events.map(e => ({
     time: new Date(e.DateTime as string),
@@ -117,8 +125,18 @@ export async function fetchTides(lat: number, lon: number): Promise<TideData> {
     type: (e.EventType as string).includes('High') ? 'High' : 'Low',
   }));
 
-  setCached(cacheKey, { extremes, stationName: data.stationName }, TTL.TIDES);
-  return { extremes, heights: interpolateTideCurve(extremes), stationName: data.stationName };
+  let heights: TideHeight[];
+  if (data.heights && data.heights.length > 0) {
+    heights = data.heights.map(h => ({
+      time: new Date(h.DateTime as string),
+      height: h.Height as number,
+    }));
+  } else {
+    heights = interpolateTideCurve(extremes);
+  }
+
+  setCached(cacheKey, { extremes, heights, stationName: data.stationName }, TTL.TIDES);
+  return { extremes, heights, stationName: data.stationName };
 }
 
 type SerialisedSun = Omit<SunInfo, 'sunrise' | 'sunset'> & { sunrise: string; sunset: string };

@@ -39,16 +39,29 @@ export default async function handler(req: Request): Promise<Response> {
     haversineKm(lat, lon, s.Latitude, s.Longitude) < haversineKm(lat, lon, best.Latitude, best.Longitude) ? s : best
   );
 
-  const tidesRes = await fetch(
-    `https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/${nearest.Id}/TidalEvents?duration=4`,
-    { headers }
-  );
-  if (!tidesRes.ok) {
-    return new Response(JSON.stringify({ error: 'UKHO tides error' }), { status: tidesRes.status });
+  const startDatetime = new Date();
+  startDatetime.setMinutes(0, 0, 0);
+  const endDatetime = new Date(startDatetime.getTime() + 5 * 24 * 60 * 60 * 1000);
+
+  const startStr = startDatetime.toISOString().replace(/\.\d{3}Z$/, 'Z');
+  const endStr = endDatetime.toISOString().replace(/\.\d{3}Z$/, 'Z');
+
+  const [eventsRes, heightsRes] = await Promise.all([
+    fetch(`https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/${nearest.Id}/TidalEvents?duration=5`, { headers }),
+    fetch(`https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/${nearest.Id}/TidalHeights?startDatetime=${encodeURIComponent(startStr)}&endDatetime=${encodeURIComponent(endStr)}&intervalInMinutes=30`, { headers }),
+  ]);
+
+  if (!eventsRes.ok) {
+    return new Response(JSON.stringify({ error: 'UKHO tidal events error' }), { status: eventsRes.status });
   }
 
-  const events = await tidesRes.json();
-  return new Response(JSON.stringify({ stationName: nearest.Name, events }), {
+  const events = await eventsRes.json();
+  let heights: unknown[] = [];
+  if (heightsRes.ok) {
+    heights = await heightsRes.json() as unknown[];
+  }
+
+  return new Response(JSON.stringify({ stationName: nearest.Name, events, heights }), {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 's-maxage=14400, stale-while-revalidate=600',
