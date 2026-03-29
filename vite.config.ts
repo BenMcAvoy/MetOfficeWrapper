@@ -68,13 +68,19 @@ async function handleApiRequest(req: IncomingMessage, res: ServerResponse, env: 
       const startStr = startDatetime.toISOString().replace(/\.\d{3}Z$/, 'Z');
       const endStr = endDatetime.toISOString().replace(/\.\d{3}Z$/, 'Z');
 
-      const [tidesRes, heightsRes] = await Promise.all([
-        fetch(`https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/${nearest.Id}/TidalEvents?duration=5`, { headers }),
-        fetch(`https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/${nearest.Id}/TidalHeights?startDatetime=${encodeURIComponent(startStr)}&endDatetime=${encodeURIComponent(endStr)}&intervalInMinutes=30`, { headers }),
-      ]);
+      const tidesRes = await fetch(
+        `https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/${nearest.Id}/TidalEvents?duration=5`,
+        { headers }
+      );
       const events = await tidesRes.json();
       let heights: unknown[] = [];
-      if (heightsRes.ok) heights = await heightsRes.json() as unknown[];
+      try {
+        const heightsRes = await fetch(
+          `https://admiraltyapi.azure-api.net/uktidalapi/api/V1/Stations/${nearest.Id}/TidalHeights?startDatetime=${encodeURIComponent(startStr)}&endDatetime=${encodeURIComponent(endStr)}&intervalInMinutes=30`,
+          { headers }
+        );
+        if (heightsRes.ok) heights = await heightsRes.json() as unknown[];
+      } catch { /* not available on this API tier */ }
       res.statusCode = tidesRes.status;
       res.end(JSON.stringify({ stationName: nearest.Name, events, heights }));
       return true;
