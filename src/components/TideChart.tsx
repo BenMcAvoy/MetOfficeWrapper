@@ -2,12 +2,8 @@ import type { TideData } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Waves, Anchor } from 'lucide-react';
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine
-} from 'recharts';
-import { XAxisTick, YAxisTick, tooltipStyle } from '@/lib/chartUtils';
-import { format, isAfter, isBefore, addHours, startOfDay, endOfDay, isSameDay } from 'date-fns';
+import { TideChartInner } from '@/components/charts';
+import { isAfter, isBefore, addHours, startOfDay, endOfDay, isSameDay, format } from 'date-fns';
 
 interface TideChartProps {
   tideData: TideData;
@@ -103,21 +99,6 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
   const chartStart = isToday ? addHours(now, -1) : startOfDay(selectedDay);
   const chartEnd = isToday ? addHours(now, 48) : endOfDay(selectedDay);
 
-  const chartData = tideData.heights
-    .filter(h => isAfter(h.time, chartStart) && isBefore(h.time, chartEnd))
-    .map(h => ({
-      t: h.time.getTime(),
-      height: Math.round(h.height * 100) / 100,
-    }));
-
-  const xTicks = (() => {
-    const ticks: number[] = [];
-    const start = new Date(chartStart);
-    start.setMinutes(0, 0, 0);
-    if (start.getHours() % 3 !== 0) start.setHours(start.getHours() + (3 - start.getHours() % 3));
-    for (let t = start.getTime(); t <= chartEnd.getTime(); t += 3 * 60 * 60 * 1000) ticks.push(t);
-    return ticks;
-  })();
 
   const currentHeight = (() => {
     const before = [...tideData.heights].reverse().find(h => !isAfter(h.time, now));
@@ -184,33 +165,13 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-56">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="tideGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#2563eb" stopOpacity={0.02} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis dataKey="t" type="number" scale="time" domain={['dataMin', 'dataMax']} ticks={xTicks} tickFormatter={(t) => format(new Date(t), 'HH:mm')} tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }} />
-                <YAxis tick={<YAxisTick unit="m" />} width={40} domain={['auto', 'auto']} />
-                <Tooltip {...tooltipStyle} labelFormatter={(t) => format(new Date(t), 'HH:mm')} formatter={(v) => [`${Number(v).toFixed(2)}m`, 'Height']} />
-                {currentHeight !== null && (
-                  <ReferenceLine
-                    y={currentHeight}
-                    stroke="var(--primary)"
-                    strokeDasharray="4 4"
-                    label={(props) => (
-                      <text x={props.viewBox?.x} y={(props.viewBox?.y ?? 0) - 4} style={{ fill: 'var(--primary)' }} fontSize={10} textAnchor="middle">Now</text>
-                    )}
-                  />
-                )}
-                <Area type="monotone" dataKey="height" stroke="#2563eb" fill="url(#tideGrad)" strokeWidth={2} dot={false} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          <TideChartInner
+            tideData={tideData}
+            windowStart={chartStart}
+            windowEnd={chartEnd}
+            nowRefLine={currentHeight ?? undefined}
+            height={224}
+          />
         </CardContent>
       </Card>
 

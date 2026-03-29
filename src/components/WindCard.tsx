@@ -2,10 +2,7 @@ import type { HourlyForecast } from '@/lib/api';
 import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind, ArrowUp } from 'lucide-react';
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
-} from 'recharts';
-import { XAxisTick, YAxisTick, tooltipStyle } from '@/lib/chartUtils';
+import { WindChart } from '@/components/charts';
 import { format, isSameDay } from 'date-fns';
 
 interface WindCardProps {
@@ -38,11 +35,6 @@ export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
   const currentKnotsGust = msToKnots(current.windGustSpeed10m);
   const currentBf = beaufortScale(currentKnotsAvg);
 
-  const chartData = forecasts.map(f => ({
-    time: format(f.time, 'HH:mm'),
-    avg: Math.round(msToKnots(f.windSpeed10m) * 10) / 10,
-    gust: Math.round(msToKnots(f.windGustSpeed10m) * 10) / 10,
-  }));
 
   return (
     <div className="space-y-3">
@@ -125,7 +117,6 @@ export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
         </CardContent>
       </Card>
 
-      {/* Chart */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-sm">
@@ -133,29 +124,7 @@ export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-44">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="avgGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2563eb" stopOpacity={0.2} />
-                    <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="gustGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ea580c" stopOpacity={0.2} />
-                    <stop offset="95%" stopColor="#ea580c" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis dataKey="time" tick={<XAxisTick />} interval={2} />
-                <YAxis tick={<YAxisTick unit="kt" />} width={44} />
-                <Tooltip {...tooltipStyle} />
-                <Legend wrapperStyle={{ color: 'var(--muted-foreground)', fontSize: '11px' }} />
-                <Area type="monotone" dataKey="avg" name="Avg" stroke="#2563eb" fill="url(#avgGrad)" strokeWidth={2} dot={false} />
-                <Area type="monotone" dataKey="gust" name="Gust" stroke="#ea580c" fill="url(#gustGrad)" strokeWidth={2} dot={false} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          <WindChart forecasts={forecasts} />
         </CardContent>
       </Card>
 

@@ -7,10 +7,7 @@ import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Wind, Waves } from 'lucide-react';
 import { format, addMinutes, startOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ReferenceLine
-} from 'recharts';
-import { XAxisTick, YAxisTick, tooltipStyle } from '@/lib/chartUtils';
+import { WindChart, TideChartInner } from '@/components/charts';
 
 interface RaceCalendarProps {
   forecasts: HourlyForecast[];
@@ -66,28 +63,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, onBack }: {
     { label: format(windowEnd, 'HH:mm'), time: windowEnd, role: 'Post-race' },
   ];
 
-  const windChartData = forecasts
-    .filter(f => f.time >= windowStart && f.time <= windowEnd)
-    .map(f => ({
-      time: format(f.time, 'HH:mm'),
-      avg: Math.round(msToKnots(f.windSpeed10m) * 10) / 10,
-      gust: Math.round(msToKnots(f.windGustSpeed10m) * 10) / 10,
-    }));
-
-  const tideChartData = tideData
-    ? tideData.heights
-        .filter(h => h.time >= windowStart && h.time <= windowEnd)
-        .map(h => ({ t: h.time.getTime(), height: Math.round(h.height * 100) / 100 }))
-    : [];
-
-  const tideTicks = (() => {
-    if (!tideChartData.length) return [];
-    const ticks: number[] = [];
-    const start = new Date(windowStart);
-    start.setMinutes(0, 0, 0);
-    for (let t = start.getTime(); t <= windowEnd.getTime(); t += 60 * 60 * 1000) ticks.push(t);
-    return ticks;
-  })();
+  const windowForecasts = forecasts.filter(f => f.time >= windowStart && f.time <= windowEnd);
 
   const startForecast = closestForecast(forecasts, eventStart);
   const hasForecastData = forecasts.some(f => {
@@ -206,7 +182,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, onBack }: {
         </Card>
       )}
 
-      {hasForecastData && windChartData.length > 0 && (
+      {hasForecastData && windowForecasts.length > 0 && (
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm">
@@ -214,35 +190,12 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, onBack }: {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-44">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={windChartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="raceAvgGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#2563eb" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="raceGustGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#ea580c" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#ea580c" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis dataKey="time" tick={<XAxisTick />} interval={0} />
-                  <YAxis tick={<YAxisTick unit="kt" />} width={44} />
-                  <Tooltip {...tooltipStyle} />
-                  <Legend wrapperStyle={{ color: 'var(--muted-foreground)', fontSize: '11px' }} />
-                  <ReferenceLine x={event.time} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
-                  <Area type="monotone" dataKey="avg" name="Avg" stroke="#2563eb" fill="url(#raceAvgGrad)" strokeWidth={2} dot={false} />
-                  <Area type="monotone" dataKey="gust" name="Gust" stroke="#ea580c" fill="url(#raceGustGrad)" strokeWidth={2} dot={false} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+            <WindChart forecasts={windowForecasts} startRefLine={event.time!} />
           </CardContent>
         </Card>
       )}
 
-      {tideData && tideChartData.length > 0 && (
+      {tideData && (
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm">
@@ -250,24 +203,13 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, onBack }: {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-44">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={tideChartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="raceTideGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
-                      <stop offset="95%" stopColor="#2563eb" stopOpacity={0.02} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis dataKey="t" type="number" scale="time" domain={['dataMin', 'dataMax']} ticks={tideTicks} tickFormatter={t => format(new Date(t), 'HH:mm')} tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }} />
-                  <YAxis tick={<YAxisTick unit="m" />} width={40} domain={['auto', 'auto']} />
-                  <Tooltip {...tooltipStyle} labelFormatter={t => format(new Date(t), 'HH:mm')} formatter={v => [`${Number(v).toFixed(2)}m`, 'Height']} />
-                  <ReferenceLine x={eventStart.getTime()} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
-                  <Area type="monotone" dataKey="height" stroke="#2563eb" fill="url(#raceTideGrad)" strokeWidth={2} dot={false} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+            <TideChartInner
+              tideData={tideData}
+              windowStart={windowStart}
+              windowEnd={windowEnd}
+              tickIntervalHours={1}
+              startRefLine={eventStart.getTime()}
+            />
           </CardContent>
         </Card>
       )}
