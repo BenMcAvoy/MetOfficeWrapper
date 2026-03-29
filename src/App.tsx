@@ -7,9 +7,10 @@ import WeatherOverview from '@/components/WeatherOverview';
 import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
+import RaceCalendar from '@/components/RaceCalendar';
 import {
   MapPin, AlertTriangle, Waves, RefreshCw, Loader2,
-  LayoutDashboard, Wind, CalendarDays,
+  LayoutDashboard, Wind, CalendarDays, Anchor,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay, isBefore, startOfHour } from 'date-fns';
 
@@ -18,7 +19,7 @@ const LOCATION_NAME = 'Poole Harbour';
 const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
-type Tab = 'overview' | 'wind' | 'tides' | 'forecast';
+type Tab = 'overview' | 'wind' | 'tides' | 'forecast' | 'races';
 
 function useDarkMode() {
   useEffect(() => {
@@ -73,6 +74,7 @@ const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
   { id: 'wind',     label: 'Wind',     Icon: Wind },
   { id: 'tides',    label: 'Tides',    Icon: Waves },
   { id: 'forecast', label: '5-Day',    Icon: CalendarDays },
+  { id: 'races',    label: 'Races',    Icon: Anchor },
 ];
 
 function LoadingSkeleton() {
@@ -136,7 +138,7 @@ export default function App() {
   const availableDays = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
   const dayForecasts = filterForDay(forecasts, selectedDay);
   const isLoading = loadState === 'loading';
-  const showDateSelector = activeTab !== 'forecast';
+  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'races';
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -213,6 +215,9 @@ export default function App() {
             )}
             {activeTab === 'forecast' && (
               <ForecastStrip forecasts={forecasts} />
+            )}
+            {activeTab === 'races' && (
+              <RaceCalendar forecasts={forecasts} />
             )}
           </div>
         )}
