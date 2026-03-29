@@ -110,9 +110,14 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
       height: Math.round(h.height * 100) / 100,
     }));
 
-  const xTicks = chartData
-    .filter(d => { const dt = new Date(d.t); return dt.getMinutes() === 0 && dt.getHours() % 3 === 0; })
-    .map(d => d.t);
+  const xTicks = (() => {
+    const ticks: number[] = [];
+    const start = new Date(chartStart);
+    start.setMinutes(0, 0, 0);
+    if (start.getHours() % 3 !== 0) start.setHours(start.getHours() + (3 - start.getHours() % 3));
+    for (let t = start.getTime(); t <= chartEnd.getTime(); t += 3 * 60 * 60 * 1000) ticks.push(t);
+    return ticks;
+  })();
 
   const currentHeight = (() => {
     const before = [...tideData.heights].reverse().find(h => !isAfter(h.time, now));
@@ -189,7 +194,7 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis dataKey="t" type="number" scale="time" domain={['dataMin', 'dataMax']} ticks={xTicks} tickFormatter={(t) => format(new Date(t), 'HH:mm')} tick={<XAxisTick />} />
+                <XAxis dataKey="t" type="number" scale="time" domain={['dataMin', 'dataMax']} ticks={xTicks} tickFormatter={(t) => format(new Date(t), 'HH:mm')} tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }} />
                 <YAxis tick={<YAxisTick unit="m" />} width={40} domain={['auto', 'auto']} />
                 <Tooltip {...tooltipStyle} labelFormatter={(t) => format(new Date(t), 'HH:mm')} formatter={(v) => [`${Number(v).toFixed(2)}m`, 'Height']} />
                 {currentHeight !== null && (

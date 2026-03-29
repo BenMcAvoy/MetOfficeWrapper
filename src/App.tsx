@@ -217,7 +217,7 @@ export default function App() {
               <ForecastStrip forecasts={forecasts} />
             )}
             {activeTab === 'races' && (
-              <RaceCalendar forecasts={forecasts} />
+              <RaceCalendar forecasts={forecasts} tideData={tideData} />
             )}
           </div>
         )}

@@ -1,15 +1,20 @@
 import { useState } from 'react';
-import type { HourlyForecast } from '@/lib/api';
+import type { HourlyForecast, TideData } from '@/lib/api';
 import type { RaceEvent } from '@/lib/calendar';
 import { RACE_CALENDAR, getEventsForDay } from '@/lib/calendar';
 import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Wind } from 'lucide-react';
+import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Wind, Waves } from 'lucide-react';
 import { format, addMinutes, startOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ReferenceLine
+} from 'recharts';
+import { XAxisTick, YAxisTick, tooltipStyle } from '@/lib/chartUtils';
 
 interface RaceCalendarProps {
   forecasts: HourlyForecast[];
+  tideData: TideData | null;
 }
 
 function parseEventTime(date: Date, timeStr: string): Date {
@@ -26,10 +31,11 @@ function closestForecast(forecasts: HourlyForecast[], time: Date): HourlyForecas
   );
 }
 
-function EventWeatherView({ event, selectedDay, forecasts, onBack }: {
+function EventWeatherView({ event, selectedDay, forecasts, tideData, onBack }: {
   event: RaceEvent;
   selectedDay: Date;
   forecasts: HourlyForecast[];
+  tideData: TideData | null;
   onBack: () => void;
 }) {
   if (!event.time) {
@@ -59,6 +65,29 @@ function EventWeatherView({ event, selectedDay, forecasts, onBack }: {
     { label: format(addMinutes(eventStart, 120), 'HH:mm'), time: addMinutes(eventStart, 120), role: 'Finish' },
     { label: format(windowEnd, 'HH:mm'), time: windowEnd, role: 'Post-race' },
   ];
+
+  const windChartData = forecasts
+    .filter(f => f.time >= windowStart && f.time <= windowEnd)
+    .map(f => ({
+      time: format(f.time, 'HH:mm'),
+      avg: Math.round(msToKnots(f.windSpeed10m) * 10) / 10,
+      gust: Math.round(msToKnots(f.windGustSpeed10m) * 10) / 10,
+    }));
+
+  const tideChartData = tideData
+    ? tideData.heights
+        .filter(h => h.time >= windowStart && h.time <= windowEnd)
+        .map(h => ({ t: h.time.getTime(), height: Math.round(h.height * 100) / 100 }))
+    : [];
+
+  const tideTicks = (() => {
+    if (!tideChartData.length) return [];
+    const ticks: number[] = [];
+    const start = new Date(windowStart);
+    start.setMinutes(0, 0, 0);
+    for (let t = start.getTime(); t <= windowEnd.getTime(); t += 60 * 60 * 1000) ticks.push(t);
+    return ticks;
+  })();
 
   const startForecast = closestForecast(forecasts, eventStart);
   const hasForecastData = forecasts.some(f => {
@@ -176,6 +205,72 @@ function EventWeatherView({ event, selectedDay, forecasts, onBack }: {
           </CardContent>
         </Card>
       )}
+
+      {hasForecastData && windChartData.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm">
+              <Wind className="h-4 w-4" /> Wind · Race Window
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-44">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={windChartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="raceAvgGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#2563eb" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="raceGustGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ea580c" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#ea580c" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                  <XAxis dataKey="time" tick={<XAxisTick />} interval={0} />
+                  <YAxis tick={<YAxisTick unit="kt" />} width={44} />
+                  <Tooltip {...tooltipStyle} />
+                  <Legend wrapperStyle={{ color: 'var(--muted-foreground)', fontSize: '11px' }} />
+                  <ReferenceLine x={event.time} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
+                  <Area type="monotone" dataKey="avg" name="Avg" stroke="#2563eb" fill="url(#raceAvgGrad)" strokeWidth={2} dot={false} />
+                  <Area type="monotone" dataKey="gust" name="Gust" stroke="#ea580c" fill="url(#raceGustGrad)" strokeWidth={2} dot={false} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {tideData && tideChartData.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm">
+              <Waves className="h-4 w-4" /> Tides · Race Window
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-44">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={tideChartData} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="raceTideGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#2563eb" stopOpacity={0.02} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                  <XAxis dataKey="t" type="number" scale="time" domain={['dataMin', 'dataMax']} ticks={tideTicks} tickFormatter={t => format(new Date(t), 'HH:mm')} tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }} />
+                  <YAxis tick={<YAxisTick unit="m" />} width={40} domain={['auto', 'auto']} />
+                  <Tooltip {...tooltipStyle} labelFormatter={t => format(new Date(t), 'HH:mm')} formatter={v => [`${Number(v).toFixed(2)}m`, 'Height']} />
+                  <ReferenceLine x={eventStart.getTime()} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
+                  <Area type="monotone" dataKey="height" stroke="#2563eb" fill="url(#raceTideGrad)" strokeWidth={2} dot={false} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
@@ -241,7 +336,7 @@ function MonthCalendar({ month, selectedDay, onSelect }: {
   );
 }
 
-export default function RaceCalendar({ forecasts }: RaceCalendarProps) {
+export default function RaceCalendar({ forecasts, tideData }: RaceCalendarProps) {
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
   const [currentMonth, setCurrentMonth] = useState<Date>(startOfMonth(new Date()));
   const [selectedEvent, setSelectedEvent] = useState<RaceEvent | null>(null);
@@ -254,6 +349,7 @@ export default function RaceCalendar({ forecasts }: RaceCalendarProps) {
         event={selectedEvent}
         selectedDay={selectedDay}
         forecasts={forecasts}
+        tideData={tideData}
         onBack={() => setSelectedEvent(null)}
       />
     );
