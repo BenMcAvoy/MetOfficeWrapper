@@ -86,6 +86,14 @@ for (const { text } of allLines) {
 
   if (currentDate === null) continue;
 
+  // Orphaned date+time line from page break: "17 13:00 Sociable Dinghy Sailing"
+  const orphanMatch = text.match(/^(\d{1,2})\s+(\d{1,2}:\d{2})\s+(.+)$/);
+  if (orphanMatch && parseInt(orphanMatch[1]) >= 1 && parseInt(orphanMatch[1]) <= 31) {
+    currentDate = parseInt(orphanMatch[1]);
+    parseEventLine(orphanMatch[2] + ' ' + orphanMatch[3], currentMonth, currentDate, currentYear, events);
+    continue;
+  }
+
   // Event line (starts with time or is a named event/all-day)
   parseEventLine(text, currentMonth, currentDate, currentYear, events);
 }
@@ -104,19 +112,24 @@ function parseEventLine(text, month, date, year, out) {
   if (timeMatch) {
     const time = timeMatch[1];
     const rest = timeMatch[2].trim();
-    // Classes are in the form: single letters/numbers and comma-separated combos, optionally
-    // with parenthesized sub-classes like "1,(1a, 1b, & 2),3,R,4".
-    // Event names start with a Capital word (e.g. "Cruiser", "Laser", "Dinghy", "Youth"...).
-    // Strategy: find the first token that looks like a capitalised English word (Title Case, length > 2,
-    // not purely digits/uppercase single chars).
+    // Classes are short tokens before the event name.
+    // Event names either start with a Title-Case word (has lowercase), or are ALL-CAPS.
+    // The classes/name boundary is the first token that is either:
+    //   a) Title-Case (starts uppercase, contains lowercase): "Cruiser", "Laser", "Dinghy"
+    //   b) An all-caps trophy name like "STUDLAND", "WAREHAM", "LAKESHORE", "GRIFFIN"
+    //   c) A token starting with R19 (e.g. "R19" is part of the name, class is just "R")
     let classes = null;
     let name = rest;
     const tokens = rest.split(/\s+/);
     let splitAt = -1;
     for (let i = 0; i < tokens.length; i++) {
       const t = tokens[i];
-      // A proper event name word: starts with uppercase, has lowercase letters, length > 2
+      // Title-case word with real letters: starts uppercase, has 2+ lowercase chars
       if (/^[A-Z][a-z]{2,}/.test(t)) { splitAt = i; break; }
+      // ALL CAPS word that looks like an event name (4+ chars, not a class code)
+      if (/^[A-Z]{4,}$/.test(t)) { splitAt = i; break; }
+      // R19, R19s etc — belongs to name not class
+      if (/^R19/.test(t)) { splitAt = i; break; }
     }
     if (splitAt > 0) {
       classes = tokens.slice(0, splitAt).join(' ').replace(/[,\s]+$/, '').trim() || null;
