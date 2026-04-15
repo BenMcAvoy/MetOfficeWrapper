@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { HourlyForecast, TideData } from '@/lib/api';
+import type { HourlyForecast, TideData, LiveWindHistoryPoint } from '@/lib/api';
 import type { RaceEvent } from '@/lib/calendar';
 import { RACE_CALENDAR, getEventsForDay } from '@/lib/calendar';
 import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
@@ -7,11 +7,13 @@ import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Wind, Waves } from 'lucide-react';
 import { format, addMinutes, startOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
-import { WindChart, TideChartInner } from '@/components/charts';
+import { TideChartInner } from '@/components/charts';
+import WindChartCard from '@/components/WindChartCard';
 
 interface RaceCalendarProps {
   forecasts: HourlyForecast[];
   tideData: TideData | null;
+  liveWindHistory: LiveWindHistoryPoint[];
 }
 
 function parseEventTime(date: Date, timeStr: string): Date {
@@ -28,11 +30,12 @@ function closestForecast(forecasts: HourlyForecast[], time: Date): HourlyForecas
   );
 }
 
-function EventWeatherView({ event, selectedDay, forecasts, tideData, onBack }: {
+function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHistory, onBack }: {
   event: RaceEvent;
   selectedDay: Date;
   forecasts: HourlyForecast[];
   tideData: TideData | null;
+  liveWindHistory: LiveWindHistoryPoint[];
   onBack: () => void;
 }) {
   if (!event.time) {
@@ -183,16 +186,13 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, onBack }: {
       )}
 
       {hasForecastData && windowForecasts.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-sm">
-              <Wind className="h-4 w-4" /> Wind · Race Window
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <WindChart forecasts={windowForecasts} startRefLine={eventStart.getTime()} />
-          </CardContent>
-        </Card>
+        <WindChartCard
+          title="Wind · Race Window"
+          forecasts={windowForecasts}
+          startRefLine={eventStart.getTime()}
+          liveWindHistory={isSameDay(selectedDay, new Date()) ? liveWindHistory : []}
+          includePastHours={isSameDay(selectedDay, new Date()) ? 3 : 0}
+        />
       )}
 
       {tideData && (
@@ -278,7 +278,7 @@ function MonthCalendar({ month, selectedDay, onSelect }: {
   );
 }
 
-export default function RaceCalendar({ forecasts, tideData }: RaceCalendarProps) {
+export default function RaceCalendar({ forecasts, tideData, liveWindHistory }: RaceCalendarProps) {
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
   const [currentMonth, setCurrentMonth] = useState<Date>(startOfMonth(new Date()));
   const [selectedEvent, setSelectedEvent] = useState<RaceEvent | null>(null);
@@ -292,6 +292,7 @@ export default function RaceCalendar({ forecasts, tideData }: RaceCalendarProps)
         selectedDay={selectedDay}
         forecasts={forecasts}
         tideData={tideData}
+        liveWindHistory={liveWindHistory}
         onBack={() => setSelectedEvent(null)}
       />
     );

@@ -2,8 +2,8 @@ import type { HourlyForecast, LiveWind, LiveWindHistoryPoint } from '@/lib/api';
 import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind, ArrowUp } from 'lucide-react';
-import { WindChart } from '@/components/charts';
 import { format, isSameDay } from 'date-fns';
+import WindChartCard from '@/components/WindChartCard';
 
 interface WindCardProps {
   forecasts: HourlyForecast[];
@@ -133,20 +133,12 @@ export default function WindCard({ forecasts, chartForecasts, selectedDay, liveW
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-sm">
-            <Wind className="h-4 w-4" /> Wind Chart
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <WindChart
-            forecasts={chartForecasts}
-            liveHistory={isToday ? liveWindHistory : []}
-            includePastHours={isToday ? 3 : 0}
-          />
-        </CardContent>
-      </Card>
+      <WindChartCard
+        title="Wind Chart"
+        forecasts={chartForecasts}
+        liveWindHistory={isToday ? liveWindHistory : []}
+        includePastHours={isToday ? 3 : 0}
+      />
 
       {/* Hourly breakdown table */}
       <Card>
