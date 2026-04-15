@@ -52,15 +52,27 @@ export default function WindCard({ forecasts, chartForecasts, selectedDay, liveW
   const sourceBadgeClass = hasFreshLiveWind
     ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
     : 'bg-muted text-muted-foreground';
+  const nowMs = Date.now();
+  const lastHourObserved = isToday
+    ? liveWindHistory.filter(p => {
+      const t = p.time.getTime();
+      return t >= nowMs - 60 * 60 * 1000 && t <= nowMs;
+    })
+    : [];
+  const maxObservedGustLastHour = lastHourObserved.length
+    ? Math.max(...lastHourObserved.map(p => msToKnots(p.gustWindMs)))
+    : null;
   const primarySpeedLabel = isToday
     ? hasFreshLiveWind ? 'Current speed' : 'Current avg'
     : 'First-hour avg';
   const gustLabel = isToday
     ? hasFreshLiveWind ? 'Forecast gust' : 'Current gust'
     : 'First-hour gust';
+  const displayedGustLabel = maxObservedGustLastHour !== null ? 'Max gust (1h)' : gustLabel;
+  const displayedGustKnots = maxObservedGustLastHour ?? currentKnotsGust;
   const currentTimestamp = hasFreshLiveWind && liveWind && liveAgeSeconds !== null
     ? `${format(liveWind.observedAt, 'HH:mm:ss')} · ${liveAgeSeconds}s ago${liveWind.delaySeconds !== null ? ` · +${liveWind.delaySeconds}s` : ''}`
-    : `Forecast ${format(current.time, 'HH:mm')}`;
+    : `Updated ${format(current.time, 'HH:mm')}`;
 
 
   return (
@@ -85,11 +97,14 @@ export default function WindCard({ forecasts, chartForecasts, selectedDay, liveW
               </div>
             </div>
             <div className="rounded-lg border p-3">
-              <p className="text-muted-foreground text-xs mb-1">{gustLabel}</p>
+              <p className="text-muted-foreground text-xs mb-1">{displayedGustLabel}</p>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-4xl font-bold tabular-nums text-orange-500">{Math.round(currentKnotsGust)}</span>
+                <span className="text-4xl font-bold tabular-nums text-orange-500">{Math.round(displayedGustKnots)}</span>
                 <span className="text-muted-foreground text-sm">kt</span>
               </div>
+              {maxObservedGustLastHour !== null && (
+                <p className="text-muted-foreground text-[11px] mt-1">Observed in latest hour</p>
+              )}
             </div>
           </div>
 
@@ -108,12 +123,6 @@ export default function WindCard({ forecasts, chartForecasts, selectedDay, liveW
             </div>
             <p className="text-muted-foreground text-xs text-right">{currentTimestamp}</p>
           </div>
-
-          {isToday && hasFreshLiveWind && (
-            <p className="text-muted-foreground text-xs mt-2">
-              Forecast now: {Math.round(currentKnotsAvg)}kt avg / {Math.round(currentKnotsGust)}kt gust
-            </p>
-          )}
 
           <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t">
             <div>
