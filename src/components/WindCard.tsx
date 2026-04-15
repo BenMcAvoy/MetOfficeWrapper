@@ -42,7 +42,7 @@ export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
       <Card>
         <CardContent className="pt-4 pb-4">
           <p className="text-muted-foreground text-xs uppercase tracking-wide mb-4">
-            {isToday ? "Today's" : format(selectedDay, "EEEE's")} Wind
+            {isToday ? "Today's" : `${format(selectedDay, 'EEEE')}'s`} Wind
           </p>
           <div className="flex items-end justify-between gap-2">
             <div>

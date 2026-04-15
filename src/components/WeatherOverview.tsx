@@ -162,7 +162,7 @@ export default function WeatherOverview({ forecasts, allForecasts, sunInfo, sele
       <Card>
         <CardContent className="pt-4 pb-3">
           <p className="text-muted-foreground text-xs uppercase tracking-wide mb-3">
-            {isToday ? 'Next 12 hours' : format(selectedDay, 'EEEE — all day')}
+            {isToday ? 'Next 12 hours' : `${format(selectedDay, 'EEEE')} — all day`}
           </p>
           <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar">
             {stripForecasts.map((f, i) => {
