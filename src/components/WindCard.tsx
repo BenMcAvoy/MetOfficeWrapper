@@ -33,112 +33,148 @@ export default function WindCard({ forecasts, chartForecasts, selectedDay, liveW
   const peakBf = beaufortScale(peakKnots);
   const avgBf = beaufortScale(avgKnots);
 
-  const current = forecasts[0];
-  const currentKnotsAvg = msToKnots(current.windSpeed10m);
-  const currentKnotsGust = msToKnots(current.windGustSpeed10m);
-  const currentBf = beaufortScale(currentKnotsAvg);
-
+  const nowMs = Date.now();
   const liveAgeSeconds = liveWind
-    ? Math.max(0, Math.round((Date.now() - liveWind.observedAt.getTime()) / 1000))
+    ? Math.max(0, Math.round((nowMs - liveWind.observedAt.getTime()) / 1000))
     : null;
-  const hasFreshLiveWind = isToday && !!liveWind && liveAgeSeconds !== null && liveAgeSeconds <= 300;
-  const liveKnots = hasFreshLiveWind && liveWind ? msToKnots(liveWind.windSpeedMs) : null;
-  const liveBf = liveKnots !== null ? beaufortScale(liveKnots) : null;
-  const currentSourceKnots = hasFreshLiveWind && liveKnots !== null ? liveKnots : currentKnotsAvg;
-  const currentSourceDirection = hasFreshLiveWind && liveWind
-    ? liveWind.windDirectionDeg
-    : current.windDirectionFrom10m;
-  const currentSourceBf = hasFreshLiveWind && liveBf ? liveBf : currentBf;
+  const hasLiveReading = isToday && !!liveWind && liveAgeSeconds !== null;
+  const hasFreshLiveWind = hasLiveReading && liveAgeSeconds <= 300;
+  const hasStaleLiveWind = hasLiveReading && liveAgeSeconds > 300;
+  const currentObservedKnots = hasLiveReading && liveWind ? msToKnots(liveWind.windSpeedMs) : null;
+  const currentObservedBf = currentObservedKnots !== null ? beaufortScale(currentObservedKnots) : null;
+  const currentObservedDirection = hasLiveReading && liveWind ? liveWind.windDirectionDeg : null;
   const sourceBadgeClass = hasFreshLiveWind
     ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
-    : 'bg-muted text-muted-foreground';
-  const nowMs = Date.now();
+    : hasStaleLiveWind
+      ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'
+      : 'bg-muted text-muted-foreground';
+  const sourceBadgeText = hasFreshLiveWind ? 'LIVE' : hasStaleLiveWind ? 'STALE' : 'NO LIVE';
+
   const lastHourObserved = isToday
     ? liveWindHistory.filter(p => {
       const t = p.time.getTime();
       return t >= nowMs - 60 * 60 * 1000 && t <= nowMs;
     })
     : [];
-  const maxObservedGustLastHour = lastHourObserved.length
-    ? Math.max(...lastHourObserved.map(p => msToKnots(p.gustWindMs)))
+  const observedAvgKnotsLastHour = lastHourObserved.length
+    ? lastHourObserved.reduce((sum, p) => sum + msToKnots(p.avgWindMs), 0) / lastHourObserved.length
     : null;
-  const primarySpeedLabel = isToday
-    ? hasFreshLiveWind ? 'Current speed' : 'Current avg'
-    : 'First-hour avg';
-  const gustLabel = isToday
-    ? hasFreshLiveWind ? 'Forecast gust' : 'Current gust'
-    : 'First-hour gust';
-  const displayedGustLabel = maxObservedGustLastHour !== null ? 'Max gust (1h)' : gustLabel;
-  const displayedGustKnots = maxObservedGustLastHour ?? currentKnotsGust;
-  const currentTimestamp = hasFreshLiveWind && liveWind && liveAgeSeconds !== null
+  const maxObservedGustPoint = lastHourObserved.length
+    ? lastHourObserved.reduce((max, p) => (p.gustWindMs > max.gustWindMs ? p : max), lastHourObserved[0])
+    : null;
+  const maxObservedGustLastHour = maxObservedGustPoint
+    ? msToKnots(maxObservedGustPoint.gustWindMs)
+    : null;
+  const currentTimestamp = hasLiveReading && liveWind && liveAgeSeconds !== null
     ? `${format(liveWind.observedAt, 'HH:mm:ss')} · ${liveAgeSeconds}s ago${liveWind.delaySeconds !== null ? ` · +${liveWind.delaySeconds}s` : ''}`
-    : `Updated ${format(current.time, 'HH:mm')}`;
+    : 'No live station update';
 
 
   return (
     <div className="space-y-3">
       <Card>
         <CardContent className="pt-4 pb-4">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-muted-foreground text-xs uppercase tracking-wide">
-              {isToday ? "Today's" : `${format(selectedDay, 'EEEE')}'s`} Wind
-            </p>
-            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${sourceBadgeClass}`}>
-              {hasFreshLiveWind ? 'LIVE' : 'FORECAST'}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-lg border p-3">
-              <p className="text-muted-foreground text-xs mb-1">{primarySpeedLabel}</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className={`text-4xl font-bold tabular-nums ${beaufortColor(currentSourceBf.force)}`}>{Math.round(currentSourceKnots)}</span>
-                <span className="text-muted-foreground text-sm">kt</span>
+          {isToday ? (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-muted-foreground text-xs uppercase tracking-wide">Today's Wind</p>
+                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${sourceBadgeClass}`}>
+                  {sourceBadgeText}
+                </span>
               </div>
-            </div>
-            <div className="rounded-lg border p-3">
-              <p className="text-muted-foreground text-xs mb-1">{displayedGustLabel}</p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-4xl font-bold tabular-nums text-orange-500">{Math.round(displayedGustKnots)}</span>
-                <span className="text-muted-foreground text-sm">kt</span>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-lg border p-3">
+                  <p className="text-muted-foreground text-xs mb-1">Current speed</p>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className={`text-4xl font-bold tabular-nums ${currentObservedBf ? beaufortColor(currentObservedBf.force) : 'text-foreground'}`}>
+                      {currentObservedKnots !== null ? Math.round(currentObservedKnots) : '—'}
+                    </span>
+                    {currentObservedKnots !== null && <span className="text-muted-foreground text-sm">kt</span>}
+                  </div>
+                  {currentObservedBf && (
+                    <p className="text-muted-foreground text-[11px] mt-1">F{currentObservedBf.force} · {currentObservedBf.description}</p>
+                  )}
+                </div>
+
+                <div className="rounded-lg border p-3">
+                  <p className="text-muted-foreground text-xs mb-1">Max gust (1h)</p>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-4xl font-bold tabular-nums text-orange-500">
+                      {maxObservedGustLastHour !== null ? Math.round(maxObservedGustLastHour) : '—'}
+                    </span>
+                    {maxObservedGustLastHour !== null && <span className="text-muted-foreground text-sm">kt</span>}
+                  </div>
+                  {maxObservedGustPoint && (
+                    <p className="text-muted-foreground text-[11px] mt-1">
+                      {format(maxObservedGustPoint.time, 'HH:mm')} · {degreesToCardinal(maxObservedGustPoint.windDirectionDeg)}
+                    </p>
+                  )}
+                </div>
               </div>
-              {maxObservedGustLastHour !== null && (
-                <p className="text-muted-foreground text-[11px] mt-1">Observed in latest hour</p>
-              )}
-            </div>
-          </div>
 
-          <div className="flex items-center justify-between mt-3 pt-3 border-t">
-            <div className="flex items-center gap-1.5">
-              <ArrowUp
-                className="h-4 w-4 text-primary"
-                style={{ transform: `rotate(${currentSourceDirection}deg)` }}
-                strokeWidth={2.5}
-              />
-              <span className="text-sm font-semibold">{degreesToCardinal(currentSourceDirection)}</span>
-              <span className="text-muted-foreground text-xs">{Math.round(currentSourceDirection)}°</span>
-              <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${beaufortBg(currentSourceBf.force)}`}>
-                F{currentSourceBf.force}
-              </span>
-            </div>
-            <p className="text-muted-foreground text-xs text-right">{currentTimestamp}</p>
-          </div>
+              <div className="flex items-center justify-between mt-3 pt-3 border-t">
+                <div className="flex items-center gap-1.5">
+                  {currentObservedDirection !== null ? (
+                    <>
+                      <ArrowUp
+                        className="h-4 w-4 text-primary"
+                        style={{ transform: `rotate(${currentObservedDirection}deg)` }}
+                        strokeWidth={2.5}
+                      />
+                      <span className="text-sm font-semibold">{degreesToCardinal(currentObservedDirection)}</span>
+                      <span className="text-muted-foreground text-xs">{Math.round(currentObservedDirection)}°</span>
+                    </>
+                  ) : (
+                    <span className="text-muted-foreground text-xs">No live direction</span>
+                  )}
+                </div>
+                <p className="text-muted-foreground text-xs text-right">{currentTimestamp}</p>
+              </div>
 
-          <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t">
-            <div>
-              <p className="text-muted-foreground text-xs mb-1">Day Avg</p>
-              <p className={`text-xl font-bold tabular-nums ${beaufortColor(avgBf.force)}`}>{Math.round(avgKnots)}kt</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
-              <p className={`text-xl font-bold tabular-nums ${beaufortColor(peakBf.force)}`}>{Math.round(peakKnots)}kt</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground text-xs mb-1">Peak At</p>
-              <p className="text-base font-semibold tabular-nums">{format(peakGustEntry.time, 'HH:mm')}</p>
-              <p className="text-muted-foreground text-xs">{degreesToCardinal(peakGustEntry.windDirectionFrom10m)}</p>
-            </div>
-          </div>
+              <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t">
+                <div>
+                  <p className="text-muted-foreground text-xs mb-1">Avg (1h)</p>
+                  <p className="text-xl font-bold tabular-nums">
+                    {observedAvgKnotsLastHour !== null ? `${Math.round(observedAvgKnotsLastHour)}kt` : '—'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs mb-1">Samples</p>
+                  <p className="text-xl font-bold tabular-nums">{lastHourObserved.length}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs mb-1">Data</p>
+                  <p className="text-base font-semibold tabular-nums">
+                    {hasFreshLiveWind ? 'Fresh' : hasStaleLiveWind ? 'Stale' : 'Offline'}
+                  </p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-muted-foreground text-xs uppercase tracking-wide">{`${format(selectedDay, 'EEEE')}'s`} Wind</p>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-muted text-muted-foreground">FORECAST</span>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <p className="text-muted-foreground text-xs mb-1">Day Avg</p>
+                  <p className={`text-xl font-bold tabular-nums ${beaufortColor(avgBf.force)}`}>{Math.round(avgKnots)}kt</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
+                  <p className={`text-xl font-bold tabular-nums ${beaufortColor(peakBf.force)}`}>{Math.round(peakKnots)}kt</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs mb-1">Peak At</p>
+                  <p className="text-base font-semibold tabular-nums">{format(peakGustEntry.time, 'HH:mm')}</p>
+                  <p className="text-muted-foreground text-xs">{degreesToCardinal(peakGustEntry.windDirectionFrom10m)}</p>
+                </div>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
 
