@@ -39,6 +39,22 @@ export interface SunInfo {
   dayLength: number;
 }
 
+export interface LiveWind {
+  observedAt: Date;
+  windSpeedMs: number;
+  windDirectionDeg: number;
+  locationId: string;
+  locationName: string;
+  delaySeconds: number | null;
+}
+
+export interface LiveWindHistoryPoint {
+  time: Date;
+  avgWindMs: number;
+  gustWindMs: number;
+  windDirectionDeg: number;
+}
+
 function interpolateTideCurve(extremes: TideExtreme[], stepMinutes = 10): TideHeight[] {
   if (extremes.length < 2) return [];
   const heights: TideHeight[] = [];
@@ -57,6 +73,12 @@ function interpolateTideCurve(extremes: TideExtreme[], stepMinutes = 10): TideHe
   const last = extremes[extremes.length - 1];
   heights.push({ time: last.time, height: last.height });
   return heights;
+}
+
+function parseLiveWindTimestamp(ts: string): Date {
+  const isoBase = ts.includes('T') ? ts : ts.replace(' ', 'T');
+  const withZone = /(?:Z|[+-]\d{2}:\d{2})$/i.test(isoBase) ? isoBase : `${isoBase}Z`;
+  return new Date(withZone);
 }
 
 type SerialisedForecast = Omit<HourlyForecast, 'time'> & { time: string };
@@ -137,6 +159,118 @@ export async function fetchTides(lat: number, lon: number): Promise<TideData> {
 
   setCached(cacheKey, { extremes, heights, stationName: data.stationName }, TTL.TIDES);
   return { extremes, heights, stationName: data.stationName };
+}
+
+type SerialisedLiveWind = Omit<LiveWind, 'observedAt'> & { observedAt: string };
+
+export async function fetchLiveWind(locId: string): Promise<LiveWind | null> {
+  const cacheKey = `live_wind_${locId}`;
+  const cached = getCached<SerialisedLiveWind>(cacheKey);
+  if (cached) return { ...cached, observedAt: new Date(cached.observedAt) };
+
+  const res = await fetch(`/api/live-wind?locId=${encodeURIComponent(locId)}`);
+  if (!res.ok) throw new Error(`Live wind API error: ${res.status}`);
+
+  const raw = await res.text();
+  let payload: {
+    status?: string;
+    data?: Record<string, unknown> | null;
+  };
+
+  try {
+    payload = JSON.parse(raw) as {
+      status?: string;
+      data?: Record<string, unknown> | null;
+    };
+  } catch {
+    throw new Error('Live wind API returned non-JSON response');
+  }
+
+  if (payload.status !== 'ok' || !payload.data) return null;
+
+  const data = payload.data;
+  const speed = Number(data.wsc);
+  const direction = Number(data.wdc);
+  const delay = Number(data.delay);
+
+  const timestampCandidate = typeof data.ts === 'string'
+    ? data.ts
+    : `${String(data.date ?? '')} ${String(data.time ?? '')}`.trim();
+
+  if (!timestampCandidate || Number.isNaN(speed) || Number.isNaN(direction)) return null;
+
+  const observedAt = parseLiveWindTimestamp(timestampCandidate);
+  if (Number.isNaN(observedAt.getTime())) return null;
+
+  const reading: LiveWind = {
+    observedAt,
+    windSpeedMs: speed,
+    windDirectionDeg: direction,
+    locationId: typeof data.loc_id === 'string' ? data.loc_id : locId,
+    locationName: typeof data.loc_name === 'string' ? data.loc_name : locId,
+    delaySeconds: Number.isFinite(delay) ? delay : null,
+  };
+
+  setCached(cacheKey, reading, TTL.LIVE_WIND);
+  return reading;
+}
+
+type SerialisedLiveWindHistoryPoint = Omit<LiveWindHistoryPoint, 'time'> & { time: string };
+
+export async function fetchLiveWindHistory(locId: string, historyHours = 6): Promise<LiveWindHistoryPoint[]> {
+  const cacheKey = `live_wind_history_${locId}_${historyHours}`;
+  const cached = getCached<SerialisedLiveWindHistoryPoint[]>(cacheKey);
+  if (cached) return cached.map(p => ({ ...p, time: new Date(p.time) }));
+
+  const res = await fetch(`/api/live-wind?locId=${encodeURIComponent(locId)}&historyHours=${historyHours}`);
+  if (!res.ok) throw new Error(`Live wind history API error: ${res.status}`);
+
+  const raw = await res.text();
+  let payload: {
+    status?: string;
+    data?: Record<string, unknown>[] | null;
+  };
+
+  try {
+    payload = JSON.parse(raw) as {
+      status?: string;
+      data?: Record<string, unknown>[] | null;
+    };
+  } catch {
+    throw new Error('Live wind history API returned non-JSON response');
+  }
+
+  if (payload.status !== 'ok' || !Array.isArray(payload.data)) return [];
+
+  const points = payload.data
+    .map((entry): LiveWindHistoryPoint | null => {
+      const tsCandidate = typeof entry.ts === 'string'
+        ? entry.ts
+        : `${String(entry.date ?? '')} ${String(entry.time ?? '')}`.trim();
+
+      if (!tsCandidate) return null;
+
+      const time = parseLiveWindTimestamp(tsCandidate);
+      const avgWindMs = Number(entry.wsa);
+      const gustWindMs = Number(entry.wsh ?? entry.wsa);
+      const windDirectionDeg = Number(entry.wda ?? entry.wdc);
+
+      if (
+        Number.isNaN(time.getTime()) ||
+        Number.isNaN(avgWindMs) ||
+        Number.isNaN(gustWindMs) ||
+        Number.isNaN(windDirectionDeg)
+      ) {
+        return null;
+      }
+
+      return { time, avgWindMs, gustWindMs, windDirectionDeg };
+    })
+    .filter((point): point is LiveWindHistoryPoint => point !== null)
+    .sort((a, b) => a.time.getTime() - b.time.getTime());
+
+  setCached(cacheKey, points, TTL.LIVE_WIND_HISTORY);
+  return points;
 }
 
 type SerialisedSun = Omit<SunInfo, 'sunrise' | 'sunset'> & { sunrise: string; sunset: string };

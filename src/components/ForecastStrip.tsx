@@ -1,115 +1,131 @@
-import type { HourlyForecast } from '@/lib/api';
+import type { HourlyForecast, LiveWindHistoryPoint } from '@/lib/api';
 import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, CalendarDays } from 'lucide-react';
 import { format, startOfDay, addDays, isSameDay } from 'date-fns';
+import { WindChart } from '@/components/charts';
 
 interface ForecastStripProps {
   forecasts: HourlyForecast[];
+  liveWindHistory: LiveWindHistoryPoint[];
 }
 
 
-export default function ForecastStrip({ forecasts }: ForecastStripProps) {
+export default function ForecastStrip({ forecasts, liveWindHistory }: ForecastStripProps) {
   const days = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
+  const todayForecasts = forecasts.filter(f => isSameDay(f.time, new Date()));
 
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-sm">
-          <CalendarDays className="h-4 w-4" /> 5-Day Forecast
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-0 pb-1">
-        {/* Column headers */}
-        <div className="grid grid-cols-[3.5rem_1.75rem_3.5rem_1fr_1fr_2.5rem] gap-x-3 px-4 pb-2 text-xs text-muted-foreground uppercase tracking-wide">
-          <span>Day</span>
-          <span></span>
-          <span>Temp</span>
-          <span>Avg</span>
-          <span className="text-orange-500">Gust</span>
-          <span>Rain</span>
-        </div>
+    <div className="space-y-3">
+      {todayForecasts.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">Observed vs Forecast Wind (Today)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <WindChart forecasts={todayForecasts} liveHistory={liveWindHistory} includePastHours={3} />
+          </CardContent>
+        </Card>
+      )}
 
-        <div className="divide-y divide-border">
-          {days.map((day, i) => {
-            const dayForecasts = forecasts.filter(f => isSameDay(f.time, day));
-            if (!dayForecasts.length) return null;
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <CalendarDays className="h-4 w-4" /> 5-Day Forecast
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0 pb-1">
+          {/* Column headers */}
+          <div className="grid grid-cols-[3.5rem_1.75rem_3.5rem_1fr_1fr_2.5rem] gap-x-3 px-4 pb-2 text-xs text-muted-foreground uppercase tracking-wide">
+            <span>Day</span>
+            <span></span>
+            <span>Temp</span>
+            <span>Avg</span>
+            <span className="text-orange-500">Gust</span>
+            <span>Rain</span>
+          </div>
 
-            const maxTemp = Math.max(...dayForecasts.map(f => f.screenTemperature));
-            const minTemp = Math.min(...dayForecasts.map(f => f.screenTemperature));
-            const maxGust = Math.max(...dayForecasts.map(f => f.windGustSpeed10m));
-            const avgWind = dayForecasts.reduce((s, f) => s + f.windSpeed10m, 0) / dayForecasts.length;
-            const maxRain = Math.max(...dayForecasts.map(f => f.probOfPrecipitation));
-            const peakEntry = dayForecasts.find(f => f.windGustSpeed10m === maxGust)!;
-            const dominant = dayForecasts.reduce((best, f) =>
-              f.precipitationRate > best.precipitationRate ? f : best, dayForecasts[0]);
-            const weather = getWeatherInfo(dominant.significantWeatherCode);
-            const WeatherIcon = weather.Icon;
-            const bf = beaufortScale(msToKnots(avgWind));
-            const peakBf = beaufortScale(msToKnots(maxGust));
-            const isToday = isSameDay(day, new Date());
+          <div className="divide-y divide-border">
+            {days.map((day, i) => {
+              const dayForecasts = forecasts.filter(f => isSameDay(f.time, day));
+              if (!dayForecasts.length) return null;
 
-            return (
-              <div
-                key={i}
-                className={`grid grid-cols-[3.5rem_1.75rem_3.5rem_1fr_1fr_2.5rem] gap-x-3 px-4 py-3 items-center ${
-                  isToday ? 'bg-muted/40' : ''
-                }`}
-              >
-                {/* Day */}
-                <div>
-                  <p className="text-sm font-medium leading-tight">
-                    {isToday ? 'Today' : format(day, 'EEE')}
-                  </p>
-                  <p className="text-muted-foreground text-xs">{format(day, 'd MMM')}</p>
-                </div>
+              const maxTemp = Math.max(...dayForecasts.map(f => f.screenTemperature));
+              const minTemp = Math.min(...dayForecasts.map(f => f.screenTemperature));
+              const maxGust = Math.max(...dayForecasts.map(f => f.windGustSpeed10m));
+              const avgWind = dayForecasts.reduce((s, f) => s + f.windSpeed10m, 0) / dayForecasts.length;
+              const maxRain = Math.max(...dayForecasts.map(f => f.probOfPrecipitation));
+              const peakEntry = dayForecasts.find(f => f.windGustSpeed10m === maxGust)!;
+              const dominant = dayForecasts.reduce((best, f) =>
+                f.precipitationRate > best.precipitationRate ? f : best, dayForecasts[0]);
+              const weather = getWeatherInfo(dominant.significantWeatherCode);
+              const WeatherIcon = weather.Icon;
+              const bf = beaufortScale(msToKnots(avgWind));
+              const peakBf = beaufortScale(msToKnots(maxGust));
+              const isToday = isSameDay(day, new Date());
 
-                {/* Icon */}
-                <WeatherIcon className="h-5 w-5 text-primary" strokeWidth={1.5} />
+              return (
+                <div
+                  key={i}
+                  className={`grid grid-cols-[3.5rem_1.75rem_3.5rem_1fr_1fr_2.5rem] gap-x-3 px-4 py-3 items-center ${
+                    isToday ? 'bg-muted/40' : ''
+                  }`}
+                >
+                  {/* Day */}
+                  <div>
+                    <p className="text-sm font-medium leading-tight">
+                      {isToday ? 'Today' : format(day, 'EEE')}
+                    </p>
+                    <p className="text-muted-foreground text-xs">{format(day, 'd MMM')}</p>
+                  </div>
 
-                {/* Temp */}
-                <div className="text-xs leading-tight">
-                  <span className="font-medium">{Math.round(maxTemp)}°</span>
-                  <span className="text-muted-foreground"> / {Math.round(minTemp)}°</span>
-                </div>
+                  {/* Icon */}
+                  <WeatherIcon className="h-5 w-5 text-primary" strokeWidth={1.5} />
 
-                {/* Avg wind */}
-                <div className="flex items-center gap-1.5">
-                  <span className={`text-sm font-semibold tabular-nums ${beaufortColor(bf.force)}`}>
-                    {Math.round(msToKnots(avgWind))}kt
+                  {/* Temp */}
+                  <div className="text-xs leading-tight">
+                    <span className="font-medium">{Math.round(maxTemp)}°</span>
+                    <span className="text-muted-foreground"> / {Math.round(minTemp)}°</span>
+                  </div>
+
+                  {/* Avg wind */}
+                  <div className="flex items-center gap-1.5">
+                    <span className={`text-sm font-semibold tabular-nums ${beaufortColor(bf.force)}`}>
+                      {Math.round(msToKnots(avgWind))}kt
+                    </span>
+                    <span className={`text-xs font-medium px-1 py-0.5 rounded leading-none ${beaufortBg(bf.force)}`}>
+                      F{bf.force}
+                    </span>
+                  </div>
+
+                  {/* Peak gust */}
+                  <div className="flex items-center gap-1">
+                    <ArrowUp
+                      className="h-3 w-3 text-muted-foreground flex-shrink-0"
+                      style={{ transform: `rotate(${peakEntry.windDirectionFrom10m}deg)` }}
+                      strokeWidth={2.5}
+                    />
+                    <span className={`text-sm font-semibold tabular-nums ${beaufortColor(peakBf.force)}`}>
+                      {Math.round(msToKnots(maxGust))}kt
+                    </span>
+                    <span className="text-muted-foreground text-xs">
+                      {degreesToCardinal(peakEntry.windDirectionFrom10m)}
+                    </span>
+                  </div>
+
+                  {/* Rain */}
+                  <span className={`text-xs font-medium tabular-nums text-right ${
+                    maxRain > 60 ? 'text-blue-500' : 'text-muted-foreground'
+                  }`}>
+                    {maxRain}%
                   </span>
-                  <span className={`text-xs font-medium px-1 py-0.5 rounded leading-none ${beaufortBg(bf.force)}`}>
-                    F{bf.force}
-                  </span>
                 </div>
-
-                {/* Peak gust */}
-                <div className="flex items-center gap-1">
-                  <ArrowUp
-                    className="h-3 w-3 text-muted-foreground flex-shrink-0"
-                    style={{ transform: `rotate(${peakEntry.windDirectionFrom10m}deg)` }}
-                    strokeWidth={2.5}
-                  />
-                  <span className={`text-sm font-semibold tabular-nums ${beaufortColor(peakBf.force)}`}>
-                    {Math.round(msToKnots(maxGust))}kt
-                  </span>
-                  <span className="text-muted-foreground text-xs">
-                    {degreesToCardinal(peakEntry.windDirectionFrom10m)}
-                  </span>
-                </div>
-
-                {/* Rain */}
-                <span className={`text-xs font-medium tabular-nums text-right ${
-                  maxRain > 60 ? 'text-blue-500' : 'text-muted-foreground'
-                }`}>
-                  {maxRain}%
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

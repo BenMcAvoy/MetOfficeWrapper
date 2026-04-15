@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import type { HourlyForecast, TideData, SunInfo } from '@/lib/api';
-import { fetchMetOfficeHourly, fetchTides, fetchSunInfo } from '@/lib/api';
+import type { HourlyForecast, TideData, SunInfo, LiveWind, LiveWindHistoryPoint } from '@/lib/api';
+import { fetchMetOfficeHourly, fetchTides, fetchSunInfo, fetchLiveWind, fetchLiveWindHistory } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
 import { Skeleton } from '@/components/ui/skeleton';
 import WeatherOverview from '@/components/WeatherOverview';
@@ -16,6 +16,7 @@ import { format, addDays, startOfDay, isSameDay, isBefore, startOfHour } from 'd
 
 const LOCATION_GEOHASH = 'gcn86rd2z';
 const LOCATION_NAME = 'Poole Harbour';
+const LIVE_WIND_LOCATION_ID = 'GBR00015';
 const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
@@ -97,6 +98,8 @@ export default function App() {
   const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
   const [tideData, setTideData] = useState<TideData | null>(null);
   const [sunInfo, setSunInfo] = useState<SunInfo | null>(null);
+  const [liveWind, setLiveWind] = useState<LiveWind | null>(null);
+  const [liveWindHistory, setLiveWindHistory] = useState<LiveWindHistoryPoint[]>([]);
   const [loadState, setLoadState] = useState<LoadState>('idle');
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -134,6 +137,36 @@ export default function App() {
     const interval = setInterval(loadData, 30 * 60 * 1000);
     return () => clearInterval(interval);
   }, [loadData]);
+
+  const loadLiveWind = useCallback(async () => {
+    try {
+      const live = await fetchLiveWind(LIVE_WIND_LOCATION_ID);
+      setLiveWind(live);
+    } catch (e) {
+      console.warn('Live wind failed:', (e as Error).message);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadLiveWind();
+    const interval = setInterval(loadLiveWind, 15 * 1000);
+    return () => clearInterval(interval);
+  }, [loadLiveWind]);
+
+  const loadLiveWindHistory = useCallback(async () => {
+    try {
+      const history = await fetchLiveWindHistory(LIVE_WIND_LOCATION_ID, 6);
+      setLiveWindHistory(history);
+    } catch (e) {
+      console.warn('Live wind history failed:', (e as Error).message);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadLiveWindHistory();
+    const interval = setInterval(loadLiveWindHistory, 60 * 1000);
+    return () => clearInterval(interval);
+  }, [loadLiveWindHistory]);
 
   const availableDays = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
   const dayForecasts = filterForDay(forecasts, selectedDay);
@@ -201,7 +234,13 @@ export default function App() {
               />
             )}
             {activeTab === 'wind' && (
-              <WindCard forecasts={dayForecasts} selectedDay={selectedDay} />
+              <WindCard
+                forecasts={dayForecasts}
+                chartForecasts={forecasts.filter(f => isSameDay(f.time, selectedDay))}
+                selectedDay={selectedDay}
+                liveWind={liveWind}
+                liveWindHistory={liveWindHistory}
+              />
             )}
             {activeTab === 'tides' && (
               tideData ? (
@@ -214,7 +253,7 @@ export default function App() {
               )
             )}
             {activeTab === 'forecast' && (
-              <ForecastStrip forecasts={forecasts} />
+              <ForecastStrip forecasts={forecasts} liveWindHistory={liveWindHistory} />
             )}
             {activeTab === 'races' && (
               <RaceCalendar forecasts={forecasts} tideData={tideData} />

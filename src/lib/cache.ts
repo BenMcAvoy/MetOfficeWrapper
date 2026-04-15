@@ -30,5 +30,7 @@ export const TTL = {
   FORECAST: 60 * 60 * 1000,
   TIDES:    4  * 60 * 60 * 1000,
   SUN:      24 * 60 * 60 * 1000,
+  LIVE_WIND: 15 * 1000,
+  LIVE_WIND_HISTORY: 60 * 1000,
   STATIONS: 24 * 60 * 60 * 1000,
 };

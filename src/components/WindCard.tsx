@@ -1,4 +1,4 @@
-import type { HourlyForecast } from '@/lib/api';
+import type { HourlyForecast, LiveWind, LiveWindHistoryPoint } from '@/lib/api';
 import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind, ArrowUp } from 'lucide-react';
@@ -7,12 +7,15 @@ import { format, isSameDay } from 'date-fns';
 
 interface WindCardProps {
   forecasts: HourlyForecast[];
+  chartForecasts: HourlyForecast[];
   selectedDay: Date;
+  liveWind: LiveWind | null;
+  liveWindHistory: LiveWindHistoryPoint[];
 }
 
 
 
-export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
+export default function WindCard({ forecasts, chartForecasts, selectedDay, liveWind, liveWindHistory }: WindCardProps) {
   if (!forecasts.length) return (
     <div className="text-center py-12 text-muted-foreground">
       <Wind className="mx-auto h-10 w-10 mb-3" />
@@ -35,84 +38,112 @@ export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
   const currentKnotsGust = msToKnots(current.windGustSpeed10m);
   const currentBf = beaufortScale(currentKnotsAvg);
 
+  const liveAgeSeconds = liveWind
+    ? Math.max(0, Math.round((Date.now() - liveWind.observedAt.getTime()) / 1000))
+    : null;
+  const hasFreshLiveWind = isToday && !!liveWind && liveAgeSeconds !== null && liveAgeSeconds <= 300;
+  const liveKnots = hasFreshLiveWind && liveWind ? msToKnots(liveWind.windSpeedMs) : null;
+  const liveBf = liveKnots !== null ? beaufortScale(liveKnots) : null;
+  const currentSourceKnots = hasFreshLiveWind && liveKnots !== null ? liveKnots : currentKnotsAvg;
+  const currentSourceDirection = hasFreshLiveWind && liveWind
+    ? liveWind.windDirectionDeg
+    : current.windDirectionFrom10m;
+  const currentSourceBf = hasFreshLiveWind && liveBf ? liveBf : currentBf;
+  const currentTimestamp = hasFreshLiveWind && liveWind && liveAgeSeconds !== null
+    ? `${format(liveWind.observedAt, 'HH:mm:ss')} · ${liveAgeSeconds}s ago${liveWind.delaySeconds !== null ? ` · delay ${liveWind.delaySeconds}s` : ''}`
+    : isToday
+      ? `Forecast now · ${format(current.time, 'HH:mm')}`
+      : `Forecast ${format(current.time, 'HH:mm')}`;
+
 
   return (
     <div className="space-y-3">
-      {/* Day summary */}
       <Card>
-        <CardContent className="pt-4 pb-4">
+        <CardContent className="pt-4 pb-4 space-y-4">
           <p className="text-muted-foreground text-xs uppercase tracking-wide mb-4">
             {isToday ? "Today's" : `${format(selectedDay, 'EEEE')}'s`} Wind
           </p>
-          <div className="flex items-end justify-between gap-2">
+
+          <div className="flex items-end justify-between gap-3">
             <div>
-              <p className="text-muted-foreground text-xs mb-1">Day Average</p>
+              <p className="text-muted-foreground text-xs mb-1">{hasFreshLiveWind ? 'Current (Live)' : 'Current'}</p>
               <div className="flex items-baseline gap-1.5">
-                <span className={`text-5xl font-bold ${beaufortColor(avgBf.force)}`}>{Math.round(avgKnots)}</span>
+                <span className={`text-5xl font-bold ${beaufortColor(currentSourceBf.force)}`}>{Math.round(currentSourceKnots)}</span>
                 <span className="text-muted-foreground">kt</span>
               </div>
               <div className="flex items-center gap-1.5 mt-1.5">
-                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${beaufortBg(avgBf.force)}`}>F{avgBf.force}</span>
-                <span className="text-muted-foreground text-xs">{avgBf.description}</span>
+                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${beaufortBg(currentSourceBf.force)}`}>F{currentSourceBf.force}</span>
+                <span className="text-muted-foreground text-xs">{currentSourceBf.description}</span>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
-              <div className="flex items-baseline gap-1.5 justify-end">
-                <span className={`text-5xl font-bold ${beaufortColor(peakBf.force)}`}>{Math.round(peakKnots)}</span>
-                <span className="text-muted-foreground">kt</span>
+              <p className="text-muted-foreground text-xs mb-1">From</p>
+              <div className="flex items-center justify-end gap-1.5">
+                <ArrowUp
+                  className="h-4 w-4 text-primary"
+                  style={{ transform: `rotate(${currentSourceDirection}deg)` }}
+                  strokeWidth={2.5}
+                />
+                <span className="font-semibold">{degreesToCardinal(currentSourceDirection)}</span>
+                <span className="text-muted-foreground text-xs">{Math.round(currentSourceDirection)}°</span>
               </div>
               <p className="text-muted-foreground text-xs mt-1.5">
-                {format(peakGustEntry.time, 'HH:mm')} · {degreesToCardinal(peakGustEntry.windDirectionFrom10m)}
+                {currentTimestamp}
               </p>
             </div>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Current / first-hour detail */}
-      <Card>
-        <CardContent className="pt-4 pb-4">
-          <p className="text-muted-foreground text-xs uppercase tracking-wide mb-3">
-            {isToday ? `Now · ${format(current.time, 'HH:mm')}` : `${format(current.time, 'HH:mm')} · first hour`}
-          </p>
-          <div className="grid grid-cols-3 gap-4">
+          {isToday && !hasFreshLiveWind && (
+            <p className="text-muted-foreground text-xs border-t pt-3">
+              Live station data unavailable. Showing forecast for current hour.
+            </p>
+          )}
+
+          {isToday && hasFreshLiveWind && (
+            <p className="text-muted-foreground text-xs border-t pt-3">
+              Forecast this hour: {Math.round(currentKnotsAvg)}kt avg / {Math.round(currentKnotsGust)}kt gust
+            </p>
+          )}
+
+          <div className="grid grid-cols-3 gap-4 border-t pt-3">
             <div>
-              <p className="text-muted-foreground text-xs mb-1">Avg</p>
+              <p className="text-muted-foreground text-xs mb-1">Day Average</p>
               <div className="flex items-baseline gap-1">
-                <span className={`text-3xl font-bold ${beaufortColor(currentBf.force)}`}>
-                  {Math.round(currentKnotsAvg)}
+                <span className={`text-3xl font-bold ${beaufortColor(avgBf.force)}`}>
+                  {Math.round(avgKnots)}
                 </span>
                 <span className="text-muted-foreground text-sm">kt</span>
               </div>
             </div>
             <div>
-              <p className="text-muted-foreground text-xs mb-1">Gust</p>
+              <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
               <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-orange-500">
-                  {Math.round(currentKnotsGust)}
+                <span className={`text-3xl font-bold ${beaufortColor(peakBf.force)}`}>
+                  {Math.round(peakKnots)}
                 </span>
                 <span className="text-muted-foreground text-sm">kt</span>
               </div>
+              <p className="text-muted-foreground text-xs mt-0.5">{format(peakGustEntry.time, 'HH:mm')}</p>
             </div>
             <div>
-              <p className="text-muted-foreground text-xs mb-1">From</p>
+              <p className="text-muted-foreground text-xs mb-1">Peak Direction</p>
               <div className="flex items-center gap-1.5">
                 <ArrowUp
                   className="h-4 w-4 text-primary flex-shrink-0"
-                  style={{ transform: `rotate(${current.windDirectionFrom10m}deg)` }}
+                  style={{ transform: `rotate(${peakGustEntry.windDirectionFrom10m}deg)` }}
                   strokeWidth={2.5}
                 />
-                <span className="text-foreground font-semibold">{degreesToCardinal(current.windDirectionFrom10m)}</span>
+                <span className="text-foreground font-semibold">{degreesToCardinal(peakGustEntry.windDirectionFrom10m)}</span>
               </div>
-              <p className="text-muted-foreground text-xs mt-0.5">{Math.round(current.windDirectionFrom10m)}°</p>
+              <p className="text-muted-foreground text-xs mt-0.5">{Math.round(peakGustEntry.windDirectionFrom10m)}°</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 mt-3 pt-3 border-t">
-            <span className={`text-xs font-semibold px-2 py-0.5 rounded ${beaufortBg(currentBf.force)}`}>
-              Beaufort {currentBf.force}
+
+          <div className="flex items-center gap-2">
+            <span className={`text-xs font-semibold px-2 py-0.5 rounded ${beaufortBg(currentSourceBf.force)}`}>
+              Beaufort {currentSourceBf.force}
             </span>
-            <span className="text-muted-foreground text-sm">{currentBf.description}</span>
+            <span className="text-muted-foreground text-sm">{currentSourceBf.description}</span>
           </div>
         </CardContent>
       </Card>
@@ -124,7 +155,11 @@ export default function WindCard({ forecasts, selectedDay }: WindCardProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <WindChart forecasts={forecasts} />
+          <WindChart
+            forecasts={chartForecasts}
+            liveHistory={isToday ? liveWindHistory : []}
+            includePastHours={isToday ? 3 : 0}
+          />
         </CardContent>
       </Card>
 

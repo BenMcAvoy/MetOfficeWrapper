@@ -190,7 +190,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, onBack }: {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <WindChart forecasts={windowForecasts} startRefLine={event.time!} />
+            <WindChart forecasts={windowForecasts} startRefLine={eventStart.getTime()} />
           </CardContent>
         </Card>
       )}

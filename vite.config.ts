@@ -25,6 +25,54 @@ async function handleApiRequest(req: IncomingMessage, res: ServerResponse, env: 
   res.setHeader('Content-Type', 'application/json');
 
   try {
+    if (url.pathname === '/api/live-wind') {
+      const locId = url.searchParams.get('locId');
+      if (!locId) {
+        res.statusCode = 400;
+        res.end(JSON.stringify({ error: 'locId required' }));
+        return true;
+      }
+
+      const historyHours = url.searchParams.get('historyHours');
+
+      if (historyHours) {
+        const lastHours = Number.parseInt(historyHours, 10);
+        if (!Number.isFinite(lastHours) || lastHours <= 0 || lastHours > 72) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'historyHours must be 1-72' }));
+          return true;
+        }
+
+        const r = await fetch(
+          `https://weatherfile.com/V03/loc/${encodeURIComponent(locId)}/averages.json`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+              'wf-tkn': 'PUBLIC',
+            },
+            body: `last_hrs=${encodeURIComponent(String(lastHours))}`,
+          }
+        );
+
+        res.statusCode = r.status;
+        res.end(await r.text());
+        return true;
+      }
+
+      const r = await fetch(
+        `https://weatherfile.com/V03/loc/${encodeURIComponent(locId)}/latest.json`,
+        {
+          method: 'POST',
+          headers: { 'wf-tkn': 'PUBLIC' },
+        }
+      );
+
+      res.statusCode = r.status;
+      res.end(await r.text());
+      return true;
+    }
+
     if (url.pathname === '/api/forecast') {
       const key = env.METOFFICE_API_KEY;
       if (!key) { res.statusCode = 503; res.end(JSON.stringify({ error: 'METOFFICE_API_KEY not set' })); return true; }
