@@ -23,9 +23,54 @@ type WindChartPoint = {
   histGust: number | null;
 };
 
+type SeriesPoint = {
+  t: number;
+  avg: number;
+  gust: number;
+};
+
+const TEN_MINUTES_MS = 10 * 60 * 1000;
+
+function round1(value: number): number {
+  return Math.round(value * 10) / 10;
+}
+
 function toTenMinuteBucket(timestampMs: number): number {
-  const bucketMs = 10 * 60 * 1000;
-  return Math.floor(timestampMs / bucketMs) * bucketMs;
+  return Math.floor(timestampMs / TEN_MINUTES_MS) * TEN_MINUTES_MS;
+}
+
+function interpolateSeries(series: SeriesPoint[], t: number, clampEdges: boolean): { avg: number; gust: number } | null {
+  if (!series.length) return null;
+
+  const first = series[0];
+  const last = series[series.length - 1];
+
+  if (t < first.t) return clampEdges ? { avg: first.avg, gust: first.gust } : null;
+  if (t > last.t) return clampEdges ? { avg: last.avg, gust: last.gust } : null;
+  if (t === first.t) return { avg: first.avg, gust: first.gust };
+  if (t === last.t) return { avg: last.avg, gust: last.gust };
+
+  let lo = 0;
+  let hi = series.length - 1;
+
+  while (lo <= hi) {
+    const mid = Math.floor((lo + hi) / 2);
+    const mt = series[mid].t;
+    if (mt === t) return { avg: series[mid].avg, gust: series[mid].gust };
+    if (mt < t) lo = mid + 1;
+    else hi = mid - 1;
+  }
+
+  const upper = series[lo];
+  const lower = series[lo - 1];
+  if (!upper || !lower) return null;
+  if (upper.t === lower.t) return { avg: upper.avg, gust: upper.gust };
+
+  const ratio = (t - lower.t) / (upper.t - lower.t);
+  return {
+    avg: round1(lower.avg + (upper.avg - lower.avg) * ratio),
+    gust: round1(lower.gust + (upper.gust - lower.gust) * ratio),
+  };
 }
 
 function buildHourlyTicks(minTime: number, maxTime: number): number[] {
@@ -45,69 +90,67 @@ export function WindChart({ forecasts, startRefLine, liveHistory = [], includePa
   const forcedMinTime = includePastHours > 0 ? subHours(nowHour, includePastHours).getTime() : null;
   const minTime = forcedMinTime ?? Number.NEGATIVE_INFINITY;
 
-  const map = new Map<number, WindChartPoint>();
+  const forecastMap = new Map<number, SeriesPoint>();
+  const observedMap = new Map<number, SeriesPoint>();
 
   for (const forecast of forecasts) {
     const t = toTenMinuteBucket(forecast.time.getTime());
     if (t < minTime) continue;
-    const existing = map.get(t);
-    map.set(t, {
+    forecastMap.set(t, {
       t,
-      time: format(new Date(t), 'HH:mm'),
-      avg: Math.round(msToKnots(forecast.windSpeed10m) * 10) / 10,
-      gust: Math.round(msToKnots(forecast.windGustSpeed10m) * 10) / 10,
-      histAvg: existing?.histAvg ?? null,
-      histGust: existing?.histGust ?? null,
+      avg: round1(msToKnots(forecast.windSpeed10m)),
+      gust: round1(msToKnots(forecast.windGustSpeed10m)),
     });
   }
 
   for (const point of liveHistory) {
     const t = toTenMinuteBucket(point.time.getTime());
     if (t < minTime) continue;
-    const existing = map.get(t);
-    map.set(t, {
+    observedMap.set(t, {
       t,
-      time: format(new Date(t), 'HH:mm'),
-      avg: existing?.avg ?? null,
-      gust: existing?.gust ?? null,
-      histAvg: Math.round(msToKnots(point.avgWindMs) * 10) / 10,
-      histGust: Math.round(msToKnots(point.gustWindMs) * 10) / 10,
+      avg: round1(msToKnots(point.avgWindMs)),
+      gust: round1(msToKnots(point.gustWindMs)),
     });
   }
 
-  if (forcedMinTime !== null) {
-    const firstForecast = Array.from(map.values())
-      .filter(point => point.avg !== null && point.gust !== null)
-      .sort((a, b) => a.t - b.t)[0];
+  const forecastSeries = Array.from(forecastMap.values()).sort((a, b) => a.t - b.t);
+  const observedSeries = Array.from(observedMap.values()).sort((a, b) => a.t - b.t);
 
-    if (firstForecast && firstForecast.t > forcedMinTime) {
-      const oneHour = 60 * 60 * 1000;
-      for (let t = forcedMinTime; t < firstForecast.t; t += oneHour) {
-        const existing = map.get(t);
-        map.set(t, {
-          t,
-          time: format(new Date(t), 'HH:mm'),
-          avg: firstForecast.avg,
-          gust: firstForecast.gust,
-          histAvg: existing?.histAvg ?? null,
-          histGust: existing?.histGust ?? null,
-        });
-      }
-    }
+  if (!forecastSeries.length && !observedSeries.length) return null;
+
+  const firstDataTime = Math.min(
+    forecastSeries[0]?.t ?? Number.POSITIVE_INFINITY,
+    observedSeries[0]?.t ?? Number.POSITIVE_INFINITY,
+  );
+  const lastDataTime = Math.max(
+    forecastSeries[forecastSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
+    observedSeries[observedSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
+  );
+
+  const xMin = forcedMinTime ?? firstDataTime;
+  const xMax = Math.max(lastDataTime, xMin + 60 * 60 * 1000);
+
+  const data: WindChartPoint[] = [];
+  for (let t = toTenMinuteBucket(xMin); t <= xMax; t += TEN_MINUTES_MS) {
+    if (t < xMin) continue;
+    const forecastPoint = interpolateSeries(forecastSeries, t, true);
+    const observedPoint = interpolateSeries(observedSeries, t, false);
+    data.push({
+      t,
+      time: format(new Date(t), 'HH:mm'),
+      avg: forecastPoint?.avg ?? null,
+      gust: forecastPoint?.gust ?? null,
+      histAvg: observedPoint?.avg ?? null,
+      histGust: observedPoint?.gust ?? null,
+    });
   }
-
-  const data = Array.from(map.values())
-    .sort((a, b) => a.t - b.t)
-    .filter(d => d.t >= minTime);
 
   if (!data.length) return null;
 
-  const xMin = forcedMinTime ?? data[0].t;
-  const xMax = Math.max(data[data.length - 1].t, xMin + 60 * 60 * 1000);
   const xTicks = buildHourlyTicks(xMin, xMax);
 
   const refLineTime = startRefLine;
-  const hasHistory = liveHistory.length > 0;
+  const hasHistory = observedSeries.length > 0;
 
   return (
     <div className="h-44">
@@ -136,7 +179,13 @@ export function WindChart({ forecasts, startRefLine, liveHistory = [], includePa
           <YAxis tick={<YAxisTick unit="kt" />} width={44} />
           <Tooltip
             {...tooltipStyle}
+            filterNull={false}
             labelFormatter={t => format(new Date(Number(t)), 'HH:mm')}
+            formatter={(value: unknown) =>
+              typeof value === 'number' && Number.isFinite(value)
+                ? `${value.toFixed(1)} kt`
+                : '—'
+            }
           />
           <Legend wrapperStyle={{ color: 'var(--muted-foreground)', fontSize: '11px' }} />
           {refLineTime && (
