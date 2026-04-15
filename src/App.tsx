@@ -1,16 +1,15 @@
 import { useEffect, useState, useCallback } from 'react';
-import type { HourlyForecast, TideData, SunInfo, LiveWind, LiveWindHistoryPoint } from '@/lib/api';
-import { fetchMetOfficeHourly, fetchTides, fetchSunInfo, fetchLiveWind, fetchLiveWindHistory } from '@/lib/api';
+import type { HourlyForecast, TideData, LiveWind, LiveWindHistoryPoint } from '@/lib/api';
+import { fetchMetOfficeHourly, fetchTides, fetchLiveWind, fetchLiveWindHistory } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
 import { Skeleton } from '@/components/ui/skeleton';
-import WeatherOverview from '@/components/WeatherOverview';
 import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
 import RaceCalendar from '@/components/RaceCalendar';
 import {
   MapPin, AlertTriangle, Waves, RefreshCw, Loader2,
-  LayoutDashboard, Wind, CalendarDays, Anchor,
+  Wind, CalendarDays, Anchor,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay, isBefore, startOfHour } from 'date-fns';
 
@@ -20,7 +19,7 @@ const LIVE_WIND_LOCATION_ID = 'GBR00015';
 const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
-type Tab = 'overview' | 'wind' | 'tides' | 'forecast' | 'races';
+type Tab = 'wind' | 'tides' | 'forecast' | 'races';
 
 function useDarkMode() {
   useEffect(() => {
@@ -71,7 +70,6 @@ export function filterForDay(forecasts: HourlyForecast[], day: Date): HourlyFore
 }
 
 const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
-  { id: 'overview', label: 'Overview', Icon: LayoutDashboard },
   { id: 'wind',     label: 'Wind',     Icon: Wind },
   { id: 'tides',    label: 'Tides',    Icon: Waves },
   { id: 'forecast', label: '5-Day',    Icon: CalendarDays },
@@ -97,23 +95,21 @@ export default function App() {
 
   const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
   const [tideData, setTideData] = useState<TideData | null>(null);
-  const [sunInfo, setSunInfo] = useState<SunInfo | null>(null);
   const [liveWind, setLiveWind] = useState<LiveWind | null>(null);
   const [liveWindHistory, setLiveWindHistory] = useState<LiveWindHistoryPoint[]>([]);
   const [loadState, setLoadState] = useState<LoadState>('idle');
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>('overview');
+  const [activeTab, setActiveTab] = useState<Tab>('wind');
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
 
   const loadData = useCallback(async () => {
     setLoadState('loading');
     setError(null);
     try {
-      const [fc, td, sun] = await Promise.allSettled([
+      const [fc, td] = await Promise.allSettled([
         fetchMetOfficeHourly(lat, lon),
         fetchTides(lat, lon),
-        fetchSunInfo(lat, lon),
       ]);
 
       if (fc.status === 'fulfilled') setForecasts(fc.value);
@@ -121,8 +117,6 @@ export default function App() {
 
       if (td.status === 'fulfilled') setTideData(td.value);
       else console.warn('Tides failed:', (td.reason as Error).message);
-
-      if (sun.status === 'fulfilled') setSunInfo(sun.value);
 
       setLoadState('ok');
       setLastUpdated(new Date());
@@ -225,14 +219,6 @@ export default function App() {
               <DateSelector selected={selectedDay} onChange={setSelectedDay} availableDays={availableDays} />
             )}
 
-            {activeTab === 'overview' && (
-              <WeatherOverview
-                forecasts={dayForecasts}
-                allForecasts={forecasts}
-                sunInfo={sunInfo}
-                selectedDay={selectedDay}
-              />
-            )}
             {activeTab === 'wind' && (
               <WindCard
                 forecasts={dayForecasts}

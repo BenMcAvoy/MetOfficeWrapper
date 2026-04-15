@@ -49,101 +49,86 @@ export default function WindCard({ forecasts, chartForecasts, selectedDay, liveW
     ? liveWind.windDirectionDeg
     : current.windDirectionFrom10m;
   const currentSourceBf = hasFreshLiveWind && liveBf ? liveBf : currentBf;
+  const sourceBadgeClass = hasFreshLiveWind
+    ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
+    : 'bg-muted text-muted-foreground';
+  const primarySpeedLabel = isToday
+    ? hasFreshLiveWind ? 'Current speed' : 'Current avg'
+    : 'First-hour avg';
+  const gustLabel = isToday
+    ? hasFreshLiveWind ? 'Forecast gust' : 'Current gust'
+    : 'First-hour gust';
   const currentTimestamp = hasFreshLiveWind && liveWind && liveAgeSeconds !== null
-    ? `${format(liveWind.observedAt, 'HH:mm:ss')} · ${liveAgeSeconds}s ago${liveWind.delaySeconds !== null ? ` · delay ${liveWind.delaySeconds}s` : ''}`
-    : isToday
-      ? `Forecast now · ${format(current.time, 'HH:mm')}`
-      : `Forecast ${format(current.time, 'HH:mm')}`;
+    ? `${format(liveWind.observedAt, 'HH:mm:ss')} · ${liveAgeSeconds}s ago${liveWind.delaySeconds !== null ? ` · +${liveWind.delaySeconds}s` : ''}`
+    : `Forecast ${format(current.time, 'HH:mm')}`;
 
 
   return (
     <div className="space-y-3">
       <Card>
-        <CardContent className="pt-4 pb-4 space-y-4">
-          <p className="text-muted-foreground text-xs uppercase tracking-wide mb-4">
-            {isToday ? "Today's" : `${format(selectedDay, 'EEEE')}'s`} Wind
-          </p>
+        <CardContent className="pt-4 pb-4">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-muted-foreground text-xs uppercase tracking-wide">
+              {isToday ? "Today's" : `${format(selectedDay, 'EEEE')}'s`} Wind
+            </p>
+            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${sourceBadgeClass}`}>
+              {hasFreshLiveWind ? 'LIVE' : 'FORECAST'}
+            </span>
+          </div>
 
-          <div className="flex items-end justify-between gap-3">
-            <div>
-              <p className="text-muted-foreground text-xs mb-1">{hasFreshLiveWind ? 'Current (Live)' : 'Current'}</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-lg border p-3">
+              <p className="text-muted-foreground text-xs mb-1">{primarySpeedLabel}</p>
               <div className="flex items-baseline gap-1.5">
-                <span className={`text-5xl font-bold ${beaufortColor(currentSourceBf.force)}`}>{Math.round(currentSourceKnots)}</span>
-                <span className="text-muted-foreground">kt</span>
-              </div>
-              <div className="flex items-center gap-1.5 mt-1.5">
-                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${beaufortBg(currentSourceBf.force)}`}>F{currentSourceBf.force}</span>
-                <span className="text-muted-foreground text-xs">{currentSourceBf.description}</span>
+                <span className={`text-4xl font-bold tabular-nums ${beaufortColor(currentSourceBf.force)}`}>{Math.round(currentSourceKnots)}</span>
+                <span className="text-muted-foreground text-sm">kt</span>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-muted-foreground text-xs mb-1">From</p>
-              <div className="flex items-center justify-end gap-1.5">
-                <ArrowUp
-                  className="h-4 w-4 text-primary"
-                  style={{ transform: `rotate(${currentSourceDirection}deg)` }}
-                  strokeWidth={2.5}
-                />
-                <span className="font-semibold">{degreesToCardinal(currentSourceDirection)}</span>
-                <span className="text-muted-foreground text-xs">{Math.round(currentSourceDirection)}°</span>
+            <div className="rounded-lg border p-3">
+              <p className="text-muted-foreground text-xs mb-1">{gustLabel}</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-4xl font-bold tabular-nums text-orange-500">{Math.round(currentKnotsGust)}</span>
+                <span className="text-muted-foreground text-sm">kt</span>
               </div>
-              <p className="text-muted-foreground text-xs mt-1.5">
-                {currentTimestamp}
-              </p>
             </div>
           </div>
 
-          {isToday && !hasFreshLiveWind && (
-            <p className="text-muted-foreground text-xs border-t pt-3">
-              Live station data unavailable. Showing forecast for current hour.
-            </p>
-          )}
+          <div className="flex items-center justify-between mt-3 pt-3 border-t">
+            <div className="flex items-center gap-1.5">
+              <ArrowUp
+                className="h-4 w-4 text-primary"
+                style={{ transform: `rotate(${currentSourceDirection}deg)` }}
+                strokeWidth={2.5}
+              />
+              <span className="text-sm font-semibold">{degreesToCardinal(currentSourceDirection)}</span>
+              <span className="text-muted-foreground text-xs">{Math.round(currentSourceDirection)}°</span>
+              <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${beaufortBg(currentSourceBf.force)}`}>
+                F{currentSourceBf.force}
+              </span>
+            </div>
+            <p className="text-muted-foreground text-xs text-right">{currentTimestamp}</p>
+          </div>
 
           {isToday && hasFreshLiveWind && (
-            <p className="text-muted-foreground text-xs border-t pt-3">
-              Forecast this hour: {Math.round(currentKnotsAvg)}kt avg / {Math.round(currentKnotsGust)}kt gust
+            <p className="text-muted-foreground text-xs mt-2">
+              Forecast now: {Math.round(currentKnotsAvg)}kt avg / {Math.round(currentKnotsGust)}kt gust
             </p>
           )}
 
-          <div className="grid grid-cols-3 gap-4 border-t pt-3">
+          <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t">
             <div>
-              <p className="text-muted-foreground text-xs mb-1">Day Average</p>
-              <div className="flex items-baseline gap-1">
-                <span className={`text-3xl font-bold ${beaufortColor(avgBf.force)}`}>
-                  {Math.round(avgKnots)}
-                </span>
-                <span className="text-muted-foreground text-sm">kt</span>
-              </div>
+              <p className="text-muted-foreground text-xs mb-1">Day Avg</p>
+              <p className={`text-xl font-bold tabular-nums ${beaufortColor(avgBf.force)}`}>{Math.round(avgKnots)}kt</p>
             </div>
             <div>
               <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
-              <div className="flex items-baseline gap-1">
-                <span className={`text-3xl font-bold ${beaufortColor(peakBf.force)}`}>
-                  {Math.round(peakKnots)}
-                </span>
-                <span className="text-muted-foreground text-sm">kt</span>
-              </div>
-              <p className="text-muted-foreground text-xs mt-0.5">{format(peakGustEntry.time, 'HH:mm')}</p>
+              <p className={`text-xl font-bold tabular-nums ${beaufortColor(peakBf.force)}`}>{Math.round(peakKnots)}kt</p>
             </div>
             <div>
-              <p className="text-muted-foreground text-xs mb-1">Peak Direction</p>
-              <div className="flex items-center gap-1.5">
-                <ArrowUp
-                  className="h-4 w-4 text-primary flex-shrink-0"
-                  style={{ transform: `rotate(${peakGustEntry.windDirectionFrom10m}deg)` }}
-                  strokeWidth={2.5}
-                />
-                <span className="text-foreground font-semibold">{degreesToCardinal(peakGustEntry.windDirectionFrom10m)}</span>
-              </div>
-              <p className="text-muted-foreground text-xs mt-0.5">{Math.round(peakGustEntry.windDirectionFrom10m)}°</p>
+              <p className="text-muted-foreground text-xs mb-1">Peak At</p>
+              <p className="text-base font-semibold tabular-nums">{format(peakGustEntry.time, 'HH:mm')}</p>
+              <p className="text-muted-foreground text-xs">{degreesToCardinal(peakGustEntry.windDirectionFrom10m)}</p>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className={`text-xs font-semibold px-2 py-0.5 rounded ${beaufortBg(currentSourceBf.force)}`}>
-              Beaufort {currentSourceBf.force}
-            </span>
-            <span className="text-muted-foreground text-sm">{currentSourceBf.description}</span>
           </div>
         </CardContent>
       </Card>
