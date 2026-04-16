@@ -133,8 +133,9 @@ export function WindChart({ forecasts, startRefLine, liveHistory = [], includePa
   const data: WindChartPoint[] = [];
   for (let t = toTenMinuteBucket(xMin); t <= xMax; t += TEN_MINUTES_MS) {
     if (t < xMin) continue;
-    const forecastPoint = interpolateSeries(forecastSeries, t, true);
+    const forecastPoint = interpolateSeries(forecastSeries, t, false);
     const observedPoint = interpolateSeries(observedSeries, t, false);
+
     data.push({
       t,
       time: format(new Date(t), 'HH:mm'),
