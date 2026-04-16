@@ -1,4 +1,4 @@
-import type { HourlyForecast, LiveWind, LiveWindHistoryPoint } from '@/lib/api';
+import type { HourlyForecast, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind, ArrowUp } from 'lucide-react';
@@ -8,6 +8,7 @@ import WindChartCard from '@/components/WindChartCard';
 interface WindCardProps {
   forecasts: HourlyForecast[];
   chartForecasts: HourlyForecast[];
+  chartHistoryForecasts: WindForecastPoint[];
   selectedDay: Date;
   liveWind: LiveWind | null;
   liveWindHistory: LiveWindHistoryPoint[];
@@ -15,7 +16,7 @@ interface WindCardProps {
 
 
 
-export default function WindCard({ forecasts, chartForecasts, selectedDay, liveWind, liveWindHistory }: WindCardProps) {
+export default function WindCard({ forecasts, chartForecasts, chartHistoryForecasts, selectedDay, liveWind, liveWindHistory }: WindCardProps) {
   if (!forecasts.length) return (
     <div className="text-center py-12 text-muted-foreground">
       <Wind className="mx-auto h-10 w-10 mb-3" />
@@ -181,6 +182,7 @@ export default function WindCard({ forecasts, chartForecasts, selectedDay, liveW
       <WindChartCard
         title="Wind Chart"
         forecasts={chartForecasts}
+        historyForecasts={isToday ? chartHistoryForecasts : []}
         liveWindHistory={isToday ? liveWindHistory : []}
         includePastHours={isToday ? 3 : 0}
       />

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import type { HourlyForecast, TideData, LiveWind, LiveWindHistoryPoint } from '@/lib/api';
-import { fetchMetOfficeHourly, fetchTides, fetchLiveWind, fetchLiveWindHistory } from '@/lib/api';
+import type { HourlyForecast, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
+import { fetchMetOfficeHourly, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
 import { Skeleton } from '@/components/ui/skeleton';
 import WindCard from '@/components/WindCard';
@@ -94,6 +94,7 @@ export default function App() {
   useDarkMode();
 
   const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
+  const [forecastHistory, setForecastHistory] = useState<WindForecastPoint[]>([]);
   const [tideData, setTideData] = useState<TideData | null>(null);
   const [liveWind, setLiveWind] = useState<LiveWind | null>(null);
   const [liveWindHistory, setLiveWindHistory] = useState<LiveWindHistoryPoint[]>([]);
@@ -114,6 +115,12 @@ export default function App() {
 
       if (fc.status === 'fulfilled') setForecasts(fc.value);
       else throw new Error(`Weather: ${(fc.reason as Error).message}`);
+
+      try {
+        setForecastHistory(await fetchForecastHistory(lat, lon, 6));
+      } catch (e) {
+        console.warn('Forecast history failed:', (e as Error).message);
+      }
 
       if (td.status === 'fulfilled') setTideData(td.value);
       else console.warn('Tides failed:', (td.reason as Error).message);
@@ -223,6 +230,7 @@ export default function App() {
               <WindCard
                 forecasts={dayForecasts}
                 chartForecasts={forecasts.filter(f => isSameDay(f.time, selectedDay))}
+                chartHistoryForecasts={forecastHistory}
                 selectedDay={selectedDay}
                 liveWind={liveWind}
                 liveWindHistory={liveWindHistory}
@@ -239,7 +247,7 @@ export default function App() {
               )
             )}
             {activeTab === 'forecast' && (
-              <ForecastStrip forecasts={forecasts} liveWindHistory={liveWindHistory} />
+              <ForecastStrip forecasts={forecasts} chartHistoryForecasts={forecastHistory} liveWindHistory={liveWindHistory} />
             )}
             {activeTab === 'races' && (
               <RaceCalendar forecasts={forecasts} tideData={tideData} liveWindHistory={liveWindHistory} />

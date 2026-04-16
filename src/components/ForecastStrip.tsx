@@ -1,4 +1,4 @@
-import type { HourlyForecast, LiveWindHistoryPoint } from '@/lib/api';
+import type { HourlyForecast, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,11 +8,12 @@ import { WindChart } from '@/components/charts';
 
 interface ForecastStripProps {
   forecasts: HourlyForecast[];
+  chartHistoryForecasts: WindForecastPoint[];
   liveWindHistory: LiveWindHistoryPoint[];
 }
 
 
-export default function ForecastStrip({ forecasts, liveWindHistory }: ForecastStripProps) {
+export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWindHistory }: ForecastStripProps) {
   const days = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
   const todayForecasts = forecasts.filter(f => isSameDay(f.time, new Date()));
 
@@ -24,7 +25,7 @@ export default function ForecastStrip({ forecasts, liveWindHistory }: ForecastSt
             <CardTitle className="text-sm">Observed vs Forecast Wind (Today)</CardTitle>
           </CardHeader>
           <CardContent>
-            <WindChart forecasts={todayForecasts} liveHistory={liveWindHistory} includePastHours={3} />
+            <WindChart forecasts={todayForecasts} historyForecasts={chartHistoryForecasts} liveHistory={liveWindHistory} includePastHours={3} />
           </CardContent>
         </Card>
       )}

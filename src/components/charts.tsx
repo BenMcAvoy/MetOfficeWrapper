@@ -1,4 +1,4 @@
-import type { HourlyForecast, TideData, LiveWindHistoryPoint } from '@/lib/api';
+import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { msToKnots } from '@/lib/units';
 import { YAxisTick, tooltipStyle } from '@/lib/chartUtils';
 import {
@@ -9,6 +9,7 @@ import { format, subHours, startOfHour } from 'date-fns';
 
 interface WindChartProps {
   forecasts: HourlyForecast[];
+  historyForecasts?: WindForecastPoint[];
   startRefLine?: number;
   liveHistory?: LiveWindHistoryPoint[];
   includePastHours?: number;
@@ -84,7 +85,7 @@ function buildHourlyTicks(minTime: number, maxTime: number): number[] {
   return ticks;
 }
 
-export function WindChart({ forecasts, startRefLine, liveHistory = [], includePastHours = 0 }: WindChartProps) {
+export function WindChart({ forecasts, historyForecasts = [], startRefLine, liveHistory = [], includePastHours = 0 }: WindChartProps) {
   const now = new Date();
   const nowHour = startOfHour(now).getTime();
   const forcedMinTime = includePastHours > 0 ? subHours(nowHour, includePastHours).getTime() : null;
@@ -143,6 +144,17 @@ export function WindChart({ forecasts, startRefLine, liveHistory = [], includePa
       gust: forecastPoint?.gust ?? null,
       histAvg: observedPoint?.avg ?? null,
       histGust: observedPoint?.gust ?? null,
+    });
+  }
+
+  for (const forecast of historyForecasts) {
+    const t = toTenMinuteBucket(forecast.time.getTime());
+    if (t < minTime) continue;
+    if (forecastMap.has(t)) continue;
+    forecastMap.set(t, {
+      t,
+      avg: round1(msToKnots(forecast.windSpeed10m)),
+      gust: round1(msToKnots(forecast.windGustSpeed10m)),
     });
   }
 

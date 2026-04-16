@@ -16,6 +16,12 @@ export interface HourlyForecast {
   humidity: number;
 }
 
+export interface WindForecastPoint {
+  time: Date;
+  windSpeed10m: number;
+  windGustSpeed10m: number;
+}
+
 export interface TideExtreme {
   time: Date;
   height: number;
@@ -88,10 +94,28 @@ function parseForecastTimestamp(ts: string): Date {
   return new Date(withZone);
 }
 
+export async function fetchForecastHistory(lat: number, lon: number, historyHours = 6): Promise<WindForecastPoint[]> {
+  const res = await fetch(
+    `/api/forecast-history?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}&historyHours=${historyHours}`
+  );
+  if (!res.ok) return [];
+  const payload = await res.json() as { status?: string; data?: { time: string; windSpeed10m: number; windGustSpeed10m: number }[] };
+  if (payload.status !== 'ok' || !Array.isArray(payload.data)) return [];
+  return payload.data
+    .map(p => ({
+      time: parseForecastTimestamp(p.time),
+      windSpeed10m: p.windSpeed10m,
+      windGustSpeed10m: p.windGustSpeed10m,
+    }))
+    .filter(p => !Number.isNaN(p.time.getTime()));
+}
+
 export async function fetchMetOfficeHourly(lat: number, lon: number): Promise<HourlyForecast[]> {
   const cacheKey = `metoffice_v2_${lat.toFixed(3)}_${lon.toFixed(3)}`;
   const cached = getCached<SerialisedForecast[]>(cacheKey);
-  if (cached) return cached.map(f => ({ ...f, time: parseForecastTimestamp(f.time) }));
+  if (cached) {
+    return cached.map(f => ({ ...f, time: parseForecastTimestamp(f.time) }));
+  }
 
   const res = await fetch(`/api/forecast?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}`);
   if (!res.ok) throw new Error(`Met Office API error: ${res.status} ${res.statusText}`);

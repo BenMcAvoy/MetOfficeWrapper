@@ -1,4 +1,4 @@
-import type { HourlyForecast, LiveWindHistoryPoint } from '@/lib/api';
+import type { HourlyForecast, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind } from 'lucide-react';
 import { WindChart } from '@/components/charts';
@@ -6,6 +6,7 @@ import { WindChart } from '@/components/charts';
 interface WindChartCardProps {
   title: string;
   forecasts: HourlyForecast[];
+  historyForecasts?: WindForecastPoint[];
   startRefLine?: number;
   liveWindHistory?: LiveWindHistoryPoint[];
   includePastHours?: number;
@@ -14,6 +15,7 @@ interface WindChartCardProps {
 export default function WindChartCard({
   title,
   forecasts,
+  historyForecasts = [],
   startRefLine,
   liveWindHistory = [],
   includePastHours = 0,
@@ -28,6 +30,7 @@ export default function WindChartCard({
       <CardContent>
         <WindChart
           forecasts={forecasts}
+          historyForecasts={historyForecasts}
           startRefLine={startRefLine}
           liveHistory={liveWindHistory}
           includePastHours={includePastHours}
