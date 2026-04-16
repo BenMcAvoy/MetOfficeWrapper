@@ -3,7 +3,28 @@ interface CacheEntry<T> {
   expiresAt: number;
 }
 
+const STORAGE_VERSION_KEY = 'wx_storage_version';
+const STORAGE_VERSION = '1';
+
+let hasCheckedStorageVersion = false;
+
+function ensureStorageVersion(): void {
+  if (hasCheckedStorageVersion) return;
+  hasCheckedStorageVersion = true;
+
+  try {
+    const savedVersion = localStorage.getItem(STORAGE_VERSION_KEY);
+    if (savedVersion !== STORAGE_VERSION) {
+      localStorage.clear();
+      localStorage.setItem(STORAGE_VERSION_KEY, STORAGE_VERSION);
+    }
+  } catch {
+    // storage unavailable
+  }
+}
+
 export function getCached<T>(key: string): T | null {
+  ensureStorageVersion();
   try {
     const raw = localStorage.getItem(`wx_${key}`);
     if (!raw) return null;
@@ -19,6 +40,7 @@ export function getCached<T>(key: string): T | null {
 }
 
 export function setCached<T>(key: string, data: T, ttlMs: number): void {
+  ensureStorageVersion();
   try {
     localStorage.setItem(`wx_${key}`, JSON.stringify({ data, expiresAt: Date.now() + ttlMs }));
   } catch {

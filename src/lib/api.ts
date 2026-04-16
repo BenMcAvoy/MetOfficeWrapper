@@ -83,10 +83,15 @@ function parseLiveWindTimestamp(ts: string): Date {
 
 type SerialisedForecast = Omit<HourlyForecast, 'time'> & { time: string };
 
+function parseForecastTimestamp(ts: string): Date {
+  const withZone = /(?:Z|[+-]\d{2}:\d{2})$/i.test(ts) ? ts : `${ts}Z`;
+  return new Date(withZone);
+}
+
 export async function fetchMetOfficeHourly(lat: number, lon: number): Promise<HourlyForecast[]> {
-  const cacheKey = `metoffice_${lat.toFixed(3)}_${lon.toFixed(3)}`;
+  const cacheKey = `metoffice_v2_${lat.toFixed(3)}_${lon.toFixed(3)}`;
   const cached = getCached<SerialisedForecast[]>(cacheKey);
-  if (cached) return cached.map(f => ({ ...f, time: new Date(f.time) }));
+  if (cached) return cached.map(f => ({ ...f, time: parseForecastTimestamp(f.time) }));
 
   const res = await fetch(`/api/forecast?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}`);
   if (!res.ok) throw new Error(`Met Office API error: ${res.status} ${res.statusText}`);
@@ -98,8 +103,9 @@ export async function fetchMetOfficeHourly(lat: number, lon: number): Promise<Ho
   const timeSeries: unknown[] = features[0]?.properties?.timeSeries ?? [];
   const forecasts: HourlyForecast[] = timeSeries.map((entry: unknown) => {
     const e = entry as Record<string, unknown>;
+    const rawTime = String(e.time ?? '');
     return {
-      time: new Date(e.time as string),
+      time: parseForecastTimestamp(rawTime),
       screenTemperature:    (e.screenTemperature as number)     ?? 0,
       feelsLikeTemp:        (e.feelsLikeTemp as number)          ?? 0,
       windSpeed10m:         (e.windSpeed10m as number)           ?? 0,
