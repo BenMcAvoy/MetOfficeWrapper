@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc *)",
-      "Bash(./node_modules/.bin/tsc -b)"
+      "Bash(./node_modules/.bin/tsc -b)",
+      "Bash(git log *)",
+      "Bash(bun run *)"
     ]
   }
 }

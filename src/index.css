@@ -143,3 +143,28 @@
   user-select: none;
   -webkit-user-select: none;
 }
+
+/* Let the page scroll vertically when the user drags over a chart.
+   Without this, recharts swallows touchmove to drive its tooltip and the
+   page feels "stuck" whenever a chart is under the finger. */
+.recharts-wrapper,
+.recharts-surface {
+  touch-action: pan-y;
+}
+
+/* Horizontal pill rows (date selector, forecast strip) should scroll
+   horizontally under the finger without fighting the page's vertical scroll. */
+.touch-pan-x {
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent iOS double-tap zoom / 300ms delay on interactive controls. */
+button, [role="button"] {
+  touch-action: manipulation;
+}
+
+html, body {
+  overscroll-behavior-y: none;
+}

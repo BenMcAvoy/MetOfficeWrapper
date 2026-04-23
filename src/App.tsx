@@ -38,7 +38,7 @@ function DateSelector({ selected, onChange, availableDays }: {
   availableDays: Date[];
 }) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar">
+    <div className="flex gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar touch-pan-x -mx-4 px-4">
       {availableDays.map((day, i) => {
         const active = isSameDay(day, selected);
         const label = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : format(day, 'EEE d');
@@ -46,9 +46,9 @@ function DateSelector({ selected, onChange, availableDays }: {
           <button
             key={i}
             onClick={() => onChange(day)}
-            className={`flex-shrink-0 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+            className={`flex-shrink-0 min-h-9 px-3.5 py-2 rounded-full text-sm font-medium transition-colors active:scale-[0.97] ${
               active
-                ? 'bg-primary text-primary-foreground'
+                ? 'bg-primary text-primary-foreground shadow-sm'
                 : 'bg-muted text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -256,20 +256,23 @@ export default function App() {
         )}
       </main>
 
-      <nav className="fixed bottom-0 inset-x-0 z-20 bg-background/95 backdrop-blur border-t" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-        <div className="max-w-2xl mx-auto flex">
+      <nav className="fixed bottom-0 inset-x-0 z-20 bg-background/95 backdrop-blur-lg border-t" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+        <div className="max-w-2xl mx-auto flex px-2 pt-1.5 pb-1">
           {NAV_ITEMS.map(({ id, label, Icon }) => {
             const active = activeTab === id;
             return (
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
-                className={`flex-1 flex flex-col items-center gap-1 py-3 transition-colors ${
-                  active ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+                aria-current={active ? 'page' : undefined}
+                className={`flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-all active:scale-95 ${
+                  active
+                    ? 'text-primary bg-primary/10'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 1.75} />
-                <span className={`text-xs ${active ? 'font-semibold' : 'font-normal'}`}>{label}</span>
+                <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.5 : 1.75} />
+                <span className={`text-[11px] tracking-wide ${active ? 'font-semibold' : 'font-normal'}`}>{label}</span>
               </button>
             );
           })}
