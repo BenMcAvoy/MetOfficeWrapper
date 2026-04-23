@@ -6,7 +6,7 @@ import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal 
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Wind, Waves } from 'lucide-react';
-import { format, addMinutes, startOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
+import { format, addMinutes, subHours, startOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
 import { TideChartInner } from '@/components/charts';
 import WindChartCard from '@/components/WindChartCard';
 
@@ -66,7 +66,12 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
     { label: format(windowEnd, 'HH:mm'), time: windowEnd, role: 'Post-race' },
   ];
 
-  const windowForecasts = forecasts.filter(f => f.time >= windowStart && f.time <= windowEnd);
+  const isToday = isSameDay(selectedDay, new Date());
+  // For today's events, let the chart show forecast continuously from a few hours
+  // before now through the race window — otherwise the line only appears at eventStart-30m,
+  // leaving a blank gap between live wind history and the forecast.
+  const chartForecastStart = isToday ? subHours(new Date(), 3) : windowStart;
+  const windowForecasts = forecasts.filter(f => f.time >= chartForecastStart && f.time <= windowEnd);
 
   const startForecast = closestForecast(forecasts, eventStart);
   const hasForecastData = forecasts.some(f => {
@@ -190,8 +195,8 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
           title="Wind · Race Window"
           forecasts={windowForecasts}
           startRefLine={eventStart.getTime()}
-          liveWindHistory={isSameDay(selectedDay, new Date()) ? liveWindHistory : []}
-          includePastHours={isSameDay(selectedDay, new Date()) ? 3 : 0}
+          liveWindHistory={isToday ? liveWindHistory : []}
+          includePastHours={isToday ? 3 : 0}
         />
       )}
 
