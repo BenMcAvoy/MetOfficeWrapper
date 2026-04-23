@@ -48,7 +48,7 @@ function DateSelector({ selected, onChange, availableDays }: {
             onClick={() => onChange(day)}
             className={`flex-shrink-0 h-9 px-4 rounded-full text-sm font-medium transition-colors active:scale-[0.97] ${
               active
-                ? 'bg-foreground text-background'
+                ? 'bg-primary text-primary-foreground'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
