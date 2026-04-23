@@ -8,7 +8,7 @@ import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
 import RaceCalendar from '@/components/RaceCalendar';
 import {
-  MapPin, AlertTriangle, Waves, RefreshCw, Loader2,
+  MapPin, AlertTriangle, Waves, Loader2,
   Wind, CalendarDays, Anchor,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay, isBefore, startOfHour } from 'date-fns';
@@ -38,7 +38,7 @@ function DateSelector({ selected, onChange, availableDays }: {
   availableDays: Date[];
 }) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar touch-pan-x -mx-4 px-4">
+    <div className="flex gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollbar touch-pan-x -mx-4 px-4">
       {availableDays.map((day, i) => {
         const active = isSameDay(day, selected);
         const label = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : format(day, 'EEE d');
@@ -46,10 +46,10 @@ function DateSelector({ selected, onChange, availableDays }: {
           <button
             key={i}
             onClick={() => onChange(day)}
-            className={`flex-shrink-0 min-h-9 px-3.5 py-2 rounded-full text-sm font-medium transition-colors active:scale-[0.97] ${
+            className={`flex-shrink-0 h-9 px-4 rounded-full text-sm font-medium transition-colors active:scale-[0.97] ${
               active
-                ? 'bg-primary text-primary-foreground shadow-sm'
-                : 'bg-muted text-muted-foreground hover:text-foreground'
+                ? 'bg-foreground text-background'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             {label}
@@ -176,36 +176,30 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-10 bg-background/90 backdrop-blur border-b" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-primary shrink-0" />
-            <div>
-              <h1 className="font-semibold text-sm leading-tight">Weather App</h1>
-              <p className="text-muted-foreground text-xs">{LOCATION_NAME}</p>
+      <header className="sticky top-0 z-10 bg-background/75 backdrop-blur-xl border-b border-border/60" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+        <div className="max-w-2xl mx-auto px-4 pt-3 pb-3 flex items-end justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] text-muted-foreground/80 font-medium">
+              <MapPin className="h-3 w-3 text-primary shrink-0" strokeWidth={2.5} />
+              <span className="truncate">{format(new Date(), 'EEEE · HH:mm')}</span>
             </div>
+            <h1 className="font-display text-2xl font-semibold leading-tight tracking-tight mt-0.5 truncate">
+              {LOCATION_NAME}
+            </h1>
           </div>
-          <div className="flex items-center gap-3">
-            {lastUpdated && (
-              <span className="text-muted-foreground text-xs">
-                {format(lastUpdated, 'HH:mm')}
+          <div className="flex items-center gap-2 shrink-0 pb-1">
+            {isLoading ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground/70" />
+            ) : lastUpdated && (
+              <span className="text-muted-foreground/70 text-[11px] tabular-nums">
+                updated {format(lastUpdated, 'HH:mm')}
               </span>
             )}
-            <button
-              onClick={loadData}
-              disabled={isLoading}
-              className="text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40"
-              title="Refresh"
-            >
-              {isLoading
-                ? <Loader2 className="h-4 w-4 animate-spin" />
-                : <RefreshCw className="h-4 w-4" />}
-            </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 pt-4" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
+      <main className="max-w-2xl mx-auto px-4 pt-3" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         {isLoading && !forecasts.length ? (
           <LoadingSkeleton />
         ) : loadState === 'error' ? (

@@ -4,7 +4,10 @@
       "Bash(npx tsc *)",
       "Bash(./node_modules/.bin/tsc -b)",
       "Bash(git log *)",
-      "Bash(bun run *)"
+      "Bash(bun run *)",
+      "Bash([ -f C:\\\\\\\\Users\\\\\\\\Ben\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-Ben-metofficewrapper\\\\\\\\10685192-2bc8-45ec-b33e-13c648266771\\\\\\\\tasks\\\\\\\\baoap3484.output ])",
+      "Bash(grep -E \"built in|error\" C:\\\\\\\\Users\\\\\\\\Ben\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-Ben-metofficewrapper\\\\\\\\10685192-2bc8-45ec-b33e-13c648266771\\\\\\\\tasks\\\\\\\\baoap3484.output)",
+      "Bash(grep -E \"built in|error|ERROR\" C:\\\\\\\\Users\\\\\\\\Ben\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-Ben-metofficewrapper\\\\\\\\10685192-2bc8-45ec-b33e-13c648266771\\\\\\\\tasks\\\\\\\\baoap3484.output)"
     ]
   }
 }

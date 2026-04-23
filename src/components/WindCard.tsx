@@ -85,10 +85,10 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-lg border p-3">
+                <div className="py-1">
                   <p className="text-muted-foreground text-xs mb-1">Current speed</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className={`text-4xl font-bold tabular-nums ${currentObservedBf ? beaufortColor(currentObservedBf.force) : 'text-foreground'}`}>
+                    <span className={`font-display text-5xl font-semibold tabular-nums tracking-tight ${currentObservedBf ? beaufortColor(currentObservedBf.force) : 'text-foreground'}`}>
                       {currentObservedKnots !== null ? Math.round(currentObservedKnots) : '—'}
                     </span>
                     {currentObservedKnots !== null && <span className="text-muted-foreground text-sm">kt</span>}
@@ -98,10 +98,10 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   )}
                 </div>
 
-                <div className="rounded-lg border p-3">
+                <div className="py-1">
                   <p className="text-muted-foreground text-xs mb-1">Max gust (1h)</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-4xl font-bold tabular-nums text-orange-500">
+                    <span className="font-display text-5xl font-semibold tabular-nums tracking-tight text-orange-500">
                       {maxObservedGustLastHour !== null ? Math.round(maxObservedGustLastHour) : '—'}
                     </span>
                     {maxObservedGustLastHour !== null && <span className="text-muted-foreground text-sm">kt</span>}
@@ -136,13 +136,13 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
               <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t">
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Avg (1h)</p>
-                  <p className="text-xl font-bold tabular-nums">
+                  <p className="font-display text-2xl font-semibold tabular-nums tracking-tight">
                     {observedAvgKnotsLastHour !== null ? `${Math.round(observedAvgKnotsLastHour)}kt` : '—'}
                   </p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Samples</p>
-                  <p className="text-xl font-bold tabular-nums">{lastHourObserved.length}</p>
+                  <p className="font-display text-2xl font-semibold tabular-nums tracking-tight">{lastHourObserved.length}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Data</p>
@@ -162,11 +162,11 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Day Avg</p>
-                  <p className={`text-xl font-bold tabular-nums ${beaufortColor(avgBf.force)}`}>{Math.round(avgKnots)}kt</p>
+                  <p className={`font-display text-2xl font-semibold tabular-nums tracking-tight ${beaufortColor(avgBf.force)}`}>{Math.round(avgKnots)}kt</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
-                  <p className={`text-xl font-bold tabular-nums ${beaufortColor(peakBf.force)}`}>{Math.round(peakKnots)}kt</p>
+                  <p className={`font-display text-2xl font-semibold tabular-nums tracking-tight ${beaufortColor(peakBf.force)}`}>{Math.round(peakKnots)}kt</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Peak At</p>
