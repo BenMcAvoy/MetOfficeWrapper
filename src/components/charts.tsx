@@ -94,6 +94,16 @@ export function WindChart({ forecasts, historyForecasts = [], startRefLine, live
   const forecastMap = new Map<number, SeriesPoint>();
   const observedMap = new Map<number, SeriesPoint>();
 
+  for (const forecast of historyForecasts) {
+    const t = toTenMinuteBucket(forecast.time.getTime());
+    if (t < minTime) continue;
+    forecastMap.set(t, {
+      t,
+      avg: round1(msToKnots(forecast.windSpeed10m)),
+      gust: round1(msToKnots(forecast.windGustSpeed10m)),
+    });
+  }
+
   for (const forecast of forecasts) {
     const t = toTenMinuteBucket(forecast.time.getTime());
     if (t < minTime) continue;
@@ -144,17 +154,6 @@ export function WindChart({ forecasts, historyForecasts = [], startRefLine, live
       gust: forecastPoint?.gust ?? null,
       histAvg: observedPoint?.avg ?? null,
       histGust: observedPoint?.gust ?? null,
-    });
-  }
-
-  for (const forecast of historyForecasts) {
-    const t = toTenMinuteBucket(forecast.time.getTime());
-    if (t < minTime) continue;
-    if (forecastMap.has(t)) continue;
-    forecastMap.set(t, {
-      t,
-      avg: round1(msToKnots(forecast.windSpeed10m)),
-      gust: round1(msToKnots(forecast.windGustSpeed10m)),
     });
   }
 
