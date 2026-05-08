@@ -261,7 +261,7 @@ export default function WeatherOverview({ forecasts, allForecasts, sunInfo, tide
           <p className="text-muted-foreground text-xs uppercase tracking-wide mb-3">
             {isToday ? 'Next 12 hours' : `${format(selectedDay, 'EEEE')} — all day`}
           </p>
-          <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar">
+          <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar touch-pan-x">
             {stripForecasts.map((f, i) => {
               const w = getWeatherInfo(f.significantWeatherCode);
               const HourIcon = w.Icon;

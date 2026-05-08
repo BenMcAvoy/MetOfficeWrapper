@@ -1,0 +1,19 @@
+name: forecast-snapshot
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: POST snapshot
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          SNAPSHOT_SECRET: ${{ secrets.SNAPSHOT_SECRET }}
+        run: |
+          curl -fsS -X POST "$APP_URL/api/forecast-snapshot" \
+            -H "Authorization: Bearer $SNAPSHOT_SECRET" \
+            --max-time 30
