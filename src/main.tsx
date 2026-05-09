@@ -7,8 +7,19 @@ import App from './App.tsx'
 declare global {
   interface Window {
     __wxPwaUpdateSetup?: boolean;
+    __wxDeferredInstallPrompt?: Event | null;
   }
 }
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  window.__wxDeferredInstallPrompt = e;
+  window.dispatchEvent(new CustomEvent('wx-install-available'));
+});
+window.addEventListener('appinstalled', () => {
+  window.__wxDeferredInstallPrompt = null;
+  window.dispatchEvent(new CustomEvent('wx-installed'));
+});
 
 function setupPwaUpdates(): void {
   if (!('serviceWorker' in navigator)) return;

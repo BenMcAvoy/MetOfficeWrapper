@@ -7,6 +7,7 @@ import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
 import RaceCalendar from '@/components/RaceCalendar';
+import InstallButton from '@/components/InstallButton';
 import {
   MapPin, AlertTriangle, Waves, Loader2,
   Wind, CalendarDays, Anchor,
@@ -188,6 +189,7 @@ export default function App() {
             </h1>
           </div>
           <div className="flex items-center gap-2 shrink-0 pb-1">
+            <InstallButton />
             {isLoading ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground/70" />
             ) : lastUpdated && (
