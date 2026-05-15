@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import type { HourlyForecast, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { fetchMetOfficeHourly, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
+import { filterForDay } from '@/lib/forecastUtils';
 import { Skeleton } from '@/components/ui/skeleton';
 import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
@@ -12,7 +13,7 @@ import {
   MapPin, AlertTriangle, Waves, Loader2,
   Wind, CalendarDays, Anchor,
 } from 'lucide-react';
-import { format, addDays, startOfDay, isSameDay, isBefore, startOfHour } from 'date-fns';
+import { format, addDays, startOfDay, isSameDay } from 'date-fns';
 
 const LOCATION_GEOHASH = 'gcn86rd2z';
 const LOCATION_NAME = 'Poole Harbour';
@@ -58,15 +59,6 @@ function DateSelector({ selected, onChange, availableDays }: {
         );
       })}
     </div>
-  );
-}
-
-export function filterForDay(forecasts: HourlyForecast[], day: Date): HourlyForecast[] {
-  const isToday = isSameDay(day, new Date());
-  return forecasts.filter(f =>
-    isToday
-      ? isSameDay(f.time, day) && !isBefore(f.time, startOfHour(new Date()))
-      : isSameDay(f.time, day)
   );
 }
 
@@ -132,7 +124,7 @@ export default function App() {
       setError((e as Error).message);
       setLoadState('error');
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     loadData();

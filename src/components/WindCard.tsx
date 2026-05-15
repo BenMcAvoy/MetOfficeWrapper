@@ -1,5 +1,6 @@
 import type { HourlyForecast, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
+import { useNow } from '@/lib/useNow';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind, ArrowUp } from 'lucide-react';
 import { format, isSameDay } from 'date-fns';
@@ -17,6 +18,8 @@ interface WindCardProps {
 
 
 export default function WindCard({ forecasts, chartForecasts, chartHistoryForecasts, selectedDay, liveWind, liveWindHistory }: WindCardProps) {
+  const nowMs = useNow(1000);
+
   if (!forecasts.length) return (
     <div className="text-center py-12 text-muted-foreground">
       <Wind className="mx-auto h-10 w-10 mb-3" />
@@ -24,7 +27,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
     </div>
   );
 
-  const isToday = isSameDay(selectedDay, new Date());
+  const isToday = isSameDay(selectedDay, new Date(nowMs));
 
   const peakGust = Math.max(...forecasts.map(f => f.windGustSpeed10m));
   const avgWind = forecasts.reduce((s, f) => s + f.windSpeed10m, 0) / forecasts.length;
@@ -34,7 +37,6 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
   const peakBf = beaufortScale(peakKnots);
   const avgBf = beaufortScale(avgKnots);
 
-  const nowMs = Date.now();
   const liveAgeSeconds = liveWind
     ? Math.max(0, Math.round((nowMs - liveWind.observedAt.getTime()) / 1000))
     : null;

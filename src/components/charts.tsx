@@ -1,6 +1,12 @@
 import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
-import { msToKnots } from '@/lib/units';
 import { YAxisTick, tooltipStyle } from '@/lib/chartUtils';
+import {
+  buildForecastSeries,
+  buildObservedSeries,
+  buildWindChartRows,
+  bucket10,
+  HOUR,
+} from '@/lib/windChartData';
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Legend, ReferenceLine
@@ -15,95 +21,10 @@ interface WindChartProps {
   includePastHours?: number;
 }
 
-type SeriesPoint = { t: number; avg: number; gust: number };
-
-type ChartRow = {
-  t: number;
-  fAvg: number | null;
-  fGust: number | null;
-  oAvg: number | null;
-  oGust: number | null;
-};
-
-const TEN_MIN = 10 * 60 * 1000;
-const HOUR = 60 * 60 * 1000;
-
 const COLORS = {
-  forecastAvg: '#3b82f6',
-  forecastGust: '#f97316',
-  observedAvg: '#10b981',
-  observedGust: '#dc2626',
+  forecast: '#3b82f6',
+  observed: '#10b981',
 };
-
-function round1(v: number): number {
-  return Math.round(v * 10) / 10;
-}
-
-function bucket10(ms: number): number {
-  return Math.floor(ms / TEN_MIN) * TEN_MIN;
-}
-
-function interp(series: SeriesPoint[], t: number): { avg: number; gust: number } | null {
-  if (!series.length) return null;
-  if (t < series[0].t || t > series[series.length - 1].t) return null;
-
-  let lo = 0;
-  let hi = series.length - 1;
-  while (lo <= hi) {
-    const mid = (lo + hi) >> 1;
-    if (series[mid].t === t) return { avg: series[mid].avg, gust: series[mid].gust };
-    if (series[mid].t < t) lo = mid + 1;
-    else hi = mid - 1;
-  }
-  const upper = series[lo];
-  const lower = series[lo - 1];
-  if (!upper || !lower) return null;
-  const r = (t - lower.t) / (upper.t - lower.t);
-  return {
-    avg: round1(lower.avg + (upper.avg - lower.avg) * r),
-    gust: round1(lower.gust + (upper.gust - lower.gust) * r),
-  };
-}
-
-function buildForecastSeries(
-  history: WindForecastPoint[],
-  future: HourlyForecast[],
-): SeriesPoint[] {
-  const map = new Map<number, SeriesPoint>();
-  for (const p of history) {
-    const t = p.time.getTime();
-    map.set(t, {
-      t,
-      avg: round1(msToKnots(p.windSpeed10m)),
-      gust: round1(msToKnots(p.windGustSpeed10m)),
-    });
-  }
-  for (const p of future) {
-    const t = p.time.getTime();
-    map.set(t, {
-      t,
-      avg: round1(msToKnots(p.windSpeed10m)),
-      gust: round1(msToKnots(p.windGustSpeed10m)),
-    });
-  }
-  return Array.from(map.values()).sort((a, b) => a.t - b.t);
-}
-
-function buildObservedSeries(history: LiveWindHistoryPoint[]): SeriesPoint[] {
-  const map = new Map<number, SeriesPoint>();
-  for (const p of history) {
-    const t = bucket10(p.time.getTime());
-    const avg = round1(msToKnots(p.avgWindMs));
-    const gust = round1(msToKnots(p.gustWindMs));
-    const existing = map.get(t);
-    if (existing) {
-      map.set(t, { t, avg: round1((existing.avg + avg) / 2), gust: Math.max(existing.gust, gust) });
-    } else {
-      map.set(t, { t, avg, gust });
-    }
-  }
-  return Array.from(map.values()).sort((a, b) => a.t - b.t);
-}
 
 export function WindChart({
   forecasts,
@@ -133,19 +54,7 @@ export function WindChart({
   const xMin = bucket10(forcedMin ?? firstT);
   const xMax = bucket10(Math.max(lastT, xMin + HOUR));
 
-  const rows: ChartRow[] = [];
-  for (let t = xMin; t <= xMax; t += TEN_MIN) {
-    const f = interp(forecastSeries, t);
-    const o = interp(observedSeries, t);
-    rows.push({
-      t,
-      fAvg: f?.avg ?? null,
-      fGust: f?.gust ?? null,
-      oAvg: o?.avg ?? null,
-      oGust: o?.gust ?? null,
-    });
-  }
-
+  const rows = buildWindChartRows(forecastSeries, observedSeries, xMin, xMax);
   if (!rows.length) return null;
 
   const xTicks: number[] = [];
@@ -164,8 +73,8 @@ export function WindChart({
         <ComposedChart data={rows} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="windForecastAvgFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={COLORS.forecastAvg} stopOpacity={0.18} />
-              <stop offset="100%" stopColor={COLORS.forecastAvg} stopOpacity={0} />
+              <stop offset="0%" stopColor={COLORS.forecast} stopOpacity={0.18} />
+              <stop offset="100%" stopColor={COLORS.forecast} stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
@@ -177,8 +86,21 @@ export function WindChart({
             ticks={xTicks}
             tickFormatter={t => format(new Date(Number(t)), 'HH:mm')}
             tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
+            tickMargin={6}
           />
-          <YAxis tick={<YAxisTick unit="kt" />} width={44} domain={[0, 'auto']} allowDecimals={false} />
+          <YAxis
+            width={52}
+            domain={[0, 'auto']}
+            allowDecimals={false}
+            tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
+            label={{
+              value: 'knots',
+              angle: -90,
+              position: 'insideLeft',
+              offset: 16,
+              style: { fill: 'var(--muted-foreground)', fontSize: 10, textAnchor: 'middle' },
+            }}
+          />
           <Tooltip
             {...tooltipStyle}
             filterNull
@@ -215,7 +137,7 @@ export function WindChart({
             type="monotone"
             dataKey="fAvg"
             name="Forecast avg"
-            stroke={COLORS.forecastAvg}
+            stroke={COLORS.forecast}
             strokeWidth={2}
             fill="url(#windForecastAvgFill)"
             dot={false}
@@ -226,7 +148,8 @@ export function WindChart({
             type="monotone"
             dataKey="fGust"
             name="Forecast gust"
-            stroke={COLORS.forecastGust}
+            stroke={COLORS.forecast}
+            strokeOpacity={0.55}
             strokeWidth={1.5}
             strokeDasharray="4 3"
             dot={false}
@@ -239,8 +162,8 @@ export function WindChart({
                 type="monotone"
                 dataKey="oAvg"
                 name="Observed avg"
-                stroke={COLORS.observedAvg}
-                strokeWidth={2.5}
+                stroke={COLORS.observed}
+                strokeWidth={2.25}
                 dot={false}
                 isAnimationActive={false}
                 connectNulls
@@ -249,7 +172,8 @@ export function WindChart({
                 type="monotone"
                 dataKey="oGust"
                 name="Observed gust"
-                stroke={COLORS.observedGust}
+                stroke={COLORS.observed}
+                strokeOpacity={0.55}
                 strokeWidth={1.5}
                 strokeDasharray="4 3"
                 dot={false}

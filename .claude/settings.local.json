@@ -9,7 +9,11 @@
       "Bash(grep -E \"built in|error\" C:\\\\\\\\Users\\\\\\\\Ben\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-Ben-metofficewrapper\\\\\\\\10685192-2bc8-45ec-b33e-13c648266771\\\\\\\\tasks\\\\\\\\baoap3484.output)",
       "Bash(grep -E \"built in|error|ERROR\" C:\\\\\\\\Users\\\\\\\\Ben\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-Ben-metofficewrapper\\\\\\\\10685192-2bc8-45ec-b33e-13c648266771\\\\\\\\tasks\\\\\\\\baoap3484.output)",
       "Bash(curl -fsS \"https://met-office-pooleyc.vercel.app/api/forecast-history?lat=50.6950&lon=-1.9870&historyHours=6\")",
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "PowerShell(bunx tsc --noEmit -p tsconfig.app.json 2>&1 | Select-Object -First 50)",
+      "PowerShell(bunx tsc --noEmit -p tsconfig.app.json; $LASTEXITCODE)",
+      "PowerShell(bun run *)",
+      "PowerShell(bun add *)"
     ]
   }
 }

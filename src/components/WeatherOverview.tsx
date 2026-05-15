@@ -1,5 +1,6 @@
 import type { HourlyForecast, SunInfo, TideData, LiveWind } from '@/lib/api';
 import { msToKnots, beaufortScale, beaufortColor, degreesToCardinal } from '@/lib/units';
+import { useNow } from '@/lib/useNow';
 import { getWeatherInfo, visibilityLabel } from '@/lib/weatherCodes';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -22,11 +23,14 @@ function riskLabel(score: number): { label: string; color: string; Icon: React.E
 }
 
 export default function WeatherOverview({ forecasts, allForecasts, sunInfo, tideData, liveWind, selectedDay }: WeatherOverviewProps) {
+  const nowMs = useNow(30_000);
+
   if (!forecasts.length) return (
     <div className="text-center py-12 text-muted-foreground">No forecast data for this day</div>
   );
 
-  const isToday = isSameDay(selectedDay, new Date());
+  const now = new Date(nowMs);
+  const isToday = isSameDay(selectedDay, now);
 
   const representative = isToday
     ? forecasts[0]
@@ -45,7 +49,7 @@ export default function WeatherOverview({ forecasts, allForecasts, sunInfo, tide
   const knotsGust = msToKnots(representative.windGustSpeed10m);
 
   const liveAgeSeconds = liveWind
-    ? Math.max(0, Math.round((Date.now() - liveWind.observedAt.getTime()) / 1000))
+    ? Math.max(0, Math.round((nowMs - liveWind.observedAt.getTime()) / 1000))
     : null;
   const hasFreshLiveWind = isToday && !!liveWind && liveAgeSeconds !== null && liveAgeSeconds <= 300;
   const currentWindKnots = hasFreshLiveWind && liveWind ? msToKnots(liveWind.windSpeedMs) : knotsAvg;
@@ -57,15 +61,14 @@ export default function WeatherOverview({ forecasts, allForecasts, sunInfo, tide
     ? Math.max(...daytimeForecasts.map(f => msToKnots(f.windSpeed10m)))
     : Math.max(...forecasts.map(f => msToKnots(f.windSpeed10m)));
 
-  const next6h = allForecasts.filter(f => {
-    const now = new Date();
-    return isAfter(f.time, now) && isBefore(f.time, new Date(now.getTime() + 6 * 60 * 60 * 1000));
-  });
+  const next6h = allForecasts.filter(f =>
+    isAfter(f.time, now) && isBefore(f.time, new Date(nowMs + 6 * 60 * 60 * 1000)),
+  );
   const next6hRainPeak = next6h.length ? Math.max(...next6h.map(f => f.probOfPrecipitation)) : 0;
   const next6hGustPeak = next6h.length ? Math.max(...next6h.map(f => msToKnots(f.windGustSpeed10m))) : Math.round(knotsGust);
 
-  const nextTide = tideData?.extremes.find(e => isAfter(e.time, new Date())) ?? null;
-  const minutesToNextTide = nextTide ? Math.round((nextTide.time.getTime() - Date.now()) / 60000) : null;
+  const nextTide = tideData?.extremes.find(e => isAfter(e.time, now)) ?? null;
+  const minutesToNextTide = nextTide ? Math.round((nextTide.time.getTime() - nowMs) / 60000) : null;
 
   const riskScore = (
     (next6hGustPeak >= 28 ? 2 : next6hGustPeak >= 22 ? 1 : 0) +

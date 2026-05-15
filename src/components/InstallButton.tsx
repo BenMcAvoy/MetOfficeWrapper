@@ -24,20 +24,15 @@ function isIos(): boolean {
 }
 
 export default function InstallButton() {
-  const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
-  const [hidden, setHidden] = useState<boolean>(isStandalone());
+  const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(
+    () => (window.__wxDeferredInstallPrompt as BeforeInstallPromptEvent | null) ?? null,
+  );
+  const [hidden, setHidden] = useState<boolean>(() => isStandalone());
   const [showIosHint, setShowIosHint] = useState(false);
-  const [iosEligible, setIosEligible] = useState(false);
+  const iosEligible = !hidden && isIos();
 
   useEffect(() => {
     if (isStandalone()) return;
-
-    if (isIos()) {
-      setIosEligible(true);
-    }
-
-    const deferred = window.__wxDeferredInstallPrompt;
-    if (deferred) setPromptEvent(deferred as BeforeInstallPromptEvent);
 
     const onPrompt = (e: Event) => {
       e.preventDefault();
