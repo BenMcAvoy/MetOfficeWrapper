@@ -6,9 +6,11 @@ import {
   buildObservedSeries,
   buildWindChartRows,
   bucket10,
+  interp,
+  nearestWithin,
   HOUR,
 } from '@/lib/windChartData';
-import type { WindChartRow } from '@/lib/windChartData';
+import type { SeriesPoint, WindChartRow } from '@/lib/windChartData';
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine
@@ -94,16 +96,24 @@ function ReadoutRow({
   );
 }
 
+const READOUT_OBSERVED_TOLERANCE_MS = 15 * 60 * 1000;
+
 function WindReadoutStrip({
-  row,
+  t,
+  forecastSeries,
+  observedSeries,
   pinned,
   showLive,
 }: {
-  row: WindChartRow | null;
+  t: number | null;
+  forecastSeries: SeriesPoint[];
+  observedSeries: SeriesPoint[];
   pinned: boolean;
   showLive: boolean;
 }) {
-  const time = row ? format(new Date(row.t), 'HH:mm') : '—';
+  const time = t !== null ? format(new Date(t), 'HH:mm') : '—';
+  const f = t !== null ? interp(forecastSeries, t) : null;
+  const o = t !== null ? nearestWithin(observedSeries, t, READOUT_OBSERVED_TOLERANCE_MS) : null;
 
   return (
     <div className="flex items-center justify-between gap-3 px-1 pb-2 text-xs">
@@ -115,9 +125,9 @@ function WindReadoutStrip({
       </div>
       <div className="flex flex-col gap-0.5">
         {showLive && (
-          <ReadoutRow label="Live" avg={row?.oAvg ?? null} gust={row?.oGust ?? null} dashed={false} />
+          <ReadoutRow label="Live" avg={o?.avg ?? null} gust={o?.gust ?? null} dashed={false} />
         )}
-        <ReadoutRow label="Fcst" avg={row?.fAvg ?? null} gust={row?.fGust ?? null} dashed={true} />
+        <ReadoutRow label="Fcst" avg={f?.avg ?? null} gust={f?.gust ?? null} dashed={true} />
       </div>
     </div>
   );
@@ -212,7 +222,13 @@ export function WindChart({
 
   return (
     <div>
-      <WindReadoutStrip row={displayRow} pinned={!!activeRow} showLive={hasObserved} />
+      <WindReadoutStrip
+        t={displayRow?.t ?? null}
+        forecastSeries={forecastSeries}
+        observedSeries={observedSeries}
+        pinned={!!activeRow}
+        showLive={hasObserved}
+      />
       <div
         className="h-44 touch-pan-y"
         onTouchStart={handleTouch}

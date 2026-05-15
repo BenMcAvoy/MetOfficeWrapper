@@ -5,6 +5,7 @@ import {
   TEN_MIN,
   bucket10,
   interp,
+  nearestWithin,
   round1,
   buildForecastSeries,
   buildObservedSeries,
@@ -120,18 +121,24 @@ describe('buildForecastSeries', () => {
 });
 
 describe('buildObservedSeries', () => {
-  it('buckets multiple points in same 10-min window', () => {
+  it('keeps native timestamps without bucketing', () => {
     const series = buildObservedSeries([
       liveAt(0, 5, 7),
       liveAt(2 * 60 * 1000, 7, 9),
       liveAt(15 * 60 * 1000, 10, 12),
     ]);
-    expect(series).toHaveLength(2);
-    // first bucket merges 5 and 7 m/s
-    const firstAvgKt = round1(((round1(5 * MS_TO_KNOTS) + round1(7 * MS_TO_KNOTS)) / 2));
-    expect(series[0].avg).toBe(firstAvgKt);
-    // gust takes the max
-    expect(series[0].gust).toBe(round1(9 * MS_TO_KNOTS));
+    expect(series.map(p => p.t - baseHour)).toEqual([0, 2 * 60 * 1000, 15 * 60 * 1000]);
+    expect(series[0].avg).toBe(round1(5 * MS_TO_KNOTS));
+    expect(series[1].gust).toBe(round1(9 * MS_TO_KNOTS));
+  });
+
+  it('dedupes duplicate timestamps (last wins)', () => {
+    const series = buildObservedSeries([
+      liveAt(0, 5, 5),
+      liveAt(0, 8, 10),
+    ]);
+    expect(series).toHaveLength(1);
+    expect(series[0].avg).toBe(round1(8 * MS_TO_KNOTS));
   });
 
   it('returns ascending time order', () => {
@@ -141,6 +148,35 @@ describe('buildObservedSeries', () => {
       liveAt(10 * 60 * 1000, 6, 6),
     ]);
     expect(out.map(p => p.t)).toEqual([...out].map(p => p.t).sort((a, b) => a - b));
+  });
+});
+
+describe('nearestWithin', () => {
+  const series = [
+    { t: 0, avg: 10, gust: 12 },
+    { t: 60_000, avg: 14, gust: 18 },
+    { t: 120_000, avg: 16, gust: 22 },
+  ];
+
+  it('returns null for an empty series', () => {
+    expect(nearestWithin([], 100, 60_000)).toBeNull();
+  });
+
+  it('returns the exact point if t matches', () => {
+    expect(nearestWithin(series, 60_000, 1)).toEqual({ avg: 14, gust: 18 });
+  });
+
+  it('picks the closer side', () => {
+    expect(nearestWithin(series, 20_000, 60_000)).toEqual({ avg: 10, gust: 12 });
+    expect(nearestWithin(series, 50_000, 60_000)).toEqual({ avg: 14, gust: 18 });
+  });
+
+  it('extends past the series end within tolerance', () => {
+    expect(nearestWithin(series, 130_000, 15_000)).toEqual({ avg: 16, gust: 22 });
+  });
+
+  it('returns null when nearest point exceeds tolerance', () => {
+    expect(nearestWithin(series, 500_000, 60_000)).toBeNull();
   });
 });
 

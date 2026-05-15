@@ -65,17 +65,43 @@ export function buildForecastSeries(
 export function buildObservedSeries(history: LiveWindHistoryPoint[]): SeriesPoint[] {
   const map = new Map<number, SeriesPoint>();
   for (const p of history) {
-    const t = bucket10(p.time.getTime());
-    const avg = round1(msToKnots(p.avgWindMs));
-    const gust = round1(msToKnots(p.gustWindMs));
-    const existing = map.get(t);
-    if (existing) {
-      map.set(t, { t, avg: round1((existing.avg + avg) / 2), gust: Math.max(existing.gust, gust) });
-    } else {
-      map.set(t, { t, avg, gust });
-    }
+    const t = p.time.getTime();
+    map.set(t, {
+      t,
+      avg: round1(msToKnots(p.avgWindMs)),
+      gust: round1(msToKnots(p.gustWindMs)),
+    });
   }
   return Array.from(map.values()).sort((a, b) => a.t - b.t);
+}
+
+export function nearestWithin(
+  series: SeriesPoint[],
+  t: number,
+  toleranceMs: number,
+): { avg: number; gust: number } | null {
+  if (!series.length) return null;
+
+  let lo = 0;
+  let hi = series.length - 1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (series[mid].t === t) return { avg: series[mid].avg, gust: series[mid].gust };
+    if (series[mid].t < t) lo = mid + 1;
+    else hi = mid - 1;
+  }
+
+  const upper = series[lo];
+  const lower = series[lo - 1];
+  let pick: SeriesPoint | undefined;
+  if (upper && lower) {
+    pick = (t - lower.t) <= (upper.t - t) ? lower : upper;
+  } else {
+    pick = upper ?? lower;
+  }
+  if (!pick) return null;
+  if (Math.abs(pick.t - t) > toleranceMs) return null;
+  return { avg: pick.avg, gust: pick.gust };
 }
 
 export function buildWindChartRows(
