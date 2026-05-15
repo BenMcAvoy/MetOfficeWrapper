@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { fetchMetOfficeHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
-import RaceCalendar from '@/components/RaceCalendar';
+import RaceCalendar, { type RaceCalendarHandle } from '@/components/RaceCalendar';
 import InstallButton from '@/components/InstallButton';
 import ConditionsHeader from '@/components/ConditionsHeader';
 import {
@@ -23,7 +23,7 @@ const LIVE_WIND_LOCATION_ID = 'GBR00015';
 const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
-type Tab = 'wind' | 'tides' | 'forecast' | 'races';
+type Tab = 'wind' | 'tides' | 'forecast' | 'events';
 
 function useDarkMode() {
   useEffect(() => {
@@ -69,7 +69,7 @@ const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
   { id: 'wind',     label: 'Wind',     Icon: Wind },
   { id: 'tides',    label: 'Tides',    Icon: Waves },
   { id: 'forecast', label: '5-Day',    Icon: CalendarDays },
-  { id: 'races',    label: 'Races',    Icon: Anchor },
+  { id: 'events',   label: 'Events',   Icon: Anchor },
 ];
 
 function LoadingSkeleton() {
@@ -100,6 +100,15 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>('wind');
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
+  const eventsRef = useRef<RaceCalendarHandle>(null);
+
+  const onNavTap = useCallback((id: Tab) => {
+    if (id === activeTab && id === 'events') {
+      eventsRef.current?.popToRoot();
+      return;
+    }
+    setActiveTab(id);
+  }, [activeTab]);
 
   useSkyTint(sunInfo);
 
@@ -179,7 +188,7 @@ export default function App() {
     ? forecasts.filter(f => f.time.getTime() <= Date.now() + 12 * 60 * 60 * 1000)
     : forecasts.filter(f => isSameDay(f.time, selectedDay));
   const isLoading = loadState === 'loading';
-  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'races';
+  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'events';
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -255,9 +264,14 @@ export default function App() {
                 <ForecastStrip forecasts={forecasts} chartHistoryForecasts={forecastHistory} liveWindHistory={liveWindHistory} />
               </div>
             )}
-            {activeTab === 'races' && (
+            {activeTab === 'events' && (
               <div className="animate-in fade-in-50 duration-300">
-                <RaceCalendar forecasts={forecasts} tideData={tideData} liveWindHistory={liveWindHistory} />
+                <RaceCalendar
+                  ref={eventsRef}
+                  forecasts={forecasts}
+                  tideData={tideData}
+                  liveWindHistory={liveWindHistory}
+                />
               </div>
             )}
           </div>
@@ -271,7 +285,7 @@ export default function App() {
             return (
               <button
                 key={id}
-                onClick={() => setActiveTab(id)}
+                onClick={() => onNavTap(id)}
                 aria-current={active ? 'page' : undefined}
                 className={`flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-all active:scale-95 ${
                   active

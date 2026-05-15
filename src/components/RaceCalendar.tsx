@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import type { HourlyForecast, TideData, LiveWindHistoryPoint } from '@/lib/api';
 import type { RaceEvent } from '@/lib/calendar';
 import { RACE_CALENDAR, getEventsForDay } from '@/lib/calendar';
@@ -14,6 +14,10 @@ interface RaceCalendarProps {
   forecasts: HourlyForecast[];
   tideData: TideData | null;
   liveWindHistory: LiveWindHistoryPoint[];
+}
+
+export interface RaceCalendarHandle {
+  popToRoot: () => void;
 }
 
 function parseEventTime(date: Date, timeStr: string): Date {
@@ -270,10 +274,27 @@ function MonthCalendar({ month, selectedDay, onSelect }: {
   );
 }
 
-export default function RaceCalendar({ forecasts, tideData, liveWindHistory }: RaceCalendarProps) {
+const RaceCalendar = forwardRef<RaceCalendarHandle, RaceCalendarProps>(function RaceCalendar(
+  { forecasts, tideData, liveWindHistory },
+  ref,
+) {
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
   const [currentMonth, setCurrentMonth] = useState<Date>(startOfMonth(new Date()));
   const [selectedEvent, setSelectedEvent] = useState<RaceEvent | null>(null);
+
+  // Tap the active "Events" nav tab again: pop the drilled-in event view first;
+  // if already at the calendar root, snap back to today's date.
+  useImperativeHandle(ref, () => ({
+    popToRoot: () => {
+      if (selectedEvent) {
+        setSelectedEvent(null);
+        return;
+      }
+      const today = startOfDay(new Date());
+      setSelectedDay(today);
+      setCurrentMonth(startOfMonth(today));
+    },
+  }), [selectedEvent]);
 
   const events = getEventsForDay(selectedDay);
 
@@ -363,4 +384,6 @@ export default function RaceCalendar({ forecasts, tideData, liveWindHistory }: R
       </Card>
     </div>
   );
-}
+});
+
+export default RaceCalendar;
