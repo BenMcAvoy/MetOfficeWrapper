@@ -2,8 +2,8 @@ import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint 
 import { msToKnots } from '@/lib/units';
 import { YAxisTick, tooltipStyle } from '@/lib/chartUtils';
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Legend, ReferenceLine, Line
+  ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, Legend, ReferenceLine
 } from 'recharts';
 import { format, subHours, startOfHour } from 'date-fns';
 
@@ -15,167 +15,157 @@ interface WindChartProps {
   includePastHours?: number;
 }
 
-type WindChartPoint = {
+type SeriesPoint = { t: number; avg: number; gust: number };
+
+type ChartRow = {
   t: number;
-  time: string;
-  avg: number | null;
-  gust: number | null;
-  histAvg: number | null;
-  histGust: number | null;
+  fAvg: number | null;
+  fGust: number | null;
+  oAvg: number | null;
+  oGust: number | null;
 };
 
-type SeriesPoint = {
-  t: number;
-  avg: number;
-  gust: number;
+const TEN_MIN = 10 * 60 * 1000;
+const HOUR = 60 * 60 * 1000;
+
+const COLORS = {
+  forecastAvg: '#3b82f6',
+  forecastGust: '#f97316',
+  observedAvg: '#10b981',
+  observedGust: '#dc2626',
 };
 
-const TEN_MINUTES_MS = 10 * 60 * 1000;
-
-function round1(value: number): number {
-  return Math.round(value * 10) / 10;
+function round1(v: number): number {
+  return Math.round(v * 10) / 10;
 }
 
-function toTenMinuteBucket(timestampMs: number): number {
-  return Math.floor(timestampMs / TEN_MINUTES_MS) * TEN_MINUTES_MS;
+function bucket10(ms: number): number {
+  return Math.floor(ms / TEN_MIN) * TEN_MIN;
 }
 
-function interpolateSeries(series: SeriesPoint[], t: number, clampEdges: boolean): { avg: number; gust: number } | null {
+function interp(series: SeriesPoint[], t: number): { avg: number; gust: number } | null {
   if (!series.length) return null;
-
-  const first = series[0];
-  const last = series[series.length - 1];
-
-  if (t < first.t) return clampEdges ? { avg: first.avg, gust: first.gust } : null;
-  if (t > last.t) return clampEdges ? { avg: last.avg, gust: last.gust } : null;
-  if (t === first.t) return { avg: first.avg, gust: first.gust };
-  if (t === last.t) return { avg: last.avg, gust: last.gust };
+  if (t < series[0].t || t > series[series.length - 1].t) return null;
 
   let lo = 0;
   let hi = series.length - 1;
-
   while (lo <= hi) {
-    const mid = Math.floor((lo + hi) / 2);
-    const mt = series[mid].t;
-    if (mt === t) return { avg: series[mid].avg, gust: series[mid].gust };
-    if (mt < t) lo = mid + 1;
+    const mid = (lo + hi) >> 1;
+    if (series[mid].t === t) return { avg: series[mid].avg, gust: series[mid].gust };
+    if (series[mid].t < t) lo = mid + 1;
     else hi = mid - 1;
   }
-
   const upper = series[lo];
   const lower = series[lo - 1];
   if (!upper || !lower) return null;
-  if (upper.t === lower.t) return { avg: upper.avg, gust: upper.gust };
-
-  const ratio = (t - lower.t) / (upper.t - lower.t);
+  const r = (t - lower.t) / (upper.t - lower.t);
   return {
-    avg: round1(lower.avg + (upper.avg - lower.avg) * ratio),
-    gust: round1(lower.gust + (upper.gust - lower.gust) * ratio),
+    avg: round1(lower.avg + (upper.avg - lower.avg) * r),
+    gust: round1(lower.gust + (upper.gust - lower.gust) * r),
   };
 }
 
-function buildHourlyTicks(minTime: number, maxTime: number): number[] {
-  const ticks: number[] = [];
-  let t = startOfHour(new Date(minTime)).getTime();
-  const oneHour = 60 * 60 * 1000;
-  while (t <= maxTime) {
-    ticks.push(t);
-    t += oneHour;
+function buildForecastSeries(
+  history: WindForecastPoint[],
+  future: HourlyForecast[],
+): SeriesPoint[] {
+  const map = new Map<number, SeriesPoint>();
+  for (const p of history) {
+    const t = p.time.getTime();
+    map.set(t, {
+      t,
+      avg: round1(msToKnots(p.windSpeed10m)),
+      gust: round1(msToKnots(p.windGustSpeed10m)),
+    });
   }
-  return ticks;
+  for (const p of future) {
+    const t = p.time.getTime();
+    map.set(t, {
+      t,
+      avg: round1(msToKnots(p.windSpeed10m)),
+      gust: round1(msToKnots(p.windGustSpeed10m)),
+    });
+  }
+  return Array.from(map.values()).sort((a, b) => a.t - b.t);
 }
 
-export function WindChart({ forecasts, historyForecasts = [], startRefLine, liveHistory = [], includePastHours = 0 }: WindChartProps) {
-  const now = new Date();
-  const nowHour = startOfHour(now).getTime();
-  const forcedMinTime = includePastHours > 0 ? subHours(nowHour, includePastHours).getTime() : null;
-  const minTime = forcedMinTime ?? Number.NEGATIVE_INFINITY;
-
-  const forecastMap = new Map<number, SeriesPoint>();
-  const observedMap = new Map<number, SeriesPoint>();
-
-  for (const forecast of historyForecasts) {
-    const t = toTenMinuteBucket(forecast.time.getTime());
-    if (t < minTime) continue;
-    forecastMap.set(t, {
-      t,
-      avg: round1(msToKnots(forecast.windSpeed10m)),
-      gust: round1(msToKnots(forecast.windGustSpeed10m)),
-    });
+function buildObservedSeries(history: LiveWindHistoryPoint[]): SeriesPoint[] {
+  const map = new Map<number, SeriesPoint>();
+  for (const p of history) {
+    const t = bucket10(p.time.getTime());
+    const avg = round1(msToKnots(p.avgWindMs));
+    const gust = round1(msToKnots(p.gustWindMs));
+    const existing = map.get(t);
+    if (existing) {
+      map.set(t, { t, avg: round1((existing.avg + avg) / 2), gust: Math.max(existing.gust, gust) });
+    } else {
+      map.set(t, { t, avg, gust });
+    }
   }
+  return Array.from(map.values()).sort((a, b) => a.t - b.t);
+}
 
-  for (const forecast of forecasts) {
-    const t = toTenMinuteBucket(forecast.time.getTime());
-    if (t < minTime) continue;
-    forecastMap.set(t, {
-      t,
-      avg: round1(msToKnots(forecast.windSpeed10m)),
-      gust: round1(msToKnots(forecast.windGustSpeed10m)),
-    });
-  }
+export function WindChart({
+  forecasts,
+  historyForecasts = [],
+  startRefLine,
+  liveHistory = [],
+  includePastHours = 0,
+}: WindChartProps) {
+  const now = Date.now();
+  const nowHour = startOfHour(new Date(now)).getTime();
+  const forcedMin = includePastHours > 0 ? subHours(nowHour, includePastHours).getTime() : null;
 
-  for (const point of liveHistory) {
-    const t = toTenMinuteBucket(point.time.getTime());
-    if (t < minTime) continue;
-    observedMap.set(t, {
-      t,
-      avg: round1(msToKnots(point.avgWindMs)),
-      gust: round1(msToKnots(point.gustWindMs)),
-    });
-  }
-
-  const forecastSeries = Array.from(forecastMap.values()).sort((a, b) => a.t - b.t);
-  const observedSeries = Array.from(observedMap.values()).sort((a, b) => a.t - b.t);
+  const forecastSeries = buildForecastSeries(historyForecasts, forecasts);
+  const observedSeries = buildObservedSeries(liveHistory);
 
   if (!forecastSeries.length && !observedSeries.length) return null;
 
-  const firstDataTime = Math.min(
+  const firstT = Math.min(
     forecastSeries[0]?.t ?? Number.POSITIVE_INFINITY,
     observedSeries[0]?.t ?? Number.POSITIVE_INFINITY,
   );
-  const lastDataTime = Math.max(
+  const lastT = Math.max(
     forecastSeries[forecastSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
     observedSeries[observedSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
   );
 
-  const xMin = forcedMinTime ?? firstDataTime;
-  const xMax = Math.max(lastDataTime, xMin + 60 * 60 * 1000);
+  const xMin = bucket10(forcedMin ?? firstT);
+  const xMax = bucket10(Math.max(lastT, xMin + HOUR));
 
-  const data: WindChartPoint[] = [];
-  for (let t = toTenMinuteBucket(xMin); t <= xMax; t += TEN_MINUTES_MS) {
-    if (t < xMin) continue;
-    const forecastPoint = interpolateSeries(forecastSeries, t, false);
-    const observedPoint = interpolateSeries(observedSeries, t, false);
-
-    data.push({
+  const rows: ChartRow[] = [];
+  for (let t = xMin; t <= xMax; t += TEN_MIN) {
+    const f = interp(forecastSeries, t);
+    const o = interp(observedSeries, t);
+    rows.push({
       t,
-      time: format(new Date(t), 'HH:mm'),
-      avg: forecastPoint?.avg ?? null,
-      gust: forecastPoint?.gust ?? null,
-      histAvg: observedPoint?.avg ?? null,
-      histGust: observedPoint?.gust ?? null,
+      fAvg: f?.avg ?? null,
+      fGust: f?.gust ?? null,
+      oAvg: o?.avg ?? null,
+      oGust: o?.gust ?? null,
     });
   }
 
-  if (!data.length) return null;
+  if (!rows.length) return null;
 
-  const xTicks = buildHourlyTicks(xMin, xMax);
+  const xTicks: number[] = [];
+  {
+    let t = startOfHour(new Date(xMin)).getTime();
+    if (t < xMin) t += HOUR;
+    for (; t <= xMax; t += HOUR) xTicks.push(t);
+  }
 
-  const refLineTime = startRefLine;
-  const hasHistory = observedSeries.length > 0;
+  const hasObserved = observedSeries.length > 0;
+  const showNow = now >= xMin && now <= xMax;
 
   return (
     <div className="h-44">
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-        <AreaChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+        <ComposedChart data={rows} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
           <defs>
-            <linearGradient id="windAvgGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#2563eb" stopOpacity={0.2} />
-              <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
-            </linearGradient>
-            <linearGradient id="windGustGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#ea580c" stopOpacity={0.2} />
-              <stop offset="95%" stopColor="#ea580c" stopOpacity={0} />
+            <linearGradient id="windForecastAvgFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={COLORS.forecastAvg} stopOpacity={0.18} />
+              <stop offset="100%" stopColor={COLORS.forecastAvg} stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
@@ -188,30 +178,87 @@ export function WindChart({ forecasts, historyForecasts = [], startRefLine, live
             tickFormatter={t => format(new Date(Number(t)), 'HH:mm')}
             tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
           />
-          <YAxis tick={<YAxisTick unit="kt" />} width={44} />
+          <YAxis tick={<YAxisTick unit="kt" />} width={44} domain={[0, 'auto']} allowDecimals={false} />
           <Tooltip
             {...tooltipStyle}
-            filterNull={false}
+            filterNull
+            position={{ y: 0 }}
+            allowEscapeViewBox={{ x: false, y: true }}
+            wrapperStyle={{ pointerEvents: 'none', zIndex: 5 }}
+            cursor={{ stroke: 'var(--muted-foreground)', strokeOpacity: 0.4, strokeWidth: 1 }}
             labelFormatter={t => format(new Date(Number(t)), 'HH:mm')}
             formatter={(value: unknown) =>
-              typeof value === 'number' && Number.isFinite(value)
-                ? `${value.toFixed(1)} kt`
-                : '—'
+              typeof value === 'number' && Number.isFinite(value) ? `${value.toFixed(1)} kt` : '—'
             }
           />
           <Legend wrapperStyle={{ color: 'var(--muted-foreground)', fontSize: '11px' }} />
-          {refLineTime && (
-            <ReferenceLine x={refLineTime} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
+
+          {startRefLine && (
+            <ReferenceLine
+              x={startRefLine}
+              stroke="var(--primary)"
+              strokeDasharray="4 3"
+              label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }}
+            />
           )}
-          <Area type="monotone" dataKey="avg" name="Forecast Avg" stroke="#2563eb" fill="url(#windAvgGrad)" strokeWidth={2} dot={false} connectNulls />
-          <Area type="monotone" dataKey="gust" name="Forecast Gust" stroke="#ea580c" fill="url(#windGustGrad)" strokeWidth={2} dot={false} connectNulls />
-          {hasHistory && (
+          {showNow && (
+            <ReferenceLine
+              x={now}
+              stroke="var(--muted-foreground)"
+              strokeOpacity={0.6}
+              strokeDasharray="2 4"
+              label={{ value: 'Now', fill: 'var(--muted-foreground)', fontSize: 10, position: 'insideTopRight' }}
+            />
+          )}
+
+          <Area
+            type="monotone"
+            dataKey="fAvg"
+            name="Forecast avg"
+            stroke={COLORS.forecastAvg}
+            strokeWidth={2}
+            fill="url(#windForecastAvgFill)"
+            dot={false}
+            isAnimationActive={false}
+            connectNulls
+          />
+          <Line
+            type="monotone"
+            dataKey="fGust"
+            name="Forecast gust"
+            stroke={COLORS.forecastGust}
+            strokeWidth={1.5}
+            strokeDasharray="4 3"
+            dot={false}
+            isAnimationActive={false}
+            connectNulls
+          />
+          {hasObserved && (
             <>
-              <Line type="monotone" dataKey="histAvg" name="Observed Avg" stroke="#0ea5e9" strokeWidth={2} dot={false} strokeDasharray="6 4" connectNulls />
-              <Line type="monotone" dataKey="histGust" name="Observed Gust" stroke="#f97316" strokeWidth={2} dot={false} strokeDasharray="4 3" connectNulls />
+              <Line
+                type="monotone"
+                dataKey="oAvg"
+                name="Observed avg"
+                stroke={COLORS.observedAvg}
+                strokeWidth={2.5}
+                dot={false}
+                isAnimationActive={false}
+                connectNulls
+              />
+              <Line
+                type="monotone"
+                dataKey="oGust"
+                name="Observed gust"
+                stroke={COLORS.observedGust}
+                strokeWidth={1.5}
+                strokeDasharray="4 3"
+                dot={false}
+                isAnimationActive={false}
+                connectNulls
+              />
             </>
           )}
-        </AreaChart>
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   );
@@ -247,7 +294,7 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
   return (
     <div style={{ height }}>
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-        <AreaChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+        <ComposedChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="tideAreaGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
@@ -267,7 +314,7 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
             <ReferenceLine x={startRefLine} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
           )}
           <Area type="monotone" dataKey="height" stroke="#2563eb" fill="url(#tideAreaGrad)" strokeWidth={2} dot={false} />
-        </AreaChart>
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   );

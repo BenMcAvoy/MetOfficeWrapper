@@ -49,7 +49,7 @@ export function setCached<T>(key: string, data: T, ttlMs: number): void {
 }
 
 export const TTL = {
-  FORECAST: 60 * 60 * 1000,
+  FORECAST: 15 * 60 * 1000,
   TIDES:    4  * 60 * 60 * 1000,
   SUN:      24 * 60 * 60 * 1000,
   LIVE_WIND: 15 * 1000,
