@@ -164,6 +164,10 @@ export default function App() {
 
   const availableDays = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
   const dayForecasts = filterForDay(forecasts, selectedDay);
+  const isTodaySelected = isSameDay(selectedDay, new Date());
+  const chartForecastsForWind = isTodaySelected
+    ? forecasts.filter(f => f.time.getTime() <= Date.now() + 12 * 60 * 60 * 1000)
+    : forecasts.filter(f => isSameDay(f.time, selectedDay));
   const isLoading = loadState === 'loading';
   const showDateSelector = activeTab !== 'forecast' && activeTab !== 'races';
 
@@ -217,7 +221,7 @@ export default function App() {
             {activeTab === 'wind' && (
               <WindCard
                 forecasts={dayForecasts}
-                chartForecasts={forecasts.filter(f => isSameDay(f.time, selectedDay))}
+                chartForecasts={chartForecastsForWind}
                 chartHistoryForecasts={forecastHistory}
                 selectedDay={selectedDay}
                 liveWind={liveWind}
