@@ -42,15 +42,36 @@ function setupPwaUpdates(): void {
     onRegisteredSW(_swUrl: string, registration: ServiceWorkerRegistration | undefined) {
       if (!registration) return;
 
-      const checkForUpdate = () => {
-        void registration.update();
+      const applyIfWaiting = () => {
+        if (registration.waiting) void updateSW(true);
       };
 
-      checkForUpdate();
+      const checkForUpdate = async () => {
+        try {
+          await registration.update();
+          applyIfWaiting();
+        } catch {
+          // network or sw fetch failure — try again on next event
+        }
+      };
 
-      window.addEventListener('focus', checkForUpdate);
+      void checkForUpdate();
+
+      window.addEventListener('focus', () => void checkForUpdate());
       document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') checkForUpdate();
+        if (document.visibilityState === 'visible') void checkForUpdate();
+      });
+
+      // Periodic poll while the tab is visible, so a long-running session
+      // still picks up new deploys without needing focus events to fire.
+      window.setInterval(() => {
+        if (document.visibilityState === 'visible') void checkForUpdate();
+      }, 5 * 60 * 1000);
+
+      registration.addEventListener('updatefound', () => {
+        const installing = registration.installing;
+        if (!installing) return;
+        installing.addEventListener('statechange', applyIfWaiting);
       });
     },
   });
