@@ -1,3 +1,4 @@
+import { useState, type TouchEvent } from 'react';
 import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { YAxisTick, tooltipStyle } from '@/lib/chartUtils';
 import {
@@ -7,6 +8,7 @@ import {
   bucket10,
   HOUR,
 } from '@/lib/windChartData';
+import type { WindChartRow } from '@/lib/windChartData';
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine
@@ -57,6 +59,70 @@ function WindLegend({ entries }: { entries: LegendEntry[] }) {
   );
 }
 
+function formatKt(v: number | null): string {
+  return v === null || !Number.isFinite(v) ? '—' : Math.round(v).toString();
+}
+
+function ReadoutRow({
+  label,
+  avg,
+  gust,
+  dashed,
+}: {
+  label: string;
+  avg: number | null;
+  gust: number | null;
+  dashed: boolean;
+}) {
+  const muted = avg === null && gust === null;
+  return (
+    <div className={`flex items-baseline gap-1.5 ${muted ? 'opacity-40' : ''}`}>
+      <svg width="18" height="8" aria-hidden className="shrink-0">
+        <line
+          x1="0" x2="18" y1="4" y2="4"
+          stroke={COLORS.avg}
+          strokeWidth={2}
+          strokeDasharray={dashed ? FORECAST_DASH : undefined}
+        />
+      </svg>
+      <span className="text-muted-foreground text-[11px] w-8">{label}</span>
+      <span className="font-semibold tabular-nums" style={{ color: COLORS.avg }}>{formatKt(avg)}</span>
+      <span className="text-muted-foreground text-[10px]">/</span>
+      <span className="font-semibold tabular-nums" style={{ color: COLORS.gust }}>{formatKt(gust)}</span>
+      <span className="text-muted-foreground text-[10px]">G kt</span>
+    </div>
+  );
+}
+
+function WindReadoutStrip({
+  row,
+  pinned,
+  showLive,
+}: {
+  row: WindChartRow | null;
+  pinned: boolean;
+  showLive: boolean;
+}) {
+  const time = row ? format(new Date(row.t), 'HH:mm') : '—';
+
+  return (
+    <div className="flex items-center justify-between gap-3 px-1 pb-2 text-xs">
+      <div className="flex flex-col">
+        <span className="text-muted-foreground text-[10px] uppercase tracking-wide">
+          {pinned ? 'Hovered' : 'Latest'}
+        </span>
+        <span className="font-semibold tabular-nums">{time}</span>
+      </div>
+      <div className="flex flex-col gap-0.5">
+        {showLive && (
+          <ReadoutRow label="Live" avg={row?.oAvg ?? null} gust={row?.oGust ?? null} dashed={false} />
+        )}
+        <ReadoutRow label="Fcst" avg={row?.fAvg ?? null} gust={row?.fGust ?? null} dashed={true} />
+      </div>
+    </div>
+  );
+}
+
 export function WindChart({
   forecasts,
   historyForecasts = [],
@@ -64,6 +130,7 @@ export function WindChart({
   liveHistory = [],
   includePastHours = 0,
 }: WindChartProps) {
+  const [activeRow, setActiveRow] = useState<WindChartRow | null>(null);
   const now = Date.now();
   const nowHour = startOfHour(new Date(now)).getTime();
   const forcedMin = includePastHours > 0 ? subHours(nowHour, includePastHours).getTime() : null;
@@ -98,6 +165,40 @@ export function WindChart({
   const hasObserved = observedSeries.length > 0;
   const showNow = now >= xMin && now <= xMax;
 
+  const displayRow: WindChartRow | null = activeRow ?? rows[rows.length - 1] ?? null;
+
+  const handleActive = (state: unknown) => {
+    const s = state as {
+      activeTooltipIndex?: number;
+      activeLabel?: number | string;
+      activePayload?: { payload: WindChartRow }[];
+    } | null | undefined;
+    if (!s) return;
+    const fromPayload = s.activePayload?.[0]?.payload;
+    const fromIndex = typeof s.activeTooltipIndex === 'number' ? rows[s.activeTooltipIndex] : undefined;
+    const fromLabel = s.activeLabel !== undefined ? rows.find(r => r.t === Number(s.activeLabel)) : undefined;
+    const next = fromPayload ?? fromIndex ?? fromLabel ?? null;
+    if (next && next.t !== activeRow?.t) setActiveRow(next);
+  };
+
+  const handleTouch = (e: TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    if (!touch || rows.length === 0) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
+    const t = xMin + ratio * (xMax - xMin);
+    let nearest = rows[0];
+    let bestDist = Math.abs(rows[0].t - t);
+    for (let i = 1; i < rows.length; i++) {
+      const d = Math.abs(rows[i].t - t);
+      if (d < bestDist) {
+        nearest = rows[i];
+        bestDist = d;
+      }
+    }
+    if (nearest.t !== activeRow?.t) setActiveRow(nearest);
+  };
+
   const legendEntries: LegendEntry[] = [
     ...(hasObserved
       ? [
@@ -111,9 +212,21 @@ export function WindChart({
 
   return (
     <div>
-      <div className="h-44">
+      <WindReadoutStrip row={displayRow} pinned={!!activeRow} showLive={hasObserved} />
+      <div
+        className="h-44 touch-pan-y"
+        onTouchStart={handleTouch}
+        onTouchMove={handleTouch}
+      >
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-        <ComposedChart data={rows} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+        <ComposedChart
+          data={rows}
+          margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
+          onMouseMove={handleActive}
+          onTouchStart={handleActive}
+          onTouchMove={handleActive}
+          onMouseLeave={() => setActiveRow(null)}
+        >
           <defs>
             <linearGradient id="windObservedAvgFill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor={COLORS.avg} stopOpacity={0.18} />
@@ -145,16 +258,8 @@ export function WindChart({
             }}
           />
           <Tooltip
-            {...tooltipStyle}
-            filterNull
-            position={{ y: 0 }}
-            allowEscapeViewBox={{ x: false, y: true }}
-            wrapperStyle={{ pointerEvents: 'none', zIndex: 5 }}
-            cursor={{ stroke: 'var(--muted-foreground)', strokeOpacity: 0.4, strokeWidth: 1 }}
-            labelFormatter={t => format(new Date(Number(t)), 'HH:mm')}
-            formatter={(value: unknown) =>
-              typeof value === 'number' && Number.isFinite(value) ? `${value.toFixed(1)} kt` : '—'
-            }
+            content={() => null}
+            cursor={{ stroke: 'var(--muted-foreground)', strokeOpacity: 0.5, strokeWidth: 1 }}
           />
           {startRefLine && (
             <ReferenceLine
