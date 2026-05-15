@@ -2,10 +2,10 @@ import { useState } from 'react';
 import type { HourlyForecast, TideData, LiveWindHistoryPoint } from '@/lib/api';
 import type { RaceEvent } from '@/lib/calendar';
 import { RACE_CALENDAR, getEventsForDay } from '@/lib/calendar';
-import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
+import { msToKnots, beaufortScale, beaufortColor, beaufortBg } from '@/lib/units';
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Wind, Waves } from 'lucide-react';
+import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves } from 'lucide-react';
 import { format, addMinutes, subHours, startOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
 import { TideChartInner } from '@/components/charts';
 import WindChartCard from '@/components/WindChartCard';
@@ -107,43 +107,27 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
         </Card>
       )}
 
-      {hasForecastData && startForecast && (
-        <Card>
-          <CardHeader className="pb-1">
-            <CardTitle className="text-xs text-muted-foreground uppercase tracking-wide">At Start ({event.time})</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            {(() => {
-              const wi = getWeatherInfo(startForecast.significantWeatherCode);
-              const Icon = wi.Icon;
-              const kt = msToKnots(startForecast.windSpeed10m);
-              const gustKt = msToKnots(startForecast.windGustSpeed10m);
-              const bf = beaufortScale(kt);
-              const gustBf = beaufortScale(gustKt);
-              return (
-                <div className="flex items-center gap-3">
-                  <Icon className="h-8 w-8 text-primary shrink-0" strokeWidth={1.5} />
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium">{wi.description}</p>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`text-sm font-semibold tabular-nums ${beaufortColor(bf.force)}`}>{Math.round(kt)}kt</span>
-                      <span className={`text-xs font-medium px-1 py-0.5 rounded leading-none ${beaufortBg(bf.force)}`}>F{bf.force}</span>
-                      <ArrowUp className="h-3 w-3 text-muted-foreground" style={{ transform: `rotate(${startForecast.windDirectionFrom10m}deg)` }} strokeWidth={2.5} />
-                      <span className={`text-xs font-semibold ${beaufortColor(gustBf.force)}`}>{Math.round(gustKt)}kt gust</span>
-                      <span className="text-xs text-muted-foreground">{degreesToCardinal(startForecast.windDirectionFrom10m)}</span>
-                    </div>
-                    <div className="flex gap-3 text-xs text-muted-foreground">
-                      <span>{Math.round(startForecast.screenTemperature)}°C</span>
-                      <span>{startForecast.probOfPrecipitation}% rain</span>
-                      <span>Vis {(startForecast.visibility / 1000).toFixed(1)}km</span>
-                    </div>
+      {hasForecastData && startForecast && (() => {
+        const wi = getWeatherInfo(startForecast.significantWeatherCode);
+        const Icon = wi.Icon;
+        return (
+          <Card>
+            <CardContent className="pt-4 pb-4">
+              <div className="flex items-center gap-3">
+                <Icon className="h-10 w-10 text-primary shrink-0" strokeWidth={1.5} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-tight">At start · {wi.description}</p>
+                  <div className="flex gap-3 text-xs text-muted-foreground mt-1">
+                    <span>{Math.round(startForecast.screenTemperature)}°C</span>
+                    <span>{startForecast.probOfPrecipitation}% rain</span>
+                    <span>Vis {(startForecast.visibility / 1000).toFixed(1)}km</span>
                   </div>
                 </div>
-              );
-            })()}
-          </CardContent>
-        </Card>
-      )}
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })()}
 
       {hasForecastData && (
         <Card>
@@ -351,23 +335,22 @@ export default function RaceCalendar({ forecasts, tideData, liveWindHistory }: R
                   onClick={() => setSelectedEvent(event)}
                   className="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors"
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium leading-tight">{event.name}</p>
                       {event.classes && (
                         <p className="text-xs text-muted-foreground mt-0.5">Classes: {event.classes}</p>
                       )}
                     </div>
-                    <div className="text-right shrink-0">
-                      {event.time ? (
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Wind className="h-3 w-3" />
-                          <span>{event.time}</span>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">All day</span>
-                      )}
-                    </div>
+                    {event.time ? (
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums shrink-0">
+                        <Clock className="h-3 w-3" />
+                        <span>{event.time}</span>
+                      </div>
+                    ) : (
+                      <span className="text-xs text-muted-foreground shrink-0">All day</span>
+                    )}
+                    <ChevronRight className="h-4 w-4 text-muted-foreground/50 shrink-0" />
                   </div>
                 </button>
               ))}

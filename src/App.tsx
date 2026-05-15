@@ -48,10 +48,11 @@ function DateSelector({ selected, onChange, availableDays }: {
           <button
             key={i}
             onClick={() => onChange(day)}
-            className={`flex-shrink-0 h-9 px-4 rounded-full text-sm font-medium transition-colors active:scale-[0.97] ${
+            aria-pressed={active}
+            className={`flex-shrink-0 min-h-10 px-4 rounded-full text-sm font-medium transition-colors active:scale-[0.97] ${
               active
-                ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-primary text-primary-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground bg-muted/40 hover:bg-muted/70'
             }`}
           >
             {label}
@@ -174,23 +175,20 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-10 bg-background/75 backdrop-blur-xl border-b border-border/60" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-        <div className="max-w-2xl mx-auto px-4 pt-3 pb-3 flex items-end justify-between gap-3">
-          <div className="min-w-0">
-            <div className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] text-muted-foreground/80 font-medium">
-              <MapPin className="h-3 w-3 text-primary shrink-0" strokeWidth={2.5} />
-              <span className="truncate">{format(new Date(), 'EEEE · HH:mm')}</span>
-            </div>
-            <h1 className="font-display text-2xl font-semibold leading-tight tracking-tight mt-0.5 truncate">
+        <div className="max-w-2xl mx-auto px-4 pt-3 pb-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <MapPin className="h-4 w-4 text-primary shrink-0" strokeWidth={2.5} />
+            <h1 className="font-display text-xl font-semibold leading-none tracking-tight truncate">
               {LOCATION_NAME}
             </h1>
           </div>
-          <div className="flex items-center gap-2 shrink-0 pb-1">
+          <div className="flex items-center gap-2 shrink-0">
             <InstallButton />
             {isLoading ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground/70" />
             ) : lastUpdated && (
-              <span className="text-muted-foreground/70 text-[11px] tabular-nums">
-                updated {format(lastUpdated, 'HH:mm')}
+              <span className="text-muted-foreground/60 text-[11px] tabular-nums" title={`Updated ${format(lastUpdated, 'HH:mm:ss')}`}>
+                {format(lastUpdated, 'HH:mm')}
               </span>
             )}
           </div>

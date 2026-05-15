@@ -46,12 +46,16 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
   const currentObservedKnots = hasLiveReading && liveWind ? msToKnots(liveWind.windSpeedMs) : null;
   const currentObservedBf = currentObservedKnots !== null ? beaufortScale(currentObservedKnots) : null;
   const currentObservedDirection = hasLiveReading && liveWind ? liveWind.windDirectionDeg : null;
-  const sourceBadgeClass = hasFreshLiveWind
-    ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300'
+  const liveDotClass = hasFreshLiveWind
+    ? 'bg-emerald-500'
     : hasStaleLiveWind
-      ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'
-      : 'bg-muted text-muted-foreground';
-  const sourceBadgeText = hasFreshLiveWind ? 'LIVE' : hasStaleLiveWind ? 'STALE' : 'NO LIVE';
+      ? 'bg-amber-500'
+      : 'bg-muted-foreground/40';
+  const liveStatusText = hasFreshLiveWind
+    ? `Live · ${liveAgeSeconds}s ago`
+    : hasStaleLiveWind
+      ? `Stale · ${Math.round((liveAgeSeconds ?? 0) / 60)}m ago`
+      : 'No live data';
 
   const lastHourObserved = isToday
     ? liveWindHistory.filter(p => {
@@ -68,9 +72,9 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
   const maxObservedGustLastHour = maxObservedGustPoint
     ? msToKnots(maxObservedGustPoint.gustWindMs)
     : null;
-  const currentTimestamp = hasLiveReading && liveWind && liveAgeSeconds !== null
-    ? `${format(liveWind.observedAt, 'HH:mm:ss')} · ${liveAgeSeconds}s ago${liveWind.delaySeconds !== null ? ` · +${liveWind.delaySeconds}s` : ''}`
-    : 'No live station update';
+  const currentTimestamp = hasLiveReading && liveWind
+    ? format(liveWind.observedAt, 'HH:mm:ss')
+    : null;
 
 
   return (
@@ -80,10 +84,11 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
           {isToday ? (
             <>
               <div className="flex items-center justify-between mb-3">
-                <p className="text-muted-foreground text-xs uppercase tracking-wide">Today's Wind</p>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${sourceBadgeClass}`}>
-                  {sourceBadgeText}
-                </span>
+                <p className="text-muted-foreground text-xs uppercase tracking-wide">Today</p>
+                <div className="flex items-center gap-1.5">
+                  <span className={`h-1.5 w-1.5 rounded-full ${liveDotClass} ${hasFreshLiveWind ? 'animate-pulse' : ''}`} />
+                  <span className="text-muted-foreground text-[11px]">{liveStatusText}</span>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -117,7 +122,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
               </div>
 
               <div className="flex items-center justify-between mt-3 pt-3 border-t">
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   {currentObservedDirection !== null ? (
                     <>
                       <ArrowUp
@@ -126,40 +131,29 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                         strokeWidth={2.5}
                       />
                       <span className="text-sm font-semibold">{degreesToCardinal(currentObservedDirection)}</span>
-                      <span className="text-muted-foreground text-xs">{Math.round(currentObservedDirection)}°</span>
+                      <span className="text-muted-foreground text-xs tabular-nums">{Math.round(currentObservedDirection)}°</span>
                     </>
                   ) : (
-                    <span className="text-muted-foreground text-xs">No live direction</span>
+                    <span className="text-muted-foreground text-xs">Direction unavailable</span>
                   )}
                 </div>
-                <p className="text-muted-foreground text-xs text-right">{currentTimestamp}</p>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3 mt-3 pt-3 border-t">
-                <div>
-                  <p className="text-muted-foreground text-xs mb-1">Avg (1h)</p>
-                  <p className="font-display text-2xl font-semibold tabular-nums tracking-tight">
-                    {observedAvgKnotsLastHour !== null ? `${Math.round(observedAvgKnotsLastHour)}kt` : '—'}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-xs mb-1">Samples</p>
-                  <p className="font-display text-2xl font-semibold tabular-nums tracking-tight">{lastHourObserved.length}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-xs mb-1">Data</p>
-                  <p className="text-base font-semibold tabular-nums">
-                    {hasFreshLiveWind ? 'Fresh' : hasStaleLiveWind ? 'Stale' : 'Offline'}
-                  </p>
+                <div className="flex items-baseline gap-2 text-xs">
+                  {observedAvgKnotsLastHour !== null && (
+                    <span className="text-muted-foreground">
+                      Avg 1h <span className="text-foreground font-semibold tabular-nums">{Math.round(observedAvgKnotsLastHour)}kt</span>
+                    </span>
+                  )}
+                  {currentTimestamp && (
+                    <span className="text-muted-foreground/70 tabular-nums">{currentTimestamp}</span>
+                  )}
                 </div>
               </div>
             </>
           ) : (
             <>
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-muted-foreground text-xs uppercase tracking-wide">{`${format(selectedDay, 'EEEE')}'s`} Wind</p>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-muted text-muted-foreground">FORECAST</span>
-              </div>
+              <p className="text-muted-foreground text-xs uppercase tracking-wide mb-3">
+                {format(selectedDay, 'EEEE d MMM')}
+              </p>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
@@ -209,15 +203,19 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
               const ktsAvg = msToKnots(f.windSpeed10m);
               const ktsGust = msToKnots(f.windGustSpeed10m);
               const bf = beaufortScale(ktsAvg);
+              const isCurrentHour = isToday && i === 0;
               return (
                 <div
                   key={i}
-                  className={`grid grid-cols-[3rem_2rem_3.5rem_1fr_1fr_3rem] gap-2 px-4 py-2.5 items-center text-sm ${
-                    isToday && i === 0 ? 'bg-muted/50' : ''
+                  className={`relative grid grid-cols-[3rem_2rem_3.5rem_1fr_1fr_3rem] gap-2 px-4 py-2.5 items-center text-sm ${
+                    isCurrentHour ? 'bg-primary/5' : ''
                   }`}
                 >
-                  <span className="text-muted-foreground text-xs tabular-nums">
-                    {isToday && i === 0 ? 'Now' : format(f.time, 'HH:mm')}
+                  {isCurrentHour && (
+                    <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-primary" aria-hidden />
+                  )}
+                  <span className={`text-xs tabular-nums ${isCurrentHour ? 'font-semibold text-primary' : 'text-muted-foreground'}`}>
+                    {isCurrentHour ? 'Now' : format(f.time, 'HH:mm')}
                   </span>
                   <ArrowUp
                     className="h-4 w-4 text-primary"
