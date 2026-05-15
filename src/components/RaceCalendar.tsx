@@ -6,7 +6,7 @@ import { msToKnots, beaufortScale, beaufortColor, beaufortBg } from '@/lib/units
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves } from 'lucide-react';
-import { format, addMinutes, subHours, startOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
+import { format, addMinutes, startOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
 import { TideChartInner } from '@/components/charts';
 import WindChartCard from '@/components/WindChartCard';
 
@@ -55,6 +55,8 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
   }
 
   const eventStart = parseEventTime(selectedDay, event.time);
+  // Pad the chart window slightly: 1h before for context, 2.5h after for race + cooldown.
+  const chartStart = addMinutes(eventStart, -60);
   const windowStart = addMinutes(eventStart, -30);
   const windowEnd = addMinutes(eventStart, 150);
 
@@ -67,11 +69,12 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
   ];
 
   const isToday = isSameDay(selectedDay, new Date());
-  // For today's events, let the chart show forecast continuously from a few hours
-  // before now through the race window — otherwise the line only appears at eventStart-30m,
-  // leaving a blank gap between live wind history and the forecast.
-  const chartForecastStart = isToday ? subHours(new Date(), 3) : windowStart;
-  const windowForecasts = forecasts.filter(f => f.time >= chartForecastStart && f.time <= windowEnd);
+  const windowForecasts = forecasts.filter(f => f.time >= chartStart && f.time <= windowEnd);
+  // Only include live observations that fall inside this race chart window — outside that
+  // they're irrelevant to a race-window comparison and just add noise to the chart.
+  const windowLiveHistory = isToday
+    ? liveWindHistory.filter(p => p.time >= chartStart && p.time <= windowEnd)
+    : [];
 
   const startForecast = closestForecast(forecasts, eventStart);
   const hasForecastData = forecasts.some(f => {
@@ -179,8 +182,8 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
           title="Wind · Race Window"
           forecasts={windowForecasts}
           startRefLine={eventStart.getTime()}
-          liveWindHistory={isToday ? liveWindHistory : []}
-          includePastHours={isToday ? 3 : 0}
+          liveWindHistory={windowLiveHistory}
+          includePastHours={0}
         />
       )}
 
