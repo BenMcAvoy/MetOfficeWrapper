@@ -6,7 +6,7 @@ import { msToKnots, beaufortScale, beaufortColor, beaufortBg } from '@/lib/units
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves } from 'lucide-react';
-import { format, addMinutes, startOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
+import { format, addMinutes, startOfDay, endOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
 import { TideChartInner } from '@/components/charts';
 import WindChartCard from '@/components/WindChartCard';
 
@@ -34,6 +34,161 @@ function closestForecast(forecasts: HourlyForecast[], time: Date): HourlyForecas
   );
 }
 
+function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHistory, onBack }: {
+  event: RaceEvent;
+  selectedDay: Date;
+  forecasts: HourlyForecast[];
+  tideData: TideData | null;
+  liveWindHistory: LiveWindHistoryPoint[];
+  onBack: () => void;
+}) {
+  const dayStart = startOfDay(selectedDay);
+  const dayEnd = endOfDay(selectedDay);
+  const isToday = isSameDay(selectedDay, new Date());
+
+  const dayForecasts = forecasts.filter(f => f.time >= dayStart && f.time <= dayEnd);
+  const dayLive = isToday
+    ? liveWindHistory.filter(p => p.time >= dayStart && p.time <= dayEnd)
+    : [];
+
+  const hasForecastData = dayForecasts.length > 0;
+
+  // Pick a representative midday forecast for the headline condition.
+  const noon = new Date(selectedDay);
+  noon.setHours(12, 0, 0, 0);
+  const rep = closestForecast(dayForecasts.length ? dayForecasts : forecasts, noon);
+
+  let maxTemp: number | null = null;
+  let minTemp: number | null = null;
+  let avgWindKt: number | null = null;
+  let peakGustKt: number | null = null;
+  let peakGustEntry: HourlyForecast | null = null;
+  let maxRainProb = 0;
+  if (dayForecasts.length) {
+    maxTemp = Math.round(Math.max(...dayForecasts.map(f => f.screenTemperature)));
+    minTemp = Math.round(Math.min(...dayForecasts.map(f => f.screenTemperature)));
+    const avgWindMs = dayForecasts.reduce((s, f) => s + f.windSpeed10m, 0) / dayForecasts.length;
+    avgWindKt = msToKnots(avgWindMs);
+    const peakGustMs = Math.max(...dayForecasts.map(f => f.windGustSpeed10m));
+    peakGustEntry = dayForecasts.find(f => f.windGustSpeed10m === peakGustMs) ?? null;
+    peakGustKt = msToKnots(peakGustMs);
+    maxRainProb = Math.max(...dayForecasts.map(f => f.probOfPrecipitation));
+  }
+
+  return (
+    <div className="space-y-3">
+      <Card>
+        <CardHeader className="pb-3">
+          <button onClick={onBack} className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-xs mb-1 transition-colors">
+            <ChevronLeft className="h-3.5 w-3.5" /> Back to {format(selectedDay, 'd MMMM')}
+          </button>
+          <CardTitle className="text-sm leading-tight">{event.name}</CardTitle>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+            <Clock className="h-3 w-3" />
+            <span>{format(selectedDay, 'EEEE d MMM')} · All day</span>
+          </div>
+          {event.classes && (
+            <span className="text-xs text-muted-foreground">Classes: {event.classes}</span>
+          )}
+        </CardHeader>
+      </Card>
+
+      {!hasForecastData && (
+        <Card>
+          <CardContent className="py-6 text-center text-muted-foreground text-sm">
+            Forecast not yet available for {format(selectedDay, 'd MMMM')}.
+            <br />
+            <span className="text-xs">Met Office provides up to 5 days ahead.</span>
+          </CardContent>
+        </Card>
+      )}
+
+      {hasForecastData && rep && (() => {
+        const wi = getWeatherInfo(rep.significantWeatherCode);
+        const Icon = wi.Icon;
+        return (
+          <Card>
+            <CardContent className="pt-4 pb-4">
+              <div className="flex items-center gap-3">
+                <Icon className="h-10 w-10 text-primary shrink-0" strokeWidth={1.5} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-tight">Day outlook · {wi.description}</p>
+                  <div className="flex gap-3 text-xs text-muted-foreground mt-1 flex-wrap">
+                    {maxTemp !== null && minTemp !== null && <span>{maxTemp}° / {minTemp}°</span>}
+                    <span>{maxRainProb}% rain peak</span>
+                    {rep.visibility > 0 && <span>Vis {(rep.visibility / 1000).toFixed(1)}km</span>}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })()}
+
+      {hasForecastData && avgWindKt !== null && peakGustKt !== null && (() => {
+        const avgBf = beaufortScale(avgWindKt);
+        const peakBf = beaufortScale(peakGustKt);
+        return (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs text-muted-foreground uppercase tracking-wide">Day Wind Summary</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-muted-foreground text-xs mb-1">Day Avg</p>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className={`font-display text-3xl font-semibold tabular-nums ${beaufortColor(avgBf.force)}`}>{Math.round(avgWindKt)}</span>
+                    <span className="text-muted-foreground text-xs">kt</span>
+                    <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${beaufortBg(avgBf.force)}`}>F{avgBf.force}</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className={`font-display text-3xl font-semibold tabular-nums ${beaufortColor(peakBf.force)}`}>{Math.round(peakGustKt)}</span>
+                    <span className="text-muted-foreground text-xs">kt</span>
+                    {peakGustEntry && (
+                      <span className="text-muted-foreground text-[11px]">@ {format(peakGustEntry.time, 'HH:mm')}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })()}
+
+      {hasForecastData && (
+        <WindChartCard
+          title="Wind · All Day"
+          forecasts={dayForecasts}
+          liveWindHistory={dayLive}
+          includePastHours={0}
+        />
+      )}
+
+      {tideData && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-sm">
+              <Waves className="h-4 w-4" /> Tides · {format(selectedDay, 'd MMM')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <TideChartInner
+              tideData={tideData}
+              windowStart={dayStart}
+              windowEnd={dayEnd}
+              tickIntervalHours={3}
+            />
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+
 function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHistory, onBack }: {
   event: RaceEvent;
   selectedDay: Date;
@@ -44,17 +199,14 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
 }) {
   if (!event.time) {
     return (
-      <Card>
-        <CardHeader className="pb-2">
-          <button onClick={onBack} className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-xs mb-2 transition-colors">
-            <ChevronLeft className="h-3.5 w-3.5" /> Back
-          </button>
-          <CardTitle className="text-sm">{event.name}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm">No start time specified for this event.</p>
-        </CardContent>
-      </Card>
+      <AllDayEventView
+        event={event}
+        selectedDay={selectedDay}
+        forecasts={forecasts}
+        tideData={tideData}
+        liveWindHistory={liveWindHistory}
+        onBack={onBack}
+      />
     );
   }
 
