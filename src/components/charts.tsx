@@ -1,4 +1,4 @@
-import { useState, type TouchEvent } from 'react';
+import { useState } from 'react';
 import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { YAxisTick, tooltipStyle } from '@/lib/chartUtils';
 import {
@@ -191,24 +191,6 @@ export function WindChart({
     if (next && next.t !== activeRow?.t) setActiveRow(next);
   };
 
-  const handleTouch = (e: TouchEvent<HTMLDivElement>) => {
-    const touch = e.touches[0];
-    if (!touch || rows.length === 0) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const ratio = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
-    const t = xMin + ratio * (xMax - xMin);
-    let nearest = rows[0];
-    let bestDist = Math.abs(rows[0].t - t);
-    for (let i = 1; i < rows.length; i++) {
-      const d = Math.abs(rows[i].t - t);
-      if (d < bestDist) {
-        nearest = rows[i];
-        bestDist = d;
-      }
-    }
-    if (nearest.t !== activeRow?.t) setActiveRow(nearest);
-  };
-
   const legendEntries: LegendEntry[] = [
     ...(hasObserved
       ? [
@@ -229,11 +211,7 @@ export function WindChart({
         pinned={!!activeRow}
         showLive={hasObserved}
       />
-      <div
-        className="h-44 touch-pan-y"
-        onTouchStart={handleTouch}
-        onTouchMove={handleTouch}
-      >
+      <div className="h-44">
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ComposedChart
           data={rows}
