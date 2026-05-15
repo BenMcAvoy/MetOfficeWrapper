@@ -1,14 +1,16 @@
 import { useEffect, useState, useCallback } from 'react';
-import type { HourlyForecast, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
-import { fetchMetOfficeHourly, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory } from '@/lib/api';
+import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
+import { fetchMetOfficeHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
 import { filterForDay } from '@/lib/forecastUtils';
+import { useSkyTint } from '@/lib/useSkyTint';
 import { Skeleton } from '@/components/ui/skeleton';
 import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
 import RaceCalendar from '@/components/RaceCalendar';
 import InstallButton from '@/components/InstallButton';
+import ConditionsHeader from '@/components/ConditionsHeader';
 import {
   MapPin, AlertTriangle, Waves, Loader2,
   Wind, CalendarDays, Anchor,
@@ -90,6 +92,7 @@ export default function App() {
   const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
   const [forecastHistory, setForecastHistory] = useState<WindForecastPoint[]>([]);
   const [tideData, setTideData] = useState<TideData | null>(null);
+  const [sunInfo, setSunInfo] = useState<SunInfo | null>(null);
   const [liveWind, setLiveWind] = useState<LiveWind | null>(null);
   const [liveWindHistory, setLiveWindHistory] = useState<LiveWindHistoryPoint[]>([]);
   const [loadState, setLoadState] = useState<LoadState>('idle');
@@ -98,13 +101,16 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('wind');
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
 
+  useSkyTint(sunInfo);
+
   const loadData = useCallback(async () => {
     setLoadState('loading');
     setError(null);
     try {
-      const [fc, td] = await Promise.allSettled([
+      const [fc, td, sun] = await Promise.allSettled([
         fetchMetOfficeHourly(lat, lon),
         fetchTides(lat, lon),
+        fetchSunInfo(lat, lon),
       ]);
 
       if (fc.status === 'fulfilled') setForecasts(fc.value);
@@ -118,6 +124,9 @@ export default function App() {
 
       if (td.status === 'fulfilled') setTideData(td.value);
       else console.warn('Tides failed:', (td.reason as Error).message);
+
+      if (sun.status === 'fulfilled') setSunInfo(sun.value);
+      else console.warn('Sun info failed:', (sun.reason as Error).message);
 
       setLoadState('ok');
       setLastUpdated(new Date());
@@ -217,30 +226,39 @@ export default function App() {
             )}
 
             {activeTab === 'wind' && (
-              <WindCard
-                forecasts={dayForecasts}
-                chartForecasts={chartForecastsForWind}
-                chartHistoryForecasts={forecastHistory}
-                selectedDay={selectedDay}
-                liveWind={liveWind}
-                liveWindHistory={liveWindHistory}
-              />
+              <div key={`wind-${selectedDay.getTime()}`} className="space-y-3 animate-in fade-in-50 duration-300">
+                <ConditionsHeader forecasts={forecasts} selectedDay={selectedDay} sunInfo={sunInfo} />
+                <WindCard
+                  forecasts={dayForecasts}
+                  chartForecasts={chartForecastsForWind}
+                  chartHistoryForecasts={forecastHistory}
+                  selectedDay={selectedDay}
+                  liveWind={liveWind}
+                  liveWindHistory={liveWindHistory}
+                />
+              </div>
             )}
             {activeTab === 'tides' && (
-              tideData ? (
-                <TideChart tideData={tideData} selectedDay={selectedDay} />
-              ) : (
-                <div className="text-center py-12 text-muted-foreground">
-                  <Waves className="mx-auto h-10 w-10 mb-3" />
-                  Tide data unavailable — check UKHO API key
-                </div>
-              )
+              <div key={`tides-${selectedDay.getTime()}`} className="animate-in fade-in-50 duration-300">
+                {tideData ? (
+                  <TideChart tideData={tideData} selectedDay={selectedDay} />
+                ) : (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <Waves className="mx-auto h-10 w-10 mb-3" />
+                    Tide data unavailable — check UKHO API key
+                  </div>
+                )}
+              </div>
             )}
             {activeTab === 'forecast' && (
-              <ForecastStrip forecasts={forecasts} chartHistoryForecasts={forecastHistory} liveWindHistory={liveWindHistory} />
+              <div className="animate-in fade-in-50 duration-300">
+                <ForecastStrip forecasts={forecasts} chartHistoryForecasts={forecastHistory} liveWindHistory={liveWindHistory} />
+              </div>
             )}
             {activeTab === 'races' && (
-              <RaceCalendar forecasts={forecasts} tideData={tideData} liveWindHistory={liveWindHistory} />
+              <div className="animate-in fade-in-50 duration-300">
+                <RaceCalendar forecasts={forecasts} tideData={tideData} liveWindHistory={liveWindHistory} />
+              </div>
             )}
           </div>
         )}

@@ -126,15 +126,26 @@
   body {
     @apply bg-background text-foreground;
     background-image:
-      radial-gradient(ellipse 70% 50% at 85% -5%, oklch(0.82 0.15 65 / 0.35), transparent 65%),
-      radial-gradient(ellipse 90% 60% at 10% -10%, oklch(0.70 0.12 200 / 0.22), transparent 70%);
+      radial-gradient(ellipse 70% 50% at 85% -5%, var(--sky-warm, oklch(0.82 0.15 65 / 0.35)), transparent 65%),
+      radial-gradient(ellipse 90% 60% at 10% -10%, var(--sky-cool, oklch(0.70 0.12 200 / 0.22)), transparent 70%);
     background-attachment: fixed;
   }
   .dark body {
     background-image:
-      radial-gradient(ellipse 70% 50% at 85% -5%, oklch(0.55 0.18 60 / 0.35), transparent 65%),
-      radial-gradient(ellipse 90% 60% at 10% -10%, oklch(0.40 0.12 205 / 0.55), transparent 70%);
+      radial-gradient(ellipse 70% 50% at 85% -5%, var(--sky-warm-dark, oklch(0.55 0.18 60 / 0.35)), transparent 65%),
+      radial-gradient(ellipse 90% 60% at 10% -10%, var(--sky-cool-dark, oklch(0.40 0.12 205 / 0.55)), transparent 70%);
   }
+
+  /* Time-of-day sky tint, applied at the html level via data-sky attribute. */
+  html[data-sky="dawn"] { --sky-warm: oklch(0.86 0.13 30 / 0.45); --sky-cool: oklch(0.78 0.10 240 / 0.28); }
+  html[data-sky="day"]  { --sky-warm: oklch(0.82 0.15 65 / 0.35); --sky-cool: oklch(0.70 0.12 200 / 0.22); }
+  html[data-sky="dusk"] { --sky-warm: oklch(0.74 0.18 30 / 0.45); --sky-cool: oklch(0.55 0.14 285 / 0.30); }
+  html[data-sky="night"]{ --sky-warm: oklch(0.45 0.10 270 / 0.40); --sky-cool: oklch(0.30 0.10 220 / 0.45); }
+
+  html.dark[data-sky="dawn"] { --sky-warm-dark: oklch(0.55 0.17 30 / 0.45); --sky-cool-dark: oklch(0.42 0.13 240 / 0.55); }
+  html.dark[data-sky="day"]  { --sky-warm-dark: oklch(0.55 0.18 60 / 0.35); --sky-cool-dark: oklch(0.40 0.12 205 / 0.55); }
+  html.dark[data-sky="dusk"] { --sky-warm-dark: oklch(0.50 0.18 25 / 0.50); --sky-cool-dark: oklch(0.32 0.12 285 / 0.55); }
+  html.dark[data-sky="night"]{ --sky-warm-dark: oklch(0.30 0.10 270 / 0.45); --sky-cool-dark: oklch(0.22 0.08 220 / 0.60); }
   html {
     @apply font-sans;
   }
