@@ -22,15 +22,16 @@ interface WindChartProps {
 }
 
 const COLORS = {
-  forecast: '#94a3b8',
-  observed: '#2563eb',
+  avg: '#2563eb',
+  gust: '#ea580c',
 };
+
+const FORECAST_DASH = '5 4';
 
 type LegendEntry = {
   label: string;
   color: string;
   dashed: boolean;
-  fill?: boolean;
 };
 
 function WindLegend({ entries }: { entries: LegendEntry[] }) {
@@ -38,18 +39,15 @@ function WindLegend({ entries }: { entries: LegendEntry[] }) {
     <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-2 text-[11px] text-muted-foreground">
       {entries.map(e => (
         <div key={e.label} className="flex items-center gap-1.5">
-          <svg width="22" height="10" aria-hidden>
-            {e.fill && (
-              <rect x="0" y="3" width="22" height="6" fill={e.color} fillOpacity={0.18} />
-            )}
+          <svg width="26" height="10" aria-hidden>
             <line
               x1="0"
-              x2="22"
+              x2="26"
               y1="5"
               y2="5"
               stroke={e.color}
-              strokeWidth={e.dashed ? 1.5 : 2}
-              strokeDasharray={e.dashed ? '4 3' : undefined}
+              strokeWidth={2}
+              strokeDasharray={e.dashed ? FORECAST_DASH : undefined}
             />
           </svg>
           <span>{e.label}</span>
@@ -101,14 +99,14 @@ export function WindChart({
   const showNow = now >= xMin && now <= xMax;
 
   const legendEntries: LegendEntry[] = [
-    { label: 'Forecast avg', color: COLORS.forecast, dashed: false, fill: true },
-    { label: 'Forecast gust', color: COLORS.forecast, dashed: true },
     ...(hasObserved
       ? [
-          { label: 'Observed avg', color: COLORS.observed, dashed: false },
-          { label: 'Observed gust', color: COLORS.observed, dashed: true },
+          { label: 'Live avg', color: COLORS.avg, dashed: false },
+          { label: 'Live gust', color: COLORS.gust, dashed: false },
         ]
       : []),
+    { label: 'Forecast avg', color: COLORS.avg, dashed: true },
+    { label: 'Forecast gust', color: COLORS.gust, dashed: true },
   ];
 
   return (
@@ -117,9 +115,9 @@ export function WindChart({
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ComposedChart data={rows} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
           <defs>
-            <linearGradient id="windForecastAvgFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={COLORS.forecast} stopOpacity={0.18} />
-              <stop offset="100%" stopColor={COLORS.forecast} stopOpacity={0} />
+            <linearGradient id="windObservedAvgFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={COLORS.avg} stopOpacity={0.18} />
+              <stop offset="100%" stopColor={COLORS.avg} stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
@@ -176,13 +174,13 @@ export function WindChart({
             />
           )}
 
-          <Area
+          <Line
             type="monotone"
             dataKey="fAvg"
             name="Forecast avg"
-            stroke={COLORS.forecast}
+            stroke={COLORS.avg}
             strokeWidth={2}
-            fill="url(#windForecastAvgFill)"
+            strokeDasharray={FORECAST_DASH}
             dot={false}
             isAnimationActive={false}
             connectNulls
@@ -191,22 +189,22 @@ export function WindChart({
             type="monotone"
             dataKey="fGust"
             name="Forecast gust"
-            stroke={COLORS.forecast}
-            strokeOpacity={0.55}
-            strokeWidth={1.5}
-            strokeDasharray="4 3"
+            stroke={COLORS.gust}
+            strokeWidth={2}
+            strokeDasharray={FORECAST_DASH}
             dot={false}
             isAnimationActive={false}
             connectNulls
           />
           {hasObserved && (
             <>
-              <Line
+              <Area
                 type="monotone"
                 dataKey="oAvg"
-                name="Observed avg"
-                stroke={COLORS.observed}
+                name="Live avg"
+                stroke={COLORS.avg}
                 strokeWidth={2.25}
+                fill="url(#windObservedAvgFill)"
                 dot={false}
                 isAnimationActive={false}
                 connectNulls
@@ -214,11 +212,9 @@ export function WindChart({
               <Line
                 type="monotone"
                 dataKey="oGust"
-                name="Observed gust"
-                stroke={COLORS.observed}
-                strokeOpacity={0.55}
-                strokeWidth={1.5}
-                strokeDasharray="4 3"
+                name="Live gust"
+                stroke={COLORS.gust}
+                strokeWidth={2.25}
                 dot={false}
                 isAnimationActive={false}
                 connectNulls
