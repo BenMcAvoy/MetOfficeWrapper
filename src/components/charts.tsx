@@ -9,7 +9,7 @@ import {
 } from '@/lib/windChartData';
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Legend, ReferenceLine
+  ResponsiveContainer, ReferenceLine
 } from 'recharts';
 import { format, subHours, startOfHour } from 'date-fns';
 
@@ -22,9 +22,42 @@ interface WindChartProps {
 }
 
 const COLORS = {
-  forecast: '#3b82f6',
-  observed: '#10b981',
+  forecast: '#94a3b8',
+  observed: '#2563eb',
 };
+
+type LegendEntry = {
+  label: string;
+  color: string;
+  dashed: boolean;
+  fill?: boolean;
+};
+
+function WindLegend({ entries }: { entries: LegendEntry[] }) {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-2 text-[11px] text-muted-foreground">
+      {entries.map(e => (
+        <div key={e.label} className="flex items-center gap-1.5">
+          <svg width="22" height="10" aria-hidden>
+            {e.fill && (
+              <rect x="0" y="3" width="22" height="6" fill={e.color} fillOpacity={0.18} />
+            )}
+            <line
+              x1="0"
+              x2="22"
+              y1="5"
+              y2="5"
+              stroke={e.color}
+              strokeWidth={e.dashed ? 1.5 : 2}
+              strokeDasharray={e.dashed ? '4 3' : undefined}
+            />
+          </svg>
+          <span>{e.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function WindChart({
   forecasts,
@@ -67,8 +100,20 @@ export function WindChart({
   const hasObserved = observedSeries.length > 0;
   const showNow = now >= xMin && now <= xMax;
 
+  const legendEntries: LegendEntry[] = [
+    { label: 'Forecast avg', color: COLORS.forecast, dashed: false, fill: true },
+    { label: 'Forecast gust', color: COLORS.forecast, dashed: true },
+    ...(hasObserved
+      ? [
+          { label: 'Observed avg', color: COLORS.observed, dashed: false },
+          { label: 'Observed gust', color: COLORS.observed, dashed: true },
+        ]
+      : []),
+  ];
+
   return (
-    <div className="h-44">
+    <div>
+      <div className="h-44">
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ComposedChart data={rows} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
           <defs>
@@ -113,8 +158,6 @@ export function WindChart({
               typeof value === 'number' && Number.isFinite(value) ? `${value.toFixed(1)} kt` : '—'
             }
           />
-          <Legend wrapperStyle={{ color: 'var(--muted-foreground)', fontSize: '11px' }} />
-
           {startRefLine && (
             <ReferenceLine
               x={startRefLine}
@@ -184,6 +227,8 @@ export function WindChart({
           )}
         </ComposedChart>
       </ResponsiveContainer>
+      </div>
+      <WindLegend entries={legendEntries} />
     </div>
   );
 }
