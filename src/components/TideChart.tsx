@@ -57,19 +57,19 @@ function getTidalCharacter(extremes: import('@/lib/api').TideExtreme[], forDay: 
 
   if (posInHalf < 2.5 || posInHalf >= 12.5) {
     label = 'Building to Springs';
-    className = 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300';
+    className = 'bg-muted text-muted-foreground';
   } else if (posInHalf < 5.5) {
     label = 'Springs';
-    className = 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300';
+    className = 'bg-primary/10 text-primary';
   } else if (posInHalf < 7.5) {
     label = 'Easing to Neaps';
-    className = 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400';
+    className = 'bg-muted text-muted-foreground';
   } else if (posInHalf < 10) {
     label = 'Neaps';
-    className = 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
+    className = 'bg-muted text-muted-foreground';
   } else {
     label = 'Building to Springs';
-    className = 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300';
+    className = 'bg-muted text-muted-foreground';
   }
 
   // Compute actual range from nearest HW/LW pair for display only

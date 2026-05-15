@@ -163,7 +163,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
                       <ArrowUp className="h-3 w-3 text-muted-foreground shrink-0" style={{ transform: `rotate(${fc.windDirectionFrom10m}deg)` }} strokeWidth={2.5} />
                       <span className={`text-xs font-semibold tabular-nums ${beaufortColor(gustBf.force)}`}>{Math.round(gustKt)}kt</span>
                     </div>
-                    <span className={`text-xs font-medium tabular-nums text-right ${fc.probOfPrecipitation > 60 ? 'text-blue-500' : 'text-muted-foreground'}`}>
+                    <span className={`text-xs font-medium tabular-nums text-right ${fc.probOfPrecipitation > 60 ? 'text-primary' : 'text-muted-foreground'}`}>
                       {fc.probOfPrecipitation}%
                     </span>
                   </div>

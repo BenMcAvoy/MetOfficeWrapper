@@ -43,7 +43,7 @@ export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWi
             <span></span>
             <span>Temp</span>
             <span>Avg</span>
-            <span className="text-orange-500">Gust</span>
+            <span className="text-[var(--chart-gust)]">Gust</span>
             <span>Rain</span>
           </div>
 
@@ -117,7 +117,7 @@ export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWi
 
                   {/* Rain */}
                   <span className={`text-xs font-medium tabular-nums text-right ${
-                    maxRain > 60 ? 'text-blue-500' : 'text-muted-foreground'
+                    maxRain > 60 ? 'text-primary' : 'text-muted-foreground'
                   }`}>
                     {maxRain}%
                   </span>

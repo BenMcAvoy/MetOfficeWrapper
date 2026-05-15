@@ -26,8 +26,8 @@ interface WindChartProps {
 }
 
 const COLORS = {
-  avg: '#2563eb',
-  gust: '#ea580c',
+  avg: 'var(--chart-avg)',
+  gust: 'var(--chart-gust)',
 };
 
 const FORECAST_DASH = '5 4';
@@ -361,8 +361,8 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
         <ComposedChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="tideAreaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
-              <stop offset="95%" stopColor="#2563eb" stopOpacity={0.02} />
+              <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.25} />
+              <stop offset="95%" stopColor="var(--primary)" stopOpacity={0.02} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
@@ -377,7 +377,7 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
           {startRefLine !== undefined && (
             <ReferenceLine x={startRefLine} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
           )}
-          <Area type="monotone" dataKey="height" stroke="#2563eb" fill="url(#tideAreaGrad)" strokeWidth={2} dot={false} />
+          <Area type="monotone" dataKey="height" stroke="var(--primary)" fill="url(#tideAreaGrad)" strokeWidth={2} dot={false} />
         </ComposedChart>
       </ResponsiveContainer>
     </div>

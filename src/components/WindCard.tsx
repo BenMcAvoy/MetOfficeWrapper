@@ -47,9 +47,9 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
   const currentObservedBf = currentObservedKnots !== null ? beaufortScale(currentObservedKnots) : null;
   const currentObservedDirection = hasLiveReading && liveWind ? liveWind.windDirectionDeg : null;
   const liveDotClass = hasFreshLiveWind
-    ? 'bg-emerald-500'
+    ? 'bg-primary'
     : hasStaleLiveWind
-      ? 'bg-amber-500'
+      ? 'bg-[var(--warn)]'
       : 'bg-muted-foreground/40';
   const liveStatusText = hasFreshLiveWind
     ? `Live · ${liveAgeSeconds}s ago`
@@ -108,7 +108,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                 <div className="py-1">
                   <p className="text-muted-foreground text-xs mb-1">Max gust (1h)</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="font-display text-5xl font-semibold tabular-nums tracking-tight text-orange-500">
+                    <span className="font-display text-5xl font-semibold tabular-nums tracking-tight text-[var(--chart-gust)]">
                       {maxObservedGustLastHour !== null ? Math.round(maxObservedGustLastHour) : '—'}
                     </span>
                     {maxObservedGustLastHour !== null && <span className="text-muted-foreground text-sm">kt</span>}
@@ -196,7 +196,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
               <span></span>
               <span>Dir</span>
               <span>Avg</span>
-              <span className="text-orange-500">Gust</span>
+              <span className="text-[var(--chart-gust)]">Gust</span>
               <span>BF</span>
             </div>
             {forecasts.map((f, i) => {
@@ -226,7 +226,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   <span className={`font-semibold tabular-nums ${beaufortColor(bf.force)}`}>
                     {Math.round(ktsAvg)} kt
                   </span>
-                  <span className="font-semibold tabular-nums text-orange-500">
+                  <span className="font-semibold tabular-nums text-[var(--chart-gust)]">
                     {Math.round(ktsGust)} kt
                   </span>
                   <span className={`text-xs font-bold px-1.5 py-0.5 rounded text-center ${beaufortBg(bf.force)}`}>

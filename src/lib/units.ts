@@ -21,18 +21,19 @@ export function beaufortScale(knots: number): { force: number; description: stri
   return { force: 12, description: 'Hurricane' };
 }
 
+// Neutral up to F5 (good sailing range), warning at F6, danger from F7+.
+// Numbers stay readable; only force >=6 colours up so it actually means something.
 export function beaufortColor(force: number): string {
-  if (force <= 3) return 'text-emerald-400';
-  if (force <= 5) return 'text-yellow-400';
-  if (force <= 7) return 'text-orange-400';
-  return 'text-red-500';
+  if (force <= 3) return 'text-muted-foreground';
+  if (force <= 5) return 'text-foreground';
+  if (force === 6) return 'text-[var(--warn)]';
+  return 'text-destructive';
 }
 
 export function beaufortBg(force: number): string {
-  if (force <= 3) return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300';
-  if (force <= 5) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300';
-  if (force <= 7) return 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300';
-  return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
+  if (force <= 5) return 'bg-muted text-muted-foreground';
+  if (force === 6) return 'bg-[var(--warn-bg)] text-[var(--warn-fg)]';
+  return 'bg-destructive/10 text-destructive';
 }
 
 export function degreesToCardinal(deg: number): string {
