@@ -15,10 +15,11 @@ export default async function handler(req: Request): Promise<Response> {
     return new Response(JSON.stringify({ forecasts }), {
       headers: {
         'Content-Type': 'application/json',
-        // Edge cache for 30 min (Vercel dedupes per region within this window),
-        // serve-stale-while-revalidate for an hour, and serve-stale-if-error
-        // for a day so a Met Office hiccup doesn't take the app down.
-        'Cache-Control': 's-maxage=1800, stale-while-revalidate=3600, stale-if-error=86400',
+        // Short edge cache (5 min) so the admin clear-cache endpoint actually
+        // takes effect quickly; the per-instance scraper memo (20 min) and the
+        // client localStorage TTL (30 min) handle dedupe. stale-if-error keeps
+        // the app up for a day if Met Office goes down.
+        'Cache-Control': 's-maxage=300, stale-while-revalidate=1800, stale-if-error=86400',
       },
     });
   } catch (e) {

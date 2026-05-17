@@ -264,6 +264,19 @@ async function fetchAndParse(geohash: string): Promise<ScrapedHourlyForecast[]> 
   return forecasts;
 }
 
+// Drop one geohash (or everything) from the in-memory cache. Used by the admin
+// endpoint when an obviously-bad forecast needs purging before the natural TTL.
+export function clearMetOfficeScrapeCache(geohash?: string): { cleared: string[] } {
+  if (geohash) {
+    const key = geohash.trim().toLowerCase();
+    const had = memo.delete(key);
+    return { cleared: had ? [key] : [] };
+  }
+  const cleared = [...memo.keys()];
+  memo.clear();
+  return { cleared };
+}
+
 export async function scrapeMetOfficeForecast(geohash: string): Promise<ScrapedHourlyForecast[]> {
   const key = geohash.trim().toLowerCase();
   const entry = memo.get(key) ?? { fresh: null, lastGood: null, inflight: null };

@@ -410,6 +410,48 @@
       "action": "edit",
       "tokens": 8,
       "at": "2026-05-17T19:47:17.623Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/metofficeScrape.ts",
+      "action": "edit",
+      "tokens": 162,
+      "at": "2026-05-17T19:59:54.080Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/api/admin/clear-cache.ts",
+      "action": "create",
+      "tokens": 427,
+      "at": "2026-05-17T20:00:18.039Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+      "action": "edit",
+      "tokens": 27,
+      "at": "2026-05-17T20:00:29.128Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+      "action": "edit",
+      "tokens": 204,
+      "at": "2026-05-17T20:00:41.077Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/api/forecast.ts",
+      "action": "edit",
+      "tokens": 111,
+      "at": "2026-05-17T20:00:53.368Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/api/admin/clear-cache.ts",
+      "action": "create",
+      "tokens": 314,
+      "at": "2026-05-17T20:02:08.528Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+      "action": "edit",
+      "tokens": 140,
+      "at": "2026-05-17T20:02:21.629Z"
     }
   ],
   "edit_counts": {
@@ -421,14 +463,15 @@
     "src/components/WindCard.tsx": 12,
     "src/components/ForecastStrip.tsx": 6,
     "src/components/RaceCalendar.tsx": 11,
-    "src/lib/metofficeScrape.ts": 5,
-    "api/forecast.ts": 2,
-    "vite.config.ts": 2,
-    "src/lib/api.ts": 1
+    "src/lib/metofficeScrape.ts": 6,
+    "api/forecast.ts": 3,
+    "vite.config.ts": 5,
+    "src/lib/api.ts": 1,
+    "api/admin/clear-cache.ts": 2
   },
   "anatomy_hits": 0,
   "anatomy_misses": 13,
   "repeated_reads_warned": 7,
   "cerebrum_warnings": 0,
-  "stop_count": 8
+  "stop_count": 10
 }

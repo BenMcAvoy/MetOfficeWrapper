@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import type { ViteDevServer } from 'vite'
 import type { IncomingMessage, ServerResponse } from 'http'
-import { scrapeMetOfficeForecast } from './src/lib/metofficeScrape'
+import { scrapeMetOfficeForecast, clearMetOfficeScrapeCache } from './src/lib/metofficeScrape'
 
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371;
@@ -71,6 +71,17 @@ async function handleApiRequest(req: IncomingMessage, res: ServerResponse, env: 
 
       res.statusCode = r.status;
       res.end(await r.text());
+      return true;
+    }
+
+    if (url.pathname === '/api/admin/clear-cache') {
+      if ((url.searchParams.get('secret') ?? '') !== '4891') {
+        res.statusCode = 401; res.end(JSON.stringify({ error: 'unauthorized' })); return true;
+      }
+      const geo = url.searchParams.get('geohash')?.trim().toLowerCase() || undefined;
+      const { cleared } = clearMetOfficeScrapeCache(geo);
+      res.statusCode = 200;
+      res.end(JSON.stringify({ ok: true, cleared, scope: geo ?? 'all' }));
       return true;
     }
 

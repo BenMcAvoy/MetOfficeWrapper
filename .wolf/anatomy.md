@@ -1,15 +1,19 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-17T19:47:17.599Z
-> Files: 12 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-17T20:02:21.597Z
+> Files: 13 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
-- `vite.config.ts` — API routes: GET (5 endpoints) (~2182 tok)
+- `vite.config.ts` — API routes: GET (7 endpoints) (~2333 tok)
 
 ## api/
 
-- `forecast.ts` — API routes: GET (1 endpoints) (~304 tok)
+- `forecast.ts` — API routes: GET (1 endpoints) (~323 tok)
+
+## api/admin/
+
+- `clear-cache.ts` — API routes: GET (2 endpoints) (~314 tok)
 
 ## src/
 
@@ -26,6 +30,6 @@
 
 - `api.ts` — Exports HourlyForecast, WindForecastPoint, TideExtreme, TideHeight + 10 more (~3064 tok)
 - `cache.ts` — Exports getCached, setCached, clearCache, TTL (~519 tok)
-- `metofficeScrape.ts` — Met Office public-site scraper. (~3170 tok)
+- `metofficeScrape.ts` — Met Office public-site scraper. (~3304 tok)
 - `settings.ts` — Exports Theme, WindUnit, Location, DEFAULT_LOCATION + 5 more (~507 tok)
 - `units.ts` — Exports MS_TO_KNOTS, MS_TO_MPH, MS_TO_KMH, msToKnots + 7 more (~792 tok)
