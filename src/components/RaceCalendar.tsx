@@ -105,7 +105,7 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
           <CardContent className="py-6 text-center text-muted-foreground text-sm">
             Forecast not yet available for {format(selectedDay, 'd MMMM')}.
             <br />
-            <span className="text-xs">Met Office provides up to 5 days ahead.</span>
+            <span className="text-xs">Met Office provides up to 7 days ahead.</span>
           </CardContent>
         </Card>
       )}
@@ -271,7 +271,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
           <CardContent className="py-6 text-center text-muted-foreground text-sm">
             Forecast not yet available for {format(selectedDay, 'd MMMM')}.
             <br />
-            <span className="text-xs">Met Office provides up to 5 days ahead.</span>
+            <span className="text-xs">Met Office provides up to 7 days ahead.</span>
           </CardContent>
         </Card>
       )}

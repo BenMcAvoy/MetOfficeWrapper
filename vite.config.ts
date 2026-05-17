@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import type { ViteDevServer } from 'vite'
 import type { IncomingMessage, ServerResponse } from 'http'
+import { scrapeMetOfficeForecast } from './src/lib/metofficeScrape'
 
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371;
@@ -74,14 +75,20 @@ async function handleApiRequest(req: IncomingMessage, res: ServerResponse, env: 
     }
 
     if (url.pathname === '/api/forecast') {
-      const key = env.METOFFICE_API_KEY;
-      if (!key) { res.statusCode = 503; res.end(JSON.stringify({ error: 'METOFFICE_API_KEY not set' })); return true; }
-      const r = await fetch(
-        `https://data.hub.api.metoffice.gov.uk/sitespecific/v0/point/hourly?latitude=${lat}&longitude=${lon}`,
-        { headers: { apikey: key } }
-      );
-      res.statusCode = r.status;
-      res.end(await r.text());
+      const geohash = (url.searchParams.get('geohash') ?? '').trim().toLowerCase();
+      if (!geohash) {
+        res.statusCode = 400;
+        res.end(JSON.stringify({ error: 'geohash required' }));
+        return true;
+      }
+      try {
+        const forecasts = await scrapeMetOfficeForecast(geohash);
+        res.statusCode = 200;
+        res.end(JSON.stringify({ forecasts }));
+      } catch (e) {
+        res.statusCode = 502;
+        res.end(JSON.stringify({ error: (e as Error).message }));
+      }
       return true;
     }
 

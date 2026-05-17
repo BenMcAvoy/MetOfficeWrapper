@@ -13,7 +13,18 @@
       "PowerShell(bunx tsc --noEmit -p tsconfig.app.json 2>&1 | Select-Object -First 50)",
       "PowerShell(bunx tsc --noEmit -p tsconfig.app.json; $LASTEXITCODE)",
       "PowerShell(bun run *)",
-      "PowerShell(bun add *)"
+      "PowerShell(bun add *)",
+      "Bash(git rm *)",
+      "Bash(bunx tsc *)",
+      "WebFetch(domain:www.metoffice.gov.uk)",
+      "WebFetch(domain:weather.metoffice.gov.uk)",
+      "Bash(grep -oE 'data-[a-z-]+=\"[^\"]{0,80}\"' /tmp/mo.html)",
+      "Bash(grep -oE 'data-value=\"[^\"]{0,40}\"' /tmp/mo.html)",
+      "Bash(awk '/<table class=\"forecast-table hourly-table\" data-date=\"2026-05-17\"/,/<\\\\/table>/' /tmp/mo.html)",
+      "Bash(awk '/<table class=\"forecast-table detailed-table/,/<\\\\/table>/' /tmp/mo.html)",
+      "Bash(awk '/<table class=\"forecast-table detailed-table\" data-date=\"2026-05-18\"/,/<\\\\/table>/' /tmp/mo.html)",
+      "Bash(bunx tsx *)",
+      "Bash(curl -s -o mo.html -A \"Mozilla/5.0\" -L \"https://weather.metoffice.gov.uk/forecast/gcn86rd2z\")"
     ]
   }
 }

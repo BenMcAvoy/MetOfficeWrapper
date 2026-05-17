@@ -110,42 +110,30 @@ export async function fetchForecastHistory(lat: number, lon: number, historyHour
     .filter(p => !Number.isNaN(p.time.getTime()));
 }
 
-export async function fetchMetOfficeHourly(lat: number, lon: number): Promise<HourlyForecast[]> {
-  const cacheKey = `metoffice_v2_${lat.toFixed(3)}_${lon.toFixed(3)}`;
+export async function fetchMetOfficeHourly(geohash: string): Promise<HourlyForecast[]> {
+  const cacheKey = `metoffice_scrape_${geohash}`;
   const cached = getCached<SerialisedForecast[]>(cacheKey);
   if (cached) {
     return cached.map(f => ({ ...f, time: parseForecastTimestamp(f.time) }));
   }
 
-  const res = await fetch(`/api/forecast?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}`);
-  if (!res.ok) throw new Error(`Met Office API error: ${res.status} ${res.statusText}`);
-  const data = await res.json();
+  const res = await fetch(`/api/forecast?geohash=${encodeURIComponent(geohash)}`);
+  if (!res.ok) {
+    let detail = res.statusText;
+    try { detail = ((await res.json()) as { error?: string }).error ?? detail; } catch { /* ignore */ }
+    throw new Error(`Met Office scrape error: ${res.status} ${detail}`);
+  }
+  const data = await res.json() as { forecasts?: SerialisedForecast[] };
+  if (!Array.isArray(data.forecasts) || data.forecasts.length === 0) {
+    throw new Error('No forecast data returned');
+  }
 
-  const features = data.features ?? [];
-  if (!features.length) throw new Error('No forecast data returned');
+  const forecasts: HourlyForecast[] = data.forecasts.map(e => ({
+    ...e,
+    time: parseForecastTimestamp(e.time),
+  }));
 
-  const timeSeries: unknown[] = features[0]?.properties?.timeSeries ?? [];
-  const forecasts: HourlyForecast[] = timeSeries.map((entry: unknown) => {
-    const e = entry as Record<string, unknown>;
-    const rawTime = String(e.time ?? '');
-    return {
-      time: parseForecastTimestamp(rawTime),
-      screenTemperature:    (e.screenTemperature as number)     ?? 0,
-      feelsLikeTemp:        (e.feelsLikeTemp as number)          ?? 0,
-      windSpeed10m:         (e.windSpeed10m as number)           ?? 0,
-      windGustSpeed10m:     (e.windGustSpeed10m as number)       ?? 0,
-      windDirectionFrom10m: (e.windDirectionFrom10m as number)   ?? 0,
-      precipitationRate:    (e.precipitationRate as number)      ?? 0,
-      probOfPrecipitation:  (e.probOfPrecipitation as number)    ?? 0,
-      uvIndex:              (e.uvIndex as number)                ?? 0,
-      significantWeatherCode:(e.significantWeatherCode as number) ?? -1,
-      visibility:           (e.visibility as number)             ?? 0,
-      mslp:                 (e.mslp as number)                   ?? 1013,
-      humidity:             (e.screenRelativeHumidity as number) ?? 0,
-    };
-  });
-
-  setCached(cacheKey, forecasts, TTL.FORECAST);
+  setCached(cacheKey, data.forecasts, TTL.FORECAST);
   return forecasts;
 }
 

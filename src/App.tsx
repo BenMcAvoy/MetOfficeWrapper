@@ -68,7 +68,7 @@ function DateSelector({ selected, onChange, availableDays }: {
 const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
   { id: 'wind',     label: 'Wind',     Icon: Wind },
   { id: 'tides',    label: 'Tides',    Icon: Waves },
-  { id: 'forecast', label: '5-Day',    Icon: CalendarDays },
+  { id: 'forecast', label: '7-Day',    Icon: CalendarDays },
   { id: 'events',   label: 'Events',   Icon: Anchor },
 ];
 
@@ -121,7 +121,7 @@ export default function App() {
     setError(null);
     try {
       const [fc, td, sun] = await Promise.allSettled([
-        fetchMetOfficeHourly(lat, lon),
+        fetchMetOfficeHourly(LOCATION_GEOHASH),
         fetchTides(lat, lon),
         fetchSunInfo(lat, lon),
       ]);
@@ -147,7 +147,7 @@ export default function App() {
       setError((e as Error).message);
       setLoadState('error');
     }
-  }, [lat, lon]);
+  }, [lat, lon, LOCATION_GEOHASH]);
 
   useEffect(() => {
     loadData();
@@ -185,7 +185,26 @@ export default function App() {
     return () => clearInterval(interval);
   }, [loadLiveWindHistory]);
 
-  const availableDays = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
+  // Background timers are throttled or suspended by the OS in PWAs / hidden tabs,
+  // so a multi-hour gap can leave us showing yesterday's forecast. Re-fetch when
+  // the tab regains visibility — the localStorage TTL still absorbs rapid toggles.
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') {
+        loadData();
+        loadLiveWind();
+        loadLiveWindHistory();
+      }
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', onVisible);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', onVisible);
+    };
+  }, [loadData, loadLiveWind, loadLiveWindHistory]);
+
+  const availableDays = Array.from({ length: 7 }, (_, i) => startOfDay(addDays(new Date(), i)));
   const dayForecasts = filterForDay(forecasts, selectedDay);
   const isTodaySelected = isSameDay(selectedDay, new Date());
   const chartForecastsForWind = isTodaySelected

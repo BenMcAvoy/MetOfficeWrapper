@@ -45,3 +45,24 @@
 | 19:00 | Edited src/components/WindCard.tsx | 3→2 lines | ~30 |
 | 19:01 | Edited src/components/RaceCalendar.tsx | modified if() | ~117 |
 | 19:01 | Session end: 37 writes across 8 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 9 reads | ~19140 tok |
+| 19:23 | Edited src/App.tsx | added 1 condition(s) | ~260 |
+| 19:23 | Edited src/App.tsx | removed 24 lines | ~45 |
+| 19:24 | Edited src/App.tsx | added 1 condition(s) | ~268 |
+| 19:24 | Session end: 40 writes across 8 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 10 reads | ~23579 tok |
+| 19:38 | Created src/lib/metofficeScrape.ts | — | ~2671 |
+| 19:41 | Edited src/lib/metofficeScrape.ts | modified sliceSection() | ~162 |
+| 19:42 | Edited src/lib/metofficeScrape.ts | 4→6 lines | ~90 |
+| 19:42 | Created api/forecast.ts | — | ~232 |
+| 19:43 | Edited vite.config.ts | added 1 import(s) | ~105 |
+| 19:43 | Edited vite.config.ts | added error handling | ~165 |
+| 19:43 | Edited src/lib/api.ts | added error handling | ~289 |
+| 19:44 | Edited src/App.tsx | 5→5 lines | ~50 |
+| 19:44 | Edited src/App.tsx | inline fix | ~10 |
+| 19:44 | Edited src/App.tsx | 5 → 7 | ~18 |
+| 19:45 | Edited src/App.tsx | 5 → 7 | ~28 |
+| 19:45 | Edited src/components/ForecastStrip.tsx | 5 → 7 | ~25 |
+| 19:45 | Edited src/components/ForecastStrip.tsx | inline fix | ~18 |
+| 19:46 | Edited src/lib/metofficeScrape.ts | removed 7 lines | ~4 |
+| 19:47 | Session end: 54 writes across 12 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 12 reads | ~27446 tok |
+| 19:50 | Session end: 54 writes across 12 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 12 reads | ~27446 tok |
+| 19:50 | Session end: 54 writes across 12 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 12 reads | ~27446 tok |

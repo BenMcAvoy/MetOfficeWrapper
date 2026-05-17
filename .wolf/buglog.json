@@ -96,6 +96,134 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-17T07:59:31.655Z"
+    },
+    {
+      "id": "bug-007",
+      "timestamp": "2026-05-17T18:23:52.424Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/App.tsx",
+      "root_cause": "16 lines replaced/restructured",
+      "fix": "Rewrote 24→5 lines (16 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T18:23:52.424Z"
+    },
+    {
+      "id": "bug-008",
+      "timestamp": "2026-05-17T18:41:46.740Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/lib/metofficeScrape.ts",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 8→13 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T18:41:46.740Z"
+    },
+    {
+      "id": "bug-009",
+      "timestamp": "2026-05-17T18:42:16.104Z",
+      "error_message": "Wrong return value",
+      "file": "src/lib/metofficeScrape.ts",
+      "root_cause": "Was returning: [...withoutTh.matchAll(/<td[^>]*>([\\s\\S]*?)<\\/td>/",
+      "fix": "Now returns: [...withoutTh.matchAll(/<td[\\s\\S]*?<\\/td>/g)].map(",
+      "tags": [
+        "auto-detected",
+        "return-value",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T18:42:16.104Z"
+    },
+    {
+      "id": "bug-010",
+      "timestamp": "2026-05-17T18:43:20.254Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "vite.config.ts",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T18:43:20.254Z"
+    },
+    {
+      "id": "bug-011",
+      "timestamp": "2026-05-17T18:43:43.585Z",
+      "error_message": "Missing error handling in function",
+      "file": "src/lib/api.ts",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T18:43:43.585Z"
+    },
+    {
+      "id": "bug-012",
+      "timestamp": "2026-05-17T18:44:54.299Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/App.tsx",
+      "root_cause": "Had '5-Day'",
+      "fix": "Changed to '7-Day'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T18:44:54.299Z"
+    },
+    {
+      "id": "bug-013",
+      "timestamp": "2026-05-17T18:45:03.620Z",
+      "error_message": "CSS fix: length",
+      "file": "src/App.tsx",
+      "root_cause": "length: 5 → 7",
+      "fix": "Changed length: 5 → 7",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T18:45:03.620Z"
+    },
+    {
+      "id": "bug-014",
+      "timestamp": "2026-05-17T18:45:11.902Z",
+      "error_message": "CSS fix: length",
+      "file": "src/components/ForecastStrip.tsx",
+      "root_cause": "length: 5 → 7",
+      "fix": "Changed length: 5 → 7",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T18:45:11.902Z"
     }
   ]
 }

@@ -17,7 +17,7 @@ interface ForecastStripProps {
 export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWindHistory }: ForecastStripProps) {
   const { windUnit } = useSettings();
   const unitLabel = windUnitLabel(windUnit);
-  const days = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
+  const days = Array.from({ length: 7 }, (_, i) => startOfDay(addDays(new Date(), i)));
   const todayForecasts = forecasts.filter(f => isSameDay(f.time, new Date()));
 
   return (
@@ -36,7 +36,7 @@ export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWi
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-sm">
-            <CalendarDays className="h-4 w-4" /> 5-Day Forecast
+            <CalendarDays className="h-4 w-4" /> 7-Day Forecast
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0 pb-1">
