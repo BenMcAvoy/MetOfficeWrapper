@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "bugs": [
+    {
+      "id": "bug-001",
+      "timestamp": "2026-05-17T07:54:40.246Z",
+      "error_message": "Missing error handling in clearCache",
+      "file": "src/lib/cache.ts",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T07:54:40.246Z"
+    },
+    {
+      "id": "bug-002",
+      "timestamp": "2026-05-17T07:56:13.032Z",
+      "error_message": "Type error",
+      "file": "src/App.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T07:56:13.032Z"
+    },
+    {
+      "id": "bug-003",
+      "timestamp": "2026-05-17T07:57:06.738Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/WindCard.tsx",
+      "root_cause": "Had '@/lib/useNow'",
+      "fix": "Changed to '@/lib/settings'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T07:57:06.738Z"
+    },
+    {
+      "id": "bug-004",
+      "timestamp": "2026-05-17T07:57:48.230Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/WindCard.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T07:57:48.230Z"
+    },
+    {
+      "id": "bug-005",
+      "timestamp": "2026-05-17T07:58:17.977Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/WindCard.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 5→3 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T07:58:17.977Z"
+    },
+    {
+      "id": "bug-006",
+      "timestamp": "2026-05-17T07:59:31.655Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/RaceCalendar.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-17T07:59:31.655Z"
+    }
+  ]
+}

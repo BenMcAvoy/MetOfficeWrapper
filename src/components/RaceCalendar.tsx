@@ -2,7 +2,8 @@ import { forwardRef, useImperativeHandle, useState } from 'react';
 import type { HourlyForecast, TideData, LiveWindHistoryPoint } from '@/lib/api';
 import type { RaceEvent } from '@/lib/calendar';
 import { RACE_CALENDAR, getEventsForDay } from '@/lib/calendar';
-import { msToKnots, beaufortScale, beaufortColor, beaufortBg } from '@/lib/units';
+import { msToKnots, convertWind, windUnitLabel, beaufortScale, beaufortColor, beaufortBg } from '@/lib/units';
+import { useSettings } from '@/lib/settings';
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves } from 'lucide-react';
@@ -42,6 +43,8 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
   liveWindHistory: LiveWindHistoryPoint[];
   onBack: () => void;
 }) {
+  const { windUnit } = useSettings();
+  const unitLabel = windUnitLabel(windUnit);
   const dayStart = startOfDay(selectedDay);
   const dayEnd = endOfDay(selectedDay);
   const isToday = isSameDay(selectedDay, new Date());
@@ -62,6 +65,8 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
   let minTemp: number | null = null;
   let avgWindKt: number | null = null;
   let peakGustKt: number | null = null;
+  let avgWindMsOut: number | null = null;
+  let peakGustMsOut: number | null = null;
   let peakGustEntry: HourlyForecast | null = null;
   let maxRainProb = 0;
   if (dayForecasts.length) {
@@ -69,9 +74,11 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
     minTemp = Math.round(Math.min(...dayForecasts.map(f => f.screenTemperature)));
     const avgWindMs = dayForecasts.reduce((s, f) => s + f.windSpeed10m, 0) / dayForecasts.length;
     avgWindKt = msToKnots(avgWindMs);
+    avgWindMsOut = avgWindMs;
     const peakGustMs = Math.max(...dayForecasts.map(f => f.windGustSpeed10m));
     peakGustEntry = dayForecasts.find(f => f.windGustSpeed10m === peakGustMs) ?? null;
     peakGustKt = msToKnots(peakGustMs);
+    peakGustMsOut = peakGustMs;
     maxRainProb = Math.max(...dayForecasts.map(f => f.probOfPrecipitation));
   }
 
@@ -138,16 +145,16 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Day Avg</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className={`font-display text-3xl font-semibold tabular-nums ${beaufortColor(avgBf.force)}`}>{Math.round(avgWindKt)}</span>
-                    <span className="text-muted-foreground text-xs">kt</span>
+                    <span className={`font-display text-3xl font-semibold tabular-nums ${beaufortColor(avgBf.force)}`}>{Math.round(convertWind(avgWindMsOut ?? 0, windUnit))}</span>
+                    <span className="text-muted-foreground text-xs">{unitLabel}</span>
                     <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${beaufortBg(avgBf.force)}`}>F{avgBf.force}</span>
                   </div>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className={`font-display text-3xl font-semibold tabular-nums ${beaufortColor(peakBf.force)}`}>{Math.round(peakGustKt)}</span>
-                    <span className="text-muted-foreground text-xs">kt</span>
+                    <span className={`font-display text-3xl font-semibold tabular-nums ${beaufortColor(peakBf.force)}`}>{Math.round(convertWind(peakGustMsOut ?? 0, windUnit))}</span>
+                    <span className="text-muted-foreground text-xs">{unitLabel}</span>
                     {peakGustEntry && (
                       <span className="text-muted-foreground text-[11px]">@ {format(peakGustEntry.time, 'HH:mm')}</span>
                     )}
@@ -197,6 +204,9 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
   liveWindHistory: LiveWindHistoryPoint[];
   onBack: () => void;
 }) {
+  const { windUnit } = useSettings();
+  const unitLabel = windUnitLabel(windUnit);
+
   if (!event.time) {
     return (
       <AllDayEventView
@@ -315,12 +325,12 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
                     </div>
                     <Icon className="h-4 w-4 text-primary" strokeWidth={1.5} />
                     <div className="flex items-center gap-1.5">
-                      <span className={`text-sm font-semibold tabular-nums ${beaufortColor(bf.force)}`}>{Math.round(kt)}kt</span>
+                      <span className={`text-sm font-semibold tabular-nums ${beaufortColor(bf.force)}`}>{Math.round(convertWind(fc.windSpeed10m, windUnit))}{unitLabel}</span>
                       <span className={`text-xs font-medium px-1 py-0.5 rounded leading-none ${beaufortBg(bf.force)}`}>F{bf.force}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <ArrowUp className="h-3 w-3 text-muted-foreground shrink-0" style={{ transform: `rotate(${fc.windDirectionFrom10m}deg)` }} strokeWidth={2.5} />
-                      <span className={`text-xs font-semibold tabular-nums ${beaufortColor(gustBf.force)}`}>{Math.round(gustKt)}kt</span>
+                      <span className={`text-xs font-semibold tabular-nums ${beaufortColor(gustBf.force)}`}>{Math.round(convertWind(fc.windGustSpeed10m, windUnit))}{unitLabel}</span>
                     </div>
                     <span className={`text-xs font-medium tabular-nums text-right ${fc.probOfPrecipitation > 60 ? 'text-primary' : 'text-muted-foreground'}`}>
                       {fc.probOfPrecipitation}%

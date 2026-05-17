@@ -11,29 +11,29 @@ import ForecastStrip from '@/components/ForecastStrip';
 import RaceCalendar, { type RaceCalendarHandle } from '@/components/RaceCalendar';
 import InstallButton from '@/components/InstallButton';
 import ConditionsHeader from '@/components/ConditionsHeader';
+import SettingsPage from '@/components/SettingsPage';
+import { useSettings } from '@/lib/settings';
 import {
   MapPin, AlertTriangle, Waves, Loader2,
-  Wind, CalendarDays, Anchor,
+  Wind, CalendarDays, Anchor, Settings as SettingsIcon,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay } from 'date-fns';
 
-const LOCATION_GEOHASH = 'gcn86rd2z';
-const LOCATION_NAME = 'Poole Harbour';
-const LIVE_WIND_LOCATION_ID = 'GBR00015';
-const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
-
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
-type Tab = 'wind' | 'tides' | 'forecast' | 'events';
+type Tab = 'wind' | 'tides' | 'forecast' | 'events' | 'settings';
 
-function useDarkMode() {
+function useThemeMode(theme: 'auto' | 'light' | 'dark') {
   useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const apply = (dark: boolean) =>
       document.documentElement.classList.toggle('dark', dark);
+    if (theme === 'light') { apply(false); return; }
+    if (theme === 'dark')  { apply(true);  return; }
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
     apply(mq.matches);
-    mq.addEventListener('change', e => apply(e.matches));
-    return () => mq.removeEventListener('change', e => apply(e.matches));
-  }, []);
+    const onChange = (e: MediaQueryListEvent) => apply(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, [theme]);
 }
 
 function DateSelector({ selected, onChange, availableDays }: {
@@ -87,7 +87,11 @@ function LoadingSkeleton() {
 
 
 export default function App() {
-  useDarkMode();
+  const settings = useSettings();
+  useThemeMode(settings.theme);
+
+  const { geohash: LOCATION_GEOHASH, name: LOCATION_NAME, liveWindId: LIVE_WIND_LOCATION_ID } = settings.location;
+  const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
 
   const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
   const [forecastHistory, setForecastHistory] = useState<WindForecastPoint[]>([]);
@@ -143,7 +147,7 @@ export default function App() {
       setError((e as Error).message);
       setLoadState('error');
     }
-  }, []);
+  }, [lat, lon]);
 
   useEffect(() => {
     loadData();
@@ -158,7 +162,7 @@ export default function App() {
     } catch (e) {
       console.warn('Live wind failed:', (e as Error).message);
     }
-  }, []);
+  }, [LIVE_WIND_LOCATION_ID]);
 
   useEffect(() => {
     loadLiveWind();
@@ -173,7 +177,7 @@ export default function App() {
     } catch (e) {
       console.warn('Live wind history failed:', (e as Error).message);
     }
-  }, []);
+  }, [LIVE_WIND_LOCATION_ID]);
 
   useEffect(() => {
     loadLiveWindHistory();
@@ -188,7 +192,7 @@ export default function App() {
     ? forecasts.filter(f => f.time.getTime() <= Date.now() + 12 * 60 * 60 * 1000)
     : forecasts.filter(f => isSameDay(f.time, selectedDay));
   const isLoading = loadState === 'loading';
-  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'events';
+  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'events' && activeTab !== 'settings';
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -209,6 +213,18 @@ export default function App() {
                 {format(lastUpdated, 'HH:mm')}
               </span>
             )}
+            <button
+              onClick={() => setActiveTab(t => t === 'settings' ? 'wind' : 'settings')}
+              aria-label="Settings"
+              aria-pressed={activeTab === 'settings'}
+              className={`p-1.5 -mr-1.5 rounded-lg transition-colors active:scale-95 ${
+                activeTab === 'settings'
+                  ? 'text-primary bg-primary/10'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <SettingsIcon className="h-4 w-4" strokeWidth={2.25} />
+            </button>
           </div>
         </div>
       </header>
@@ -273,6 +289,9 @@ export default function App() {
                   liveWindHistory={liveWindHistory}
                 />
               </div>
+            )}
+            {activeTab === 'settings' && (
+              <SettingsPage onRefresh={loadData} />
             )}
           </div>
         )}

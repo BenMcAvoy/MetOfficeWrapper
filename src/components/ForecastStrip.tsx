@@ -1,5 +1,6 @@
 import type { HourlyForecast, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
-import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
+import { msToKnots, convertWind, windUnitLabel, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
+import { useSettings } from '@/lib/settings';
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, CalendarDays } from 'lucide-react';
@@ -14,6 +15,8 @@ interface ForecastStripProps {
 
 
 export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWindHistory }: ForecastStripProps) {
+  const { windUnit } = useSettings();
+  const unitLabel = windUnitLabel(windUnit);
   const days = Array.from({ length: 5 }, (_, i) => startOfDay(addDays(new Date(), i)));
   const todayForecasts = forecasts.filter(f => isSameDay(f.time, new Date()));
 
@@ -93,7 +96,7 @@ export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWi
                   {/* Avg wind */}
                   <div className="flex items-center gap-1.5">
                     <span className={`text-sm font-semibold tabular-nums ${beaufortColor(bf.force)}`}>
-                      {Math.round(msToKnots(avgWind))}kt
+                      {Math.round(convertWind(avgWind, windUnit))}{unitLabel}
                     </span>
                     <span className={`text-xs font-medium px-1 py-0.5 rounded leading-none ${beaufortBg(bf.force)}`}>
                       F{bf.force}
@@ -108,7 +111,7 @@ export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWi
                       strokeWidth={2.5}
                     />
                     <span className={`text-sm font-semibold tabular-nums ${beaufortColor(peakBf.force)}`}>
-                      {Math.round(msToKnots(maxGust))}kt
+                      {Math.round(convertWind(maxGust, windUnit))}{unitLabel}
                     </span>
                     <span className="text-muted-foreground text-xs">
                       {degreesToCardinal(peakEntry.windDirectionFrom10m)}

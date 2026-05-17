@@ -48,6 +48,19 @@ export function setCached<T>(key: string, data: T, ttlMs: number): void {
   }
 }
 
+export function clearCache(): void {
+  try {
+    const keys: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('wx_') && k !== STORAGE_VERSION_KEY) keys.push(k);
+    }
+    keys.forEach(k => localStorage.removeItem(k));
+  } catch {
+    // storage unavailable
+  }
+}
+
 export const TTL = {
   FORECAST: 15 * 60 * 1000,
   TIDES:    4  * 60 * 60 * 1000,

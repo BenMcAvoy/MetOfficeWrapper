@@ -1,8 +1,34 @@
+import { getSettings, type WindUnit } from './settings';
+
 export const MS_TO_KNOTS = 1.94384;
 export const MS_TO_MPH = 2.23694;
+export const MS_TO_KMH = 3.6;
 
 export function msToKnots(ms: number): number {
   return ms * MS_TO_KNOTS;
+}
+
+export function convertWind(ms: number, unit: WindUnit = getSettings().windUnit): number {
+  switch (unit) {
+    case 'kn':  return ms * MS_TO_KNOTS;
+    case 'mph': return ms * MS_TO_MPH;
+    case 'kmh': return ms * MS_TO_KMH;
+    case 'ms':  return ms;
+  }
+}
+
+export function windUnitLabel(unit: WindUnit = getSettings().windUnit): string {
+  switch (unit) {
+    case 'kn':  return 'kt';
+    case 'mph': return 'mph';
+    case 'kmh': return 'km/h';
+    case 'ms':  return 'm/s';
+  }
+}
+
+export function formatWind(ms: number, unit: WindUnit = getSettings().windUnit): string {
+  const v = convertWind(ms, unit);
+  return `${Math.round(v)}${windUnitLabel(unit)}`;
 }
 
 export function beaufortScale(knots: number): { force: number; description: string } {

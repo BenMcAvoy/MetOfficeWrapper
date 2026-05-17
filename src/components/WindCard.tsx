@@ -1,5 +1,6 @@
 import type { HourlyForecast, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
-import { msToKnots, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
+import { msToKnots, convertWind, windUnitLabel, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
+import { useSettings } from '@/lib/settings';
 import { useNow } from '@/lib/useNow';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind, ArrowUp } from 'lucide-react';
@@ -19,6 +20,8 @@ interface WindCardProps {
 
 export default function WindCard({ forecasts, chartForecasts, chartHistoryForecasts, selectedDay, liveWind, liveWindHistory }: WindCardProps) {
   const nowMs = useNow(1000);
+  const { windUnit } = useSettings();
+  const unitLabel = windUnitLabel(windUnit);
 
   if (!forecasts.length) return (
     <div className="text-center py-12 text-muted-foreground">
@@ -36,6 +39,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
   const avgKnots = msToKnots(avgWind);
   const peakBf = beaufortScale(peakKnots);
   const avgBf = beaufortScale(avgKnots);
+  const disp = (ms: number) => Math.round(convertWind(ms, windUnit));
 
   const liveAgeSeconds = liveWind
     ? Math.max(0, Math.round((nowMs - liveWind.observedAt.getTime()) / 1000))
@@ -63,14 +67,11 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
       return t >= nowMs - 60 * 60 * 1000 && t <= nowMs;
     })
     : [];
-  const observedAvgKnotsLastHour = lastHourObserved.length
-    ? lastHourObserved.reduce((sum, p) => sum + msToKnots(p.avgWindMs), 0) / lastHourObserved.length
+  const observedAvgMsLastHour = lastHourObserved.length
+    ? lastHourObserved.reduce((sum, p) => sum + p.avgWindMs, 0) / lastHourObserved.length
     : null;
   const maxObservedGustPoint = lastHourObserved.length
     ? lastHourObserved.reduce((max, p) => (p.gustWindMs > max.gustWindMs ? p : max), lastHourObserved[0])
-    : null;
-  const maxObservedGustLastHour = maxObservedGustPoint
-    ? msToKnots(maxObservedGustPoint.gustWindMs)
     : null;
   const currentTimestamp = hasLiveReading && liveWind
     ? format(liveWind.observedAt, 'HH:mm:ss')
@@ -96,9 +97,9 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   <p className="text-muted-foreground text-xs mb-1">Current speed</p>
                   <div className="flex items-baseline gap-1.5">
                     <span className={`font-display text-5xl font-semibold tabular-nums tracking-tight ${currentObservedBf ? beaufortColor(currentObservedBf.force) : 'text-foreground'}`}>
-                      {currentObservedKnots !== null ? Math.round(currentObservedKnots) : '—'}
+                      {hasLiveReading && liveWind ? disp(liveWind.windSpeedMs) : '—'}
                     </span>
-                    {currentObservedKnots !== null && <span className="text-muted-foreground text-sm">kt</span>}
+                    {hasLiveReading && liveWind && <span className="text-muted-foreground text-sm">{unitLabel}</span>}
                   </div>
                   {currentObservedBf && (
                     <p className="text-muted-foreground text-[11px] mt-1">F{currentObservedBf.force} · {currentObservedBf.description}</p>
@@ -109,9 +110,9 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   <p className="text-muted-foreground text-xs mb-1">Max gust (1h)</p>
                   <div className="flex items-baseline gap-1.5">
                     <span className="font-display text-5xl font-semibold tabular-nums tracking-tight text-[var(--chart-gust)]">
-                      {maxObservedGustLastHour !== null ? Math.round(maxObservedGustLastHour) : '—'}
+                      {maxObservedGustPoint ? disp(maxObservedGustPoint.gustWindMs) : '—'}
                     </span>
-                    {maxObservedGustLastHour !== null && <span className="text-muted-foreground text-sm">kt</span>}
+                    {maxObservedGustPoint && <span className="text-muted-foreground text-sm">{unitLabel}</span>}
                   </div>
                   {maxObservedGustPoint && (
                     <p className="text-muted-foreground text-[11px] mt-1">
@@ -138,9 +139,9 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   )}
                 </div>
                 <div className="flex items-baseline gap-2 text-xs">
-                  {observedAvgKnotsLastHour !== null && (
+                  {observedAvgMsLastHour !== null && (
                     <span className="text-muted-foreground">
-                      Avg 1h <span className="text-foreground font-semibold tabular-nums">{Math.round(observedAvgKnotsLastHour)}kt</span>
+                      Avg 1h <span className="text-foreground font-semibold tabular-nums">{disp(observedAvgMsLastHour)}{unitLabel}</span>
                     </span>
                   )}
                   {currentTimestamp && (
@@ -158,11 +159,11 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Day Avg</p>
-                  <p className={`font-display text-2xl font-semibold tabular-nums tracking-tight ${beaufortColor(avgBf.force)}`}>{Math.round(avgKnots)}kt</p>
+                  <p className={`font-display text-2xl font-semibold tabular-nums tracking-tight ${beaufortColor(avgBf.force)}`}>{disp(avgWind)}{unitLabel}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Peak Gust</p>
-                  <p className={`font-display text-2xl font-semibold tabular-nums tracking-tight ${beaufortColor(peakBf.force)}`}>{Math.round(peakKnots)}kt</p>
+                  <p className={`font-display text-2xl font-semibold tabular-nums tracking-tight ${beaufortColor(peakBf.force)}`}>{disp(peakGust)}{unitLabel}</p>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-xs mb-1">Peak At</p>
@@ -201,7 +202,6 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
             </div>
             {forecasts.map((f, i) => {
               const ktsAvg = msToKnots(f.windSpeed10m);
-              const ktsGust = msToKnots(f.windGustSpeed10m);
               const bf = beaufortScale(ktsAvg);
               const isCurrentHour = isToday && i === 0;
               return (
@@ -224,10 +224,10 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   />
                   <span className="text-xs text-muted-foreground">{degreesToCardinal(f.windDirectionFrom10m)}</span>
                   <span className={`font-semibold tabular-nums ${beaufortColor(bf.force)}`}>
-                    {Math.round(ktsAvg)} kt
+                    {disp(f.windSpeed10m)} {unitLabel}
                   </span>
                   <span className="font-semibold tabular-nums text-[var(--chart-gust)]">
-                    {Math.round(ktsGust)} kt
+                    {disp(f.windGustSpeed10m)} {unitLabel}
                   </span>
                   <span className={`text-xs font-bold px-1.5 py-0.5 rounded text-center ${beaufortBg(bf.force)}`}>
                     F{bf.force}
