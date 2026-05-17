@@ -24,7 +24,12 @@
       "Bash(awk '/<table class=\"forecast-table detailed-table/,/<\\\\/table>/' /tmp/mo.html)",
       "Bash(awk '/<table class=\"forecast-table detailed-table\" data-date=\"2026-05-18\"/,/<\\\\/table>/' /tmp/mo.html)",
       "Bash(bunx tsx *)",
-      "Bash(curl -s -o mo.html -A \"Mozilla/5.0\" -L \"https://weather.metoffice.gov.uk/forecast/gcn86rd2z\")"
+      "Bash(curl -s -o mo.html -A \"Mozilla/5.0\" -L \"https://weather.metoffice.gov.uk/forecast/gcn86rd2z\")",
+      "Bash(cat C:\\\\\\\\Users\\\\\\\\Ben\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\claude\\\\\\\\C--Users-Ben-metofficewrapper\\\\\\\\ec6b2a47-36c0-4b3c-ac90-8e5097659073\\\\\\\\tasks\\\\\\\\bmkmz5wl4.output)",
+      "Bash(grep -oE 'data-\\(wind|speed|ms|kn|kt\\)[a-z-]*=\"[^\"]{0,40}\"' mo.html)",
+      "Bash(grep -oE 'wind[-_]?unit[^,}]{0,60}' mo.html)",
+      "Bash(curl -s -A \"Mozilla/5.0\" -L -b \"wind_speed_unit=knots\" \"https://weather.metoffice.gov.uk/forecast/gcn86rd2z\" -o mo_kn.html)",
+      "Bash(curl -s -A \"Mozilla/5.0\" -L -b \"wind_units=kn\" \"https://weather.metoffice.gov.uk/forecast/gcn86rd2z\" -o mo_kn2.html)"
     ]
   }
 }

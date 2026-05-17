@@ -230,11 +230,24 @@ export function parseMetOfficeHtml(html: string): ScrapedHourlyForecast[] {
   return out;
 }
 
-export async function scrapeMetOfficeForecast(geohash: string): Promise<ScrapedHourlyForecast[]> {
-  const url = `https://weather.metoffice.gov.uk/forecast/${encodeURIComponent(geohash.toLowerCase())}`;
+// Per-instance memo. On edge runtimes the function module is re-used across
+// requests while the instance stays warm, so this collapses concurrent and
+// near-simultaneous fetches for the same geohash into one upstream hit.
+// `lastGood` is kept separately so we can serve stale-on-error.
+interface CacheEntry {
+  fresh: { expires: number; data: ScrapedHourlyForecast[] } | null;
+  lastGood: ScrapedHourlyForecast[] | null;
+  inflight: Promise<ScrapedHourlyForecast[]> | null;
+}
+const SCRAPE_TTL_MS = 20 * 60 * 1000; // Met Office updates roughly hourly; 20m is plenty fresh.
+const memo = new Map<string, CacheEntry>();
+
+async function fetchAndParse(geohash: string): Promise<ScrapedHourlyForecast[]> {
+  const url = `https://weather.metoffice.gov.uk/forecast/${encodeURIComponent(geohash)}`;
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; PooleHarbourWx/1.0; +metofficewrapper)',
+      // Polite, identifies the project so Met Office can contact if it ever becomes a problem.
+      'User-Agent': 'PooleHarbourWxBot/1.0 (+https://github.com/benmcavoy/metofficewrapper) personal-use scraper',
       'Accept': 'text/html,application/xhtml+xml',
       'Accept-Language': 'en-GB,en;q=0.9',
     },
@@ -249,4 +262,33 @@ export async function scrapeMetOfficeForecast(geohash: string): Promise<ScrapedH
     throw new Error('Met Office scrape parsed zero forecasts — page layout may have changed');
   }
   return forecasts;
+}
+
+export async function scrapeMetOfficeForecast(geohash: string): Promise<ScrapedHourlyForecast[]> {
+  const key = geohash.trim().toLowerCase();
+  const entry = memo.get(key) ?? { fresh: null, lastGood: null, inflight: null };
+  const now = Date.now();
+
+  if (entry.fresh && entry.fresh.expires > now) return entry.fresh.data;
+  if (entry.inflight) return entry.inflight;
+
+  const promise = fetchAndParse(key)
+    .then(data => {
+      entry.fresh = { expires: Date.now() + SCRAPE_TTL_MS, data };
+      entry.lastGood = data;
+      entry.inflight = null;
+      memo.set(key, entry);
+      return data;
+    })
+    .catch(err => {
+      entry.inflight = null;
+      memo.set(key, entry);
+      // Serve last good response if Met Office blips — better stale than nothing.
+      if (entry.lastGood) return entry.lastGood;
+      throw err;
+    });
+
+  entry.inflight = promise;
+  memo.set(key, entry);
+  return promise;
 }

@@ -62,7 +62,7 @@ export function clearCache(): void {
 }
 
 export const TTL = {
-  FORECAST: 15 * 60 * 1000,
+  FORECAST: 30 * 60 * 1000,
   TIDES:    4  * 60 * 60 * 1000,
   SUN:      24 * 60 * 60 * 1000,
   LIVE_WIND: 15 * 1000,

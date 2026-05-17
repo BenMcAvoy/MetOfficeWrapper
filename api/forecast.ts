@@ -15,7 +15,10 @@ export default async function handler(req: Request): Promise<Response> {
     return new Response(JSON.stringify({ forecasts }), {
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 's-maxage=900, stale-while-revalidate=300',
+        // Edge cache for 30 min (Vercel dedupes per region within this window),
+        // serve-stale-while-revalidate for an hour, and serve-stale-if-error
+        // for a day so a Met Office hiccup doesn't take the app down.
+        'Cache-Control': 's-maxage=1800, stale-while-revalidate=3600, stale-if-error=86400',
       },
     });
   } catch (e) {
