@@ -256,6 +256,326 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-17T20:00:41.082Z"
+    },
+    {
+      "id": "bug-017",
+      "timestamp": "2026-05-19T15:58:03.256Z",
+      "error_message": "Missing guard clause",
+      "file": "src/components/charts.tsx",
+      "root_cause": "No early return/throw for edge case: x2 <= x1",
+      "fix": "Added guard clause: if (x2 <= x1)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T15:58:03.256Z"
+    },
+    {
+      "id": "bug-018",
+      "timestamp": "2026-05-19T15:58:17.043Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T15:58:17.043Z"
+    },
+    {
+      "id": "bug-019",
+      "timestamp": "2026-05-19T15:58:44.473Z",
+      "error_message": "Wrong reference: WindCardProps should be eventWindows",
+      "file": "src/components/WindCard.tsx",
+      "root_cause": "Used \"WindCardProps\" instead of \"eventWindows\"",
+      "fix": "Changed WindCardProps → eventWindows",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T15:58:44.473Z"
+    },
+    {
+      "id": "bug-020",
+      "timestamp": "2026-05-19T15:59:01.208Z",
+      "error_message": "Wrong reference: TideChartProps should be eventWindows",
+      "file": "src/components/TideChart.tsx",
+      "root_cause": "Used \"TideChartProps\" instead of \"eventWindows\"",
+      "fix": "Changed TideChartProps → eventWindows",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T15:59:01.208Z"
+    },
+    {
+      "id": "bug-021",
+      "timestamp": "2026-05-19T16:00:00.052Z",
+      "error_message": "CSS fix: id",
+      "file": "src/App.tsx",
+      "root_cause": "id: 'events',   label: 'Events',   Icon: Anchor → 'forecast', label: '7-Day',    Icon: CalendarDays",
+      "fix": "Changed id: 'events',   label: 'Events',   Icon: Anchor → 'forecast', label: '7-Day',    Icon: CalendarDays",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:00:00.052Z"
+    },
+    {
+      "id": "bug-022",
+      "timestamp": "2026-05-19T16:00:05.750Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/App.tsx",
+      "root_cause": "6 lines replaced/restructured",
+      "fix": "Rewrote 11→6 lines (6 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:00:05.750Z"
+    },
+    {
+      "id": "bug-023",
+      "timestamp": "2026-05-19T16:02:12.719Z",
+      "error_message": "Missing guard clause",
+      "file": "src/App.tsx",
+      "root_cause": "No early return/throw for edge case: !e.time || !e.classes",
+      "fix": "Added guard clause: if (!e.time || !e.classes)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:02:12.719Z"
+    },
+    {
+      "id": "bug-024",
+      "timestamp": "2026-05-19T16:04:39.875Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Had 'var(--primary)'",
+      "fix": "Changed to \"hidden\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:04:39.875Z"
+    },
+    {
+      "id": "bug-025",
+      "timestamp": "2026-05-19T16:05:11.032Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/App.tsx",
+      "root_cause": "Had \"flex gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollb",
+      "fix": "Changed to \"flex gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollb",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:05:11.032Z"
+    },
+    {
+      "id": "bug-026",
+      "timestamp": "2026-05-19T16:07:07.900Z",
+      "error_message": "Wrong operator: || should be <=",
+      "file": "src/App.tsx",
+      "root_cause": "Used \"||\" instead of \"<=\"",
+      "fix": "Changed operator || → <=",
+      "tags": [
+        "auto-detected",
+        "operator-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:07:07.900Z"
+    },
+    {
+      "id": "bug-027",
+      "timestamp": "2026-05-19T16:09:25.011Z",
+      "error_message": "Wrong reference: WindCardProps should be eventMarkers",
+      "file": "src/components/WindCard.tsx",
+      "root_cause": "Used \"WindCardProps\" instead of \"eventMarkers\"",
+      "fix": "Changed WindCardProps → eventMarkers",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:09:25.011Z"
+    },
+    {
+      "id": "bug-028",
+      "timestamp": "2026-05-19T16:09:46.333Z",
+      "error_message": "Wrong reference: TideChartProps should be eventMarkers",
+      "file": "src/components/TideChart.tsx",
+      "root_cause": "Used \"TideChartProps\" instead of \"eventMarkers\"",
+      "fix": "Changed TideChartProps → eventMarkers",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:09:46.333Z"
+    },
+    {
+      "id": "bug-029",
+      "timestamp": "2026-05-19T16:10:10.055Z",
+      "error_message": "CSS fix: eventWindows",
+      "file": "src/App.tsx",
+      "root_cause": "eventWindows: EventWindow[] = useMemo(() => { → merged, eventMarkers: markers",
+      "fix": "Changed eventWindows: EventWindow[] = useMemo(() => { → merged, eventMarkers: markers",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:10:10.055Z"
+    },
+    {
+      "id": "bug-030",
+      "timestamp": "2026-05-19T16:17:12.258Z",
+      "error_message": "Type error",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:17:12.258Z"
+    },
+    {
+      "id": "bug-031",
+      "timestamp": "2026-05-19T16:25:41.454Z",
+      "error_message": "Missing guard clause",
+      "file": "src/components/charts.tsx",
+      "root_cause": "No early return/throw for edge case: last && w.start <= last.end",
+      "fix": "Added guard clause: if (last && w.start <= last.end)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:25:41.454Z"
+    },
+    {
+      "id": "bug-032",
+      "timestamp": "2026-05-19T16:26:03.434Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/charts.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 9→10 lines (2 removed) | Also: label={{; value: 'Events',",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-05-19T16:26:38.488Z"
+    },
+    {
+      "id": "bug-033",
+      "timestamp": "2026-05-19T16:27:14.134Z",
+      "error_message": "CSS fix: value",
+      "file": "src/components/charts.tsx",
+      "root_cause": "value: m.label, fill: 'var(--primary)', fontSize: 10, position: 'insideTop', dy: yOffset → e.timeLabel, fill: 'var(--primary)', fontSize: 10, position: 'insideTop', dy: yOffset",
+      "fix": "Changed value: m.label, fill: 'var(--primary)', fontSize: 10, position: 'insideTop', dy: yOffset → e.timeLabel, fill: 'var(--primary)', fontSize: 10, position: 'insideTop', dy: yOffset",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-05-19T16:33:32.799Z"
+    },
+    {
+      "id": "bug-034",
+      "timestamp": "2026-05-19T16:28:15.695Z",
+      "error_message": "CSS fix: start",
+      "file": "src/App.tsx",
+      "root_cause": "start: w.start, end: w.end → start.getTime(), timeLabel: e.time!, name: e.name",
+      "fix": "Changed start: w.start, end: w.end → start.getTime(), timeLabel: e.time!, name: e.name",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:28:15.695Z"
+    },
+    {
+      "id": "bug-035",
+      "timestamp": "2026-05-19T16:28:37.345Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/EventsStrip.tsx",
+      "root_cause": "11 lines replaced/restructured",
+      "fix": "Rewrote 30→17 lines (11 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:28:37.345Z"
+    },
+    {
+      "id": "bug-036",
+      "timestamp": "2026-05-19T16:33:18.448Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/charts.tsx",
+      "root_cause": "15 lines replaced/restructured",
+      "fix": "Rewrote 53→34 lines (15 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-19T16:33:18.448Z"
     }
   ]
 }

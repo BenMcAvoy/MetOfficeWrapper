@@ -1,7 +1,7 @@
 import type { HourlyForecast, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind } from 'lucide-react';
-import { WindChart } from '@/components/charts';
+import { WindChart, type ChartEvent } from '@/components/charts';
 
 interface WindChartCardProps {
   title: string;
@@ -10,6 +10,7 @@ interface WindChartCardProps {
   startRefLine?: number;
   liveWindHistory?: LiveWindHistoryPoint[];
   includePastHours?: number;
+  events?: ChartEvent[];
 }
 
 export default function WindChartCard({
@@ -19,6 +20,7 @@ export default function WindChartCard({
   startRefLine,
   liveWindHistory = [],
   includePastHours = 0,
+  events = [],
 }: WindChartCardProps) {
   return (
     <Card>
@@ -34,6 +36,7 @@ export default function WindChartCard({
           startRefLine={startRefLine}
           liveHistory={liveWindHistory}
           includePastHours={includePastHours}
+          events={events}
         />
       </CardContent>
     </Card>

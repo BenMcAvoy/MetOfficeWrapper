@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { fetchMetOfficeHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
@@ -8,19 +8,21 @@ import { Skeleton } from '@/components/ui/skeleton';
 import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
-import RaceCalendar, { type RaceCalendarHandle } from '@/components/RaceCalendar';
+import { CalendarButton } from '@/components/EventsStrip';
+import type { ChartEvent } from '@/components/charts';
+import { getEventsForDay } from '@/lib/calendar';
 import InstallButton from '@/components/InstallButton';
 import ConditionsHeader from '@/components/ConditionsHeader';
 import SettingsPage from '@/components/SettingsPage';
 import { useSettings } from '@/lib/settings';
 import {
   MapPin, AlertTriangle, Waves, Loader2,
-  Wind, CalendarDays, Anchor, Settings as SettingsIcon,
+  Wind, CalendarDays, Settings as SettingsIcon,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay } from 'date-fns';
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
-type Tab = 'wind' | 'tides' | 'forecast' | 'events' | 'settings';
+type Tab = 'wind' | 'tides' | 'forecast' | 'settings';
 
 function useThemeMode(theme: 'auto' | 'light' | 'dark') {
   useEffect(() => {
@@ -42,7 +44,7 @@ function DateSelector({ selected, onChange, availableDays }: {
   availableDays: Date[];
 }) {
   return (
-    <div className="flex gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollbar touch-pan-x -mx-4 px-4">
+    <div className="flex gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollbar touch-pan-x">
       {availableDays.map((day, i) => {
         const active = isSameDay(day, selected);
         const label = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : format(day, 'EEE d');
@@ -69,7 +71,6 @@ const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
   { id: 'wind',     label: 'Wind',     Icon: Wind },
   { id: 'tides',    label: 'Tides',    Icon: Waves },
   { id: 'forecast', label: '7-Day',    Icon: CalendarDays },
-  { id: 'events',   label: 'Events',   Icon: Anchor },
 ];
 
 function LoadingSkeleton() {
@@ -104,15 +105,10 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>('wind');
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
-  const eventsRef = useRef<RaceCalendarHandle>(null);
 
   const onNavTap = useCallback((id: Tab) => {
-    if (id === activeTab && id === 'events') {
-      eventsRef.current?.popToRoot();
-      return;
-    }
     setActiveTab(id);
-  }, [activeTab]);
+  }, []);
 
   useSkyTint(sunInfo);
 
@@ -211,7 +207,18 @@ export default function App() {
     ? forecasts.filter(f => f.time.getTime() <= Date.now() + 12 * 60 * 60 * 1000)
     : forecasts.filter(f => isSameDay(f.time, selectedDay));
   const isLoading = loadState === 'loading';
-  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'events' && activeTab !== 'settings';
+  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'settings';
+
+  const chartEvents: ChartEvent[] = useMemo(() => {
+    return getEventsForDay(selectedDay)
+      .filter(e => !!e.time)
+      .map(e => {
+        const [h, m] = e.time!.split(':').map(Number);
+        const start = new Date(selectedDay);
+        start.setHours(h, m, 0, 0);
+        return { start: start.getTime(), timeLabel: e.time!, name: e.name };
+      });
+  }, [selectedDay]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -266,7 +273,12 @@ export default function App() {
         ) : (
           <div className="space-y-3">
             {showDateSelector && (
-              <DateSelector selected={selectedDay} onChange={setSelectedDay} availableDays={availableDays} />
+              <div className="flex items-center gap-2">
+                <div className="flex-1 min-w-0">
+                  <DateSelector selected={selectedDay} onChange={setSelectedDay} availableDays={availableDays} />
+                </div>
+                <CalendarButton selectedDay={selectedDay} onSelectDay={setSelectedDay} />
+              </div>
             )}
 
             {activeTab === 'wind' && (
@@ -279,13 +291,14 @@ export default function App() {
                   selectedDay={selectedDay}
                   liveWind={liveWind}
                   liveWindHistory={liveWindHistory}
+                  events={chartEvents}
                 />
               </div>
             )}
             {activeTab === 'tides' && (
-              <div key={`tides-${selectedDay.getTime()}`} className="animate-in fade-in-50 duration-300">
+              <div key={`tides-${selectedDay.getTime()}`} className="space-y-3 animate-in fade-in-50 duration-300">
                 {tideData ? (
-                  <TideChart tideData={tideData} selectedDay={selectedDay} />
+                  <TideChart tideData={tideData} selectedDay={selectedDay} events={chartEvents} />
                 ) : (
                   <div className="text-center py-12 text-muted-foreground">
                     <Waves className="mx-auto h-10 w-10 mb-3" />
@@ -297,16 +310,6 @@ export default function App() {
             {activeTab === 'forecast' && (
               <div className="animate-in fade-in-50 duration-300">
                 <ForecastStrip forecasts={forecasts} chartHistoryForecasts={forecastHistory} liveWindHistory={liveWindHistory} />
-              </div>
-            )}
-            {activeTab === 'events' && (
-              <div className="animate-in fade-in-50 duration-300">
-                <RaceCalendar
-                  ref={eventsRef}
-                  forecasts={forecasts}
-                  tideData={tideData}
-                  liveWindHistory={liveWindHistory}
-                />
               </div>
             )}
             {activeTab === 'settings' && (

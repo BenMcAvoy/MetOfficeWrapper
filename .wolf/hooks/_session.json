@@ -66,6 +66,41 @@
       "count": 1,
       "tokens": 0,
       "first_read": "2026-05-17T19:07:18.314Z"
+    },
+    "C:/Users/Ben/MetOfficeWrapper/src/App.tsx": {
+      "count": 3,
+      "tokens": 4305,
+      "first_read": "2026-05-19T15:51:47.542Z"
+    },
+    "C:/Users/Ben/MetOfficeWrapper/src/lib/calendar.ts": {
+      "count": 2,
+      "tokens": 0,
+      "first_read": "2026-05-19T15:51:56.618Z"
+    },
+    "C:/Users/Ben/MetOfficeWrapper/src/components/WindChartCard.tsx": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-19T15:56:29.427Z"
+    },
+    "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx": {
+      "count": 5,
+      "tokens": 5535,
+      "first_read": "2026-05-19T15:56:33.275Z"
+    },
+    "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-19T15:56:37.049Z"
+    },
+    "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-19T15:56:40.798Z"
+    },
+    "C:/Users/Ben/MetOfficeWrapper/src/components/RaceCalendar.tsx": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-19T15:57:25.113Z"
     }
   },
   "files_written": [
@@ -452,6 +487,498 @@
       "action": "edit",
       "tokens": 140,
       "at": "2026-05-17T20:02:21.629Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 42,
+      "at": "2026-05-19T15:57:40.255Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 89,
+      "at": "2026-05-19T15:57:48.117Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 48,
+      "at": "2026-05-19T15:57:54.992Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 284,
+      "at": "2026-05-19T15:58:03.253Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 114,
+      "at": "2026-05-19T15:58:09.342Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 294,
+      "at": "2026-05-19T15:58:17.041Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindChartCard.tsx",
+      "action": "create",
+      "tokens": 362,
+      "at": "2026-05-19T15:58:28.135Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 248,
+      "at": "2026-05-19T15:58:39.721Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 47,
+      "at": "2026-05-19T15:58:44.471Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 84,
+      "at": "2026-05-19T15:58:50.066Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 151,
+      "at": "2026-05-19T15:58:57.320Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 28,
+      "at": "2026-05-19T15:59:01.206Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 74,
+      "at": "2026-05-19T15:59:06.206Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/EventsStrip.tsx",
+      "action": "create",
+      "tokens": 2232,
+      "at": "2026-05-19T15:59:38.821Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 384,
+      "at": "2026-05-19T15:59:53.911Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 70,
+      "at": "2026-05-19T16:00:00.049Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 62,
+      "at": "2026-05-19T16:00:05.747Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 296,
+      "at": "2026-05-19T16:00:19.890Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 524,
+      "at": "2026-05-19T16:00:35.042Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 176,
+      "at": "2026-05-19T16:02:12.715Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/EventsStrip.tsx",
+      "action": "create",
+      "tokens": 2044,
+      "at": "2026-05-19T16:04:34.771Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 10,
+      "at": "2026-05-19T16:04:39.872Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 21,
+      "at": "2026-05-19T16:04:45.057Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 514,
+      "at": "2026-05-19T16:04:59.191Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 25,
+      "at": "2026-05-19T16:05:11.028Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 232,
+      "at": "2026-05-19T16:07:07.897Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 118,
+      "at": "2026-05-19T16:08:25.019Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 54,
+      "at": "2026-05-19T16:08:29.788Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 332,
+      "at": "2026-05-19T16:08:40.971Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 129,
+      "at": "2026-05-19T16:08:48.352Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 450,
+      "at": "2026-05-19T16:08:58.678Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindChartCard.tsx",
+      "action": "edit",
+      "tokens": 169,
+      "at": "2026-05-19T16:09:07.255Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindChartCard.tsx",
+      "action": "edit",
+      "tokens": 25,
+      "at": "2026-05-19T16:09:11.492Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 20,
+      "at": "2026-05-19T16:09:16.063Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 19,
+      "at": "2026-05-19T16:09:19.997Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 52,
+      "at": "2026-05-19T16:09:25.008Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 23,
+      "at": "2026-05-19T16:09:29.082Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 20,
+      "at": "2026-05-19T16:09:33.518Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 19,
+      "at": "2026-05-19T16:09:38.051Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 34,
+      "at": "2026-05-19T16:09:46.330Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 27,
+      "at": "2026-05-19T16:09:50.352Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 20,
+      "at": "2026-05-19T16:09:59.760Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 319,
+      "at": "2026-05-19T16:10:10.052Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 54,
+      "at": "2026-05-19T16:10:14.714Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 38,
+      "at": "2026-05-19T16:10:25.930Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/EventsStrip.tsx",
+      "action": "edit",
+      "tokens": 229,
+      "at": "2026-05-19T16:10:38.625Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/EventsStrip.tsx",
+      "action": "edit",
+      "tokens": 20,
+      "at": "2026-05-19T16:10:43.341Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 324,
+      "at": "2026-05-19T16:17:05.474Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 146,
+      "at": "2026-05-19T16:17:12.253Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 256,
+      "at": "2026-05-19T16:17:21.640Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 291,
+      "at": "2026-05-19T16:17:29.831Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/EventsStrip.tsx",
+      "action": "edit",
+      "tokens": 311,
+      "at": "2026-05-19T16:17:39.726Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 313,
+      "at": "2026-05-19T16:25:41.451Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 474,
+      "at": "2026-05-19T16:25:57.344Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 81,
+      "at": "2026-05-19T16:26:03.431Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 81,
+      "at": "2026-05-19T16:26:27.533Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 280,
+      "at": "2026-05-19T16:26:38.484Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 162,
+      "at": "2026-05-19T16:26:53.891Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 145,
+      "at": "2026-05-19T16:27:02.101Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 383,
+      "at": "2026-05-19T16:27:14.131Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindChartCard.tsx",
+      "action": "create",
+      "tokens": 355,
+      "at": "2026-05-19T16:27:23.040Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 16,
+      "at": "2026-05-19T16:27:27.519Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-19T16:27:31.725Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 45,
+      "at": "2026-05-19T16:27:36.733Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+      "action": "edit",
+      "tokens": 10,
+      "at": "2026-05-19T16:27:40.767Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 16,
+      "at": "2026-05-19T16:27:45.799Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-19T16:27:50.520Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 26,
+      "at": "2026-05-19T16:27:56.369Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 12,
+      "at": "2026-05-19T16:28:00.637Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 16,
+      "at": "2026-05-19T16:28:06.192Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 110,
+      "at": "2026-05-19T16:28:15.692Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 17,
+      "at": "2026-05-19T16:28:20.134Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 28,
+      "at": "2026-05-19T16:28:24.339Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/EventsStrip.tsx",
+      "action": "edit",
+      "tokens": 166,
+      "at": "2026-05-19T16:28:37.341Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 39,
+      "at": "2026-05-19T16:28:42.952Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 421,
+      "at": "2026-05-19T16:32:07.658Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 315,
+      "at": "2026-05-19T16:33:18.444Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 59,
+      "at": "2026-05-19T16:33:24.393Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 178,
+      "at": "2026-05-19T16:33:32.796Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 0,
+      "at": "2026-05-19T16:33:38.049Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 0,
+      "at": "2026-05-19T16:34:37.865Z"
+    },
+    {
+      "file": "C:/Users/Ben/MetOfficeWrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 17,
+      "at": "2026-05-19T16:34:42.212Z"
     }
   ],
   "edit_counts": {
@@ -459,19 +986,23 @@
     "src/lib/settings.ts": 1,
     "src/lib/units.ts": 1,
     "src/components/SettingsPage.tsx": 1,
-    "src/App.tsx": 13,
-    "src/components/WindCard.tsx": 12,
+    "src/App.tsx": 33,
+    "src/components/WindCard.tsx": 23,
     "src/components/ForecastStrip.tsx": 6,
     "src/components/RaceCalendar.tsx": 11,
     "src/lib/metofficeScrape.ts": 6,
     "api/forecast.ts": 3,
     "vite.config.ts": 5,
     "src/lib/api.ts": 1,
-    "api/admin/clear-cache.ts": 2
+    "api/admin/clear-cache.ts": 2,
+    "src/components/charts.tsx": 30,
+    "src/components/WindChartCard.tsx": 4,
+    "src/components/TideChart.tsx": 11,
+    "src/components/EventsStrip.tsx": 6
   },
   "anatomy_hits": 0,
-  "anatomy_misses": 13,
-  "repeated_reads_warned": 7,
+  "anatomy_misses": 20,
+  "repeated_reads_warned": 14,
   "cerebrum_warnings": 0,
-  "stop_count": 11
+  "stop_count": 21
 }
