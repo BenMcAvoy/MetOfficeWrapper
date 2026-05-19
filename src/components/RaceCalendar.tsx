@@ -227,11 +227,11 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
   const windowEnd = addMinutes(eventStart, 150);
 
   const timeSlots = [
-    { label: format(windowStart, 'HH:mm'), time: windowStart, role: 'Pre-race' },
-    { label: event.time, time: eventStart, role: 'Warning signal', isStart: true },
-    { label: format(addMinutes(eventStart, 60), 'HH:mm'), time: addMinutes(eventStart, 60), role: 'Racing' },
-    { label: format(addMinutes(eventStart, 120), 'HH:mm'), time: addMinutes(eventStart, 120), role: 'Finish' },
-    { label: format(windowEnd, 'HH:mm'), time: windowEnd, role: 'Post-race' },
+    { label: format(windowStart, 'HH:mm'), time: windowStart },
+    { label: event.time, time: eventStart, isStart: true },
+    { label: format(addMinutes(eventStart, 60), 'HH:mm'), time: addMinutes(eventStart, 60) },
+    { label: format(addMinutes(eventStart, 120), 'HH:mm'), time: addMinutes(eventStart, 120) },
+    { label: format(windowEnd, 'HH:mm'), time: windowEnd },
   ];
 
   const isToday = isSameDay(selectedDay, new Date());
@@ -258,7 +258,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
           <CardTitle className="text-sm leading-tight">{event.name}</CardTitle>
           <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
             <Clock className="h-3 w-3" />
-            <span>{format(selectedDay, 'EEE d MMM')} · Warning signal {event.time} · 2hr window</span>
+            <span>{format(selectedDay, 'EEE d MMM')} · Start {event.time} · 2hr window</span>
           </div>
           {event.classes && (
             <span className="text-xs text-muted-foreground">Classes: {event.classes}</span>
@@ -308,7 +308,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
               <span>Time</span><span></span><span>Avg wind</span><span>Gust</span><span>Rain</span>
             </div>
             <div className="divide-y divide-border">
-              {timeSlots.map(({ label, time, role, isStart }) => {
+              {timeSlots.map(({ label, time, isStart }) => {
                 const fc = closestForecast(forecasts, time);
                 if (!fc) return null;
                 const kt = msToKnots(fc.windSpeed10m);
@@ -321,7 +321,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
                   <div key={label} className={`grid grid-cols-[3rem_1.5rem_1fr_1fr_2.5rem] gap-x-2 px-4 py-2.5 items-center ${isStart ? 'bg-primary/5' : ''}`}>
                     <div>
                       <p className={`text-xs font-medium leading-tight ${isStart ? 'text-primary' : ''}`}>{label}</p>
-                      <p className="text-muted-foreground text-xs leading-tight">{role}</p>
+                      {isStart && <p className="text-muted-foreground text-xs leading-tight">Start</p>}
                     </div>
                     <Icon className="h-4 w-4 text-primary" strokeWidth={1.5} />
                     <div className="flex items-center gap-1.5">
