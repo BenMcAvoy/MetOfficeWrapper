@@ -576,6 +576,134 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-19T16:33:18.448Z"
+    },
+    {
+      "id": "bug-037",
+      "timestamp": "2026-05-20T19:28:02.079Z",
+      "error_message": "Wrong reference: onTouchCancel should be onMouseLeave",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Used \"onTouchCancel\" instead of \"onMouseLeave\"",
+      "fix": "Changed onTouchCancel → onMouseLeave",
+      "tags": [
+        "auto-detected",
+        "wrong-reference",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:28:02.079Z"
+    },
+    {
+      "id": "bug-038",
+      "timestamp": "2026-05-20T19:31:50.086Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:31:50.086Z"
+    },
+    {
+      "id": "bug-039",
+      "timestamp": "2026-05-20T19:35:11.526Z",
+      "error_message": "Type error",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:35:11.526Z"
+    },
+    {
+      "id": "bug-040",
+      "timestamp": "2026-05-20T19:36:08.078Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/charts.tsx",
+      "root_cause": "3 lines replaced/restructured",
+      "fix": "Rewrote 4→10 lines (3 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:36:08.078Z"
+    },
+    {
+      "id": "bug-041",
+      "timestamp": "2026-05-20T19:38:22.256Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Had \"h-44\"",
+      "fix": "Changed to \"h-44 [&_*]:touch-none\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:38:22.256Z"
+    },
+    {
+      "id": "bug-042",
+      "timestamp": "2026-05-20T19:40:45.072Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check) | Also: <Tooltip; content={() => null}",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-05-20T19:43:30.450Z"
+    },
+    {
+      "id": "bug-043",
+      "timestamp": "2026-05-20T19:43:54.179Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/charts.tsx",
+      "root_cause": "3 lines replaced/restructured",
+      "fix": "Rewrote 7→4 lines (3 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:43:54.179Z"
+    },
+    {
+      "id": "bug-044",
+      "timestamp": "2026-05-20T19:43:58.510Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Had \"h-44 [&_*]:touch-none [&_*]:pointer-events-none\"",
+      "fix": "Changed to \"h-44 [&_*]:touch-none [&_.recharts-area]:pointer-",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:43:58.510Z"
     }
   ]
 }

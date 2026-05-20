@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { YAxisTick, tooltipStyle } from '@/lib/chartUtils';
 import {
@@ -141,6 +141,8 @@ export function WindChart({
   includePastHours = 0,
 }: WindChartProps) {
   const [activeRow, setActiveRow] = useState<WindChartRow | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const rowsRef = useRef<WindChartRow[]>([]);
   const now = Date.now();
   const nowHour = startOfHour(new Date(now)).getTime();
   const forcedMin = includePastHours > 0 ? subHours(nowHour, includePastHours).getTime() : null;
@@ -163,6 +165,7 @@ export function WindChart({
   const xMax = bucket10(Math.max(lastT, xMin + HOUR));
 
   const rows = buildWindChartRows(forecastSeries, observedSeries, xMin, xMax);
+  rowsRef.current = rows;
   if (!rows.length) return null;
 
   const xTicks: number[] = [];
@@ -177,19 +180,53 @@ export function WindChart({
 
   const displayRow: WindChartRow | null = activeRow ?? rows[rows.length - 1] ?? null;
 
-  const handleActive = (state: unknown) => {
-    const s = state as {
-      activeTooltipIndex?: number;
-      activeLabel?: number | string;
-      activePayload?: { payload: WindChartRow }[];
-    } | null | undefined;
-    if (!s) return;
-    const fromPayload = s.activePayload?.[0]?.payload;
-    const fromIndex = typeof s.activeTooltipIndex === 'number' ? rows[s.activeTooltipIndex] : undefined;
-    const fromLabel = s.activeLabel !== undefined ? rows.find(r => r.t === Number(s.activeLabel)) : undefined;
-    const next = fromPayload ?? fromIndex ?? fromLabel ?? null;
-    if (next && next.t !== activeRow?.t) setActiveRow(next);
-  };
+  const yAxisWidth = 52;
+  const rightMargin = 4;
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const pickFromClientX = (clientX: number) => {
+      const rs = rowsRef.current;
+      if (!rs.length) return;
+      const rect = el.getBoundingClientRect();
+      const plotLeft = rect.left + yAxisWidth;
+      const plotRight = rect.right - rightMargin;
+      const plotWidth = Math.max(1, plotRight - plotLeft);
+      const x = Math.min(plotRight, Math.max(plotLeft, clientX)) - plotLeft;
+      const minT = rs[0].t;
+      const maxT = rs[rs.length - 1].t;
+      const t = minT + (x / plotWidth) * (maxT - minT);
+      let best = rs[0];
+      let bestDelta = Math.abs(best.t - t);
+      for (let i = 1; i < rs.length; i++) {
+        const d = Math.abs(rs[i].t - t);
+        if (d < bestDelta) { best = rs[i]; bestDelta = d; }
+      }
+      setActiveRow(prev => (prev?.t === best.t ? prev : best));
+    };
+    const onTouchStart = (e: TouchEvent) => {
+      if (!e.touches[0]) return;
+      e.preventDefault();
+      pickFromClientX(e.touches[0].clientX);
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!e.touches[0]) return;
+      e.preventDefault();
+      pickFromClientX(e.touches[0].clientX);
+    };
+    const onTouchEnd = () => setActiveRow(null);
+    el.addEventListener('touchstart', onTouchStart, { passive: false, capture: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: false, capture: true });
+    el.addEventListener('touchend', onTouchEnd, { capture: true });
+    el.addEventListener('touchcancel', onTouchEnd, { capture: true });
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart, { capture: true } as EventListenerOptions);
+      el.removeEventListener('touchmove', onTouchMove, { capture: true } as EventListenerOptions);
+      el.removeEventListener('touchend', onTouchEnd, { capture: true } as EventListenerOptions);
+      el.removeEventListener('touchcancel', onTouchEnd, { capture: true } as EventListenerOptions);
+    };
+  }, []);
 
   const legendEntries: LegendEntry[] = [
     ...(hasObserved
@@ -211,15 +248,37 @@ export function WindChart({
         pinned={!!activeRow}
         showLive={hasObserved}
       />
-      <div className="h-44">
+      <div
+        ref={wrapperRef}
+        className="h-44 [&_*]:touch-none [&_.recharts-area]:pointer-events-none"
+        style={{ touchAction: 'none' }}
+        onMouseMove={(e) => {
+          const el = wrapperRef.current;
+          if (!el) return;
+          const rs = rowsRef.current;
+          if (!rs.length) return;
+          const rect = el.getBoundingClientRect();
+          const plotLeft = rect.left + yAxisWidth;
+          const plotRight = rect.right - rightMargin;
+          const plotWidth = Math.max(1, plotRight - plotLeft);
+          const x = Math.min(plotRight, Math.max(plotLeft, e.clientX)) - plotLeft;
+          const minT = rs[0].t;
+          const maxT = rs[rs.length - 1].t;
+          const t = minT + (x / plotWidth) * (maxT - minT);
+          let best = rs[0];
+          let bestDelta = Math.abs(best.t - t);
+          for (let i = 1; i < rs.length; i++) {
+            const d = Math.abs(rs[i].t - t);
+            if (d < bestDelta) { best = rs[i]; bestDelta = d; }
+          }
+          setActiveRow(prev => (prev?.t === best.t ? prev : best));
+        }}
+        onMouseLeave={() => setActiveRow(null)}
+      >
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ComposedChart
           data={rows}
           margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
-          onMouseMove={handleActive}
-          onTouchStart={handleActive}
-          onTouchMove={handleActive}
-          onMouseLeave={() => setActiveRow(null)}
         >
           <defs>
             <linearGradient id="windObservedAvgFill" x1="0" y1="0" x2="0" y2="1">

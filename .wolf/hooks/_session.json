@@ -1,33 +1,69 @@
 {
-  "session_id": "session-2026-05-20-2015",
-  "started": "2026-05-20T19:15:11.394Z",
+  "session_id": "session-2026-05-20-2035",
+  "started": "2026-05-20T19:35:01.699Z",
   "files_read": {
-    "C:/Users/Ben/metofficewrapper/src/App.tsx": {
+    "C:/Users/Ben/metofficewrapper/src/components/charts.tsx": {
       "count": 2,
-      "tokens": 4109,
-      "first_read": "2026-05-20T19:24:08.576Z"
+      "tokens": 4852,
+      "first_read": "2026-05-20T19:36:01.938Z"
     }
   },
   "files_written": [
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
       "action": "edit",
-      "tokens": 34,
-      "at": "2026-05-20T19:25:38.226Z"
+      "tokens": 210,
+      "at": "2026-05-20T19:35:11.523Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
       "action": "edit",
-      "tokens": 28,
-      "at": "2026-05-20T19:25:45.420Z"
+      "tokens": 92,
+      "at": "2026-05-20T19:36:08.076Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 27,
+      "at": "2026-05-20T19:38:22.252Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 376,
+      "at": "2026-05-20T19:40:45.069Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 6,
+      "at": "2026-05-20T19:40:59.845Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 89,
+      "at": "2026-05-20T19:43:30.447Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 46,
+      "at": "2026-05-20T19:43:54.175Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+      "action": "edit",
+      "tokens": 23,
+      "at": "2026-05-20T19:43:58.506Z"
     }
   ],
   "edit_counts": {
-    "src/App.tsx": 2
+    "src/components/charts.tsx": 8
   },
-  "anatomy_hits": 0,
-  "anatomy_misses": 1,
+  "anatomy_hits": 1,
+  "anatomy_misses": 0,
   "repeated_reads_warned": 1,
   "cerebrum_warnings": 0,
-  "stop_count": 3
+  "stop_count": 6
 }
