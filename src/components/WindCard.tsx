@@ -96,7 +96,10 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                 <div className="py-1">
                   <p className="text-muted-foreground text-xs mb-1">Current speed</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className={`font-display text-5xl font-semibold tabular-nums tracking-tight ${currentObservedBf ? beaufortColor(currentObservedBf.force) : 'text-foreground'}`}>
+                    <span
+                      key={hasLiveReading && liveWind ? disp(liveWind.windSpeedMs) : '—'}
+                      className={`value-swap font-display text-5xl font-semibold tabular-nums tracking-tight ${currentObservedBf ? beaufortColor(currentObservedBf.force) : 'text-foreground'}`}
+                    >
                       {hasLiveReading && liveWind ? disp(liveWind.windSpeedMs) : '—'}
                     </span>
                     {hasLiveReading && liveWind && <span className="text-muted-foreground text-sm">{unitLabel}</span>}
@@ -109,7 +112,10 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                 <div className="py-1">
                   <p className="text-muted-foreground text-xs mb-1">Max gust (1h)</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="font-display text-5xl font-semibold tabular-nums tracking-tight text-[var(--chart-gust)]">
+                    <span
+                      key={maxObservedGustPoint ? disp(maxObservedGustPoint.gustWindMs) : '—'}
+                      className="value-swap font-display text-5xl font-semibold tabular-nums tracking-tight text-[var(--chart-gust)]"
+                    >
                       {maxObservedGustPoint ? disp(maxObservedGustPoint.gustWindMs) : '—'}
                     </span>
                     {maxObservedGustPoint && <span className="text-muted-foreground text-sm">{unitLabel}</span>}
@@ -128,7 +134,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                     <>
                       <ArrowUp
                         className="h-4 w-4 text-primary"
-                        style={{ transform: `rotate(${currentObservedDirection}deg)` }}
+                        style={{ transform: `rotate(${currentObservedDirection}deg)`, transition: 'transform 240ms cubic-bezier(0.32, 0.72, 0, 1)' }}
                         strokeWidth={2.5}
                       />
                       <span className="text-sm font-semibold">{degreesToCardinal(currentObservedDirection)}</span>

@@ -1,5 +1,5 @@
 import type { HourlyForecast, SunInfo } from '@/lib/api';
-import { getWeatherInfo } from '@/lib/weatherCodes';
+import { getWeatherInfo, getWeatherIconColor } from '@/lib/weatherCodes';
 import { useNow } from '@/lib/useNow';
 import { isSameDay, isAfter, isBefore } from 'date-fns';
 
@@ -55,7 +55,7 @@ export default function ConditionsHeader({ forecasts, selectedDay, sunInfo }: Co
 
   return (
     <div className="flex items-center gap-3 px-1 pt-1">
-      <Icon className="h-12 w-12 text-primary shrink-0" strokeWidth={1.5} aria-hidden />
+      <Icon className="h-12 w-12 shrink-0" strokeWidth={1.5} aria-hidden style={{ color: getWeatherIconColor(target.significantWeatherCode) }} />
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2 flex-wrap">
           {isToday ? (

@@ -5,7 +5,7 @@ import type { RaceEvent, EventCategory } from '@/lib/calendar';
 import { RACE_CALENDAR, getEventsForDay, getEventCategory, sortEventsByCategory } from '@/lib/calendar';
 import { msToKnots, convertWind, windUnitLabel, beaufortScale, beaufortColor, beaufortBg } from '@/lib/units';
 import { useSettings } from '@/lib/settings';
-import { getWeatherInfo } from '@/lib/weatherCodes';
+import { getWeatherInfo, getWeatherIconColor } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves, Trophy, Sailboat, Anchor, Sparkles, GraduationCap, Megaphone, Users, Sun, Ship } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -27,82 +27,24 @@ export interface RaceCalendarHandle {
 interface CategoryStyle {
   Icon: LucideIcon;
   label: string;
-  iconClass: string;
-  badgeClass: string;
-  accentClass: string;
+  // CSS var driving the icon colour. Featured categories also use this for the
+  // thin left bar and a tinted row background (same pattern as the WindCard
+  // "current hour" highlight, just per-accent).
+  accent: string | null;
+  accentBg: string | null;
 }
 
 const CATEGORY_STYLES: Record<EventCategory, CategoryStyle> = {
-  holiday: {
-    Icon: Sun,
-    label: 'Holiday',
-    iconClass: 'text-amber-600 dark:text-amber-400',
-    badgeClass: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 ring-1 ring-inset ring-amber-500/30',
-    accentClass: 'before:bg-amber-500',
-  },
-  trophy: {
-    Icon: Trophy,
-    label: 'Trophy',
-    iconClass: 'text-yellow-600 dark:text-yellow-400',
-    badgeClass: 'bg-yellow-500/15 text-yellow-700 dark:text-yellow-300 ring-1 ring-inset ring-yellow-500/30',
-    accentClass: 'before:bg-yellow-500',
-  },
-  pyra: {
-    Icon: Ship,
-    label: 'PYRA',
-    iconClass: 'text-indigo-600 dark:text-indigo-400',
-    badgeClass: 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 ring-1 ring-inset ring-indigo-500/30',
-    accentClass: 'before:bg-indigo-500',
-  },
-  open: {
-    Icon: Sparkles,
-    label: 'Open',
-    iconClass: 'text-fuchsia-600 dark:text-fuchsia-400',
-    badgeClass: 'bg-fuchsia-500/15 text-fuchsia-700 dark:text-fuchsia-300 ring-1 ring-inset ring-fuchsia-500/30',
-    accentClass: 'before:bg-fuchsia-500',
-  },
-  cruiser: {
-    Icon: Anchor,
-    label: 'Cruiser',
-    iconClass: 'text-sky-600 dark:text-sky-400',
-    badgeClass: 'bg-sky-500/15 text-sky-700 dark:text-sky-300 ring-1 ring-inset ring-sky-500/30',
-    accentClass: 'before:bg-sky-500',
-  },
-  dinghy: {
-    Icon: Sailboat,
-    label: 'Dinghy',
-    iconClass: 'text-emerald-600 dark:text-emerald-400',
-    badgeClass: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-500/30',
-    accentClass: 'before:bg-emerald-500',
-  },
-  laser: {
-    Icon: Sailboat,
-    label: 'Laser',
-    iconClass: 'text-teal-600 dark:text-teal-400',
-    badgeClass: 'bg-teal-500/15 text-teal-700 dark:text-teal-300 ring-1 ring-inset ring-teal-500/30',
-    accentClass: 'before:bg-teal-500',
-  },
-  youth: {
-    Icon: GraduationCap,
-    label: 'Youth',
-    iconClass: 'text-rose-600 dark:text-rose-400',
-    badgeClass: 'bg-rose-500/15 text-rose-700 dark:text-rose-300 ring-1 ring-inset ring-rose-500/30',
-    accentClass: 'before:bg-rose-500',
-  },
-  briefing: {
-    Icon: Megaphone,
-    label: 'Briefing',
-    iconClass: 'text-slate-600 dark:text-slate-400',
-    badgeClass: 'bg-slate-500/15 text-slate-700 dark:text-slate-300 ring-1 ring-inset ring-slate-500/30',
-    accentClass: 'before:bg-slate-500',
-  },
-  social: {
-    Icon: Users,
-    label: 'Social',
-    iconClass: 'text-violet-600 dark:text-violet-400',
-    badgeClass: 'bg-violet-500/15 text-violet-700 dark:text-violet-300 ring-1 ring-inset ring-violet-500/30',
-    accentClass: 'before:bg-violet-500',
-  },
+  trophy:   { Icon: Trophy,        label: 'Trophy',   accent: 'var(--accent-gold)',     accentBg: 'var(--accent-gold-bg)' },
+  holiday:  { Icon: Sun,           label: 'Holiday',  accent: 'var(--warn)',            accentBg: 'var(--warn-bg)' },
+  pyra:     { Icon: Ship,          label: 'PYRA',     accent: 'var(--accent-offshore)', accentBg: 'var(--accent-offshore-bg)' },
+  open:     { Icon: Sparkles,      label: 'Open',     accent: 'var(--primary)',         accentBg: 'oklch(from var(--primary) l c h / 0.08)' },
+  cruiser:  { Icon: Anchor,        label: 'Cruiser',  accent: 'var(--accent-offshore)', accentBg: null },
+  dinghy:   { Icon: Sailboat,      label: 'Dinghy',   accent: 'var(--accent-fresh)',    accentBg: null },
+  laser:    { Icon: Sailboat,      label: 'Laser',    accent: 'var(--accent-fresh)',    accentBg: null },
+  youth:    { Icon: GraduationCap, label: 'Youth',    accent: null,                     accentBg: null },
+  briefing: { Icon: Megaphone,     label: 'Briefing', accent: null,                     accentBg: null },
+  social:   { Icon: Users,         label: 'Social',   accent: null,                     accentBg: null },
 };
 
 function parseEventTime(date: Date, timeStr: string): Date {
@@ -176,31 +118,25 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
         <span>{format(selectedDay, 'd MMM')}</span>
       </button>
       {(() => {
-        const cat = getEventCategory(event);
-        const style = CATEGORY_STYLES[cat];
+        const style = CATEGORY_STYLES[getEventCategory(event)];
         const Icon = style.Icon;
         return (
-          <Card className="overflow-hidden">
+          <Card>
             <CardHeader className="pb-3">
-              <div className="flex items-start gap-3">
-                <div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${style.badgeClass}`}>
-                  <Icon className={`h-5 w-5 ${style.iconClass}`} strokeWidth={2} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded ${style.badgeClass}`}>{style.label}</span>
-                    <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">All day</span>
-                  </div>
-                  <CardTitle className="text-base leading-tight mt-1.5">{event.name}</CardTitle>
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
-                    <Clock className="h-3 w-3" />
-                    <span>{format(selectedDay, 'EEEE d MMM')}</span>
-                  </div>
-                  {event.classes && (
-                    <p className="text-xs text-muted-foreground mt-0.5">Classes: {event.classes}</p>
-                  )}
-                </div>
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-wide font-medium" style={{ color: style.accent ?? 'var(--muted-foreground)' }}>
+                <Icon className="h-3.5 w-3.5" strokeWidth={2} />
+                <span>{style.label}</span>
+                <span className="text-muted-foreground/40">·</span>
+                <span className="text-muted-foreground">All day</span>
               </div>
+              <CardTitle className="text-base leading-tight mt-1">{event.name}</CardTitle>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+                <Clock className="h-3 w-3" />
+                <span>{format(selectedDay, 'EEEE d MMM')}</span>
+              </div>
+              {event.classes && (
+                <p className="text-xs text-muted-foreground mt-0.5">Classes: {event.classes}</p>
+              )}
             </CardHeader>
           </Card>
         );
@@ -223,7 +159,7 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
           <Card>
             <CardContent className="pt-4 pb-4">
               <div className="flex items-center gap-3">
-                <Icon className="h-10 w-10 text-primary shrink-0" strokeWidth={1.5} />
+                <Icon className="h-10 w-10 shrink-0" strokeWidth={1.5} style={{ color: getWeatherIconColor(rep.significantWeatherCode) }} />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium leading-tight">Day outlook · {wi.description}</p>
                   <div className="flex gap-3 text-xs text-muted-foreground mt-1 flex-wrap">
@@ -364,31 +300,25 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
         <span>{format(selectedDay, 'd MMM')}</span>
       </button>
       {(() => {
-        const cat = getEventCategory(event);
-        const style = CATEGORY_STYLES[cat];
+        const style = CATEGORY_STYLES[getEventCategory(event)];
         const Icon = style.Icon;
         return (
-          <Card className="overflow-hidden">
+          <Card>
             <CardHeader className="pb-3">
-              <div className="flex items-start gap-3">
-                <div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${style.badgeClass}`}>
-                  <Icon className={`h-5 w-5 ${style.iconClass}`} strokeWidth={2} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded ${style.badgeClass}`}>{style.label}</span>
-                    <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Start {event.time}</span>
-                  </div>
-                  <CardTitle className="text-base leading-tight mt-1.5">{event.name}</CardTitle>
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
-                    <Clock className="h-3 w-3" />
-                    <span>{format(selectedDay, 'EEE d MMM')} · 2hr window</span>
-                  </div>
-                  {event.classes && (
-                    <p className="text-xs text-muted-foreground mt-0.5">Classes: {event.classes}</p>
-                  )}
-                </div>
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-wide font-medium" style={{ color: style.accent ?? 'var(--muted-foreground)' }}>
+                <Icon className="h-3.5 w-3.5" strokeWidth={2} />
+                <span>{style.label}</span>
+                <span className="text-muted-foreground/40">·</span>
+                <span className="text-muted-foreground">Start {event.time}</span>
               </div>
+              <CardTitle className="text-base leading-tight mt-1">{event.name}</CardTitle>
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+                <Clock className="h-3 w-3" />
+                <span>{format(selectedDay, 'EEE d MMM')} · 2hr window</span>
+              </div>
+              {event.classes && (
+                <p className="text-xs text-muted-foreground mt-0.5">Classes: {event.classes}</p>
+              )}
             </CardHeader>
           </Card>
         );
@@ -411,7 +341,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
           <Card>
             <CardContent className="pt-4 pb-4">
               <div className="flex items-center gap-3">
-                <Icon className="h-10 w-10 text-primary shrink-0" strokeWidth={1.5} />
+                <Icon className="h-10 w-10 shrink-0" strokeWidth={1.5} style={{ color: getWeatherIconColor(startForecast.significantWeatherCode) }} />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium leading-tight">At start · {wi.description}</p>
                   <div className="flex gap-3 text-xs text-muted-foreground mt-1">
@@ -451,7 +381,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
                       <p className={`text-xs font-medium leading-tight ${isStart ? 'text-primary' : ''}`}>{label}</p>
                       {isStart && <p className="text-muted-foreground text-xs leading-tight">Start</p>}
                     </div>
-                    <Icon className="h-4 w-4 text-primary" strokeWidth={1.5} />
+                    <Icon className="h-4 w-4" strokeWidth={1.5} style={{ color: getWeatherIconColor(fc.significantWeatherCode) }} />
                     <div className="flex items-center gap-1.5">
                       <span className={`text-sm font-semibold tabular-nums ${beaufortColor(bf.force)}`}>{Math.round(convertWind(fc.windSpeed10m, windUnit))}{unitLabel}</span>
                       <span className={`text-xs font-medium px-1 py-0.5 rounded leading-none ${beaufortBg(bf.force)}`}>F{bf.force}</span>
@@ -652,7 +582,7 @@ const RaceCalendar = forwardRef<RaceCalendarHandle, RaceCalendarProps>(function 
         </CardContent>
       </Card>
 
-      <Card>
+      <Card key={`day-${selectedDay.getTime()}`} className="page-enter">
         <CardHeader className="pb-2">
           <div className="flex items-baseline justify-between gap-2">
             <CardTitle className="text-sm">{format(selectedDay, 'EEEE d MMMM')}</CardTitle>
@@ -669,31 +599,38 @@ const RaceCalendar = forwardRef<RaceCalendarHandle, RaceCalendarProps>(function 
           ) : (
             <div className="divide-y divide-border">
               {events.map((event, i) => {
-                const cat = getEventCategory(event);
-                const style = CATEGORY_STYLES[cat];
+                const style = CATEGORY_STYLES[getEventCategory(event)];
                 const Icon = style.Icon;
+                const featured = !!style.accentBg;
                 return (
                   <button
                     key={i}
                     onClick={() => { haptic('medium'); setSelectedEvent(event); }}
-                    className={`relative w-full text-left pl-4 pr-3 py-3 hover:bg-muted/50 active:bg-muted/70 press-row
-                      before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[3px] before:rounded-r ${style.accentClass}`}
+                    className="relative w-full text-left px-4 py-3 hover:bg-muted/50 active:bg-muted/70 press-row"
+                    style={featured ? { backgroundColor: style.accentBg ?? undefined } : undefined}
                   >
+                    {featured && style.accent && (
+                      <span
+                        className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full"
+                        style={{ backgroundColor: style.accent }}
+                        aria-hidden
+                      />
+                    )}
                     <div className="flex items-center gap-3">
-                      <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${style.badgeClass}`}>
-                        <Icon className={`h-[18px] w-[18px] ${style.iconClass}`} strokeWidth={2} />
-                      </div>
+                      <Icon
+                        className="h-4 w-4 shrink-0"
+                        style={{ color: style.accent ?? 'var(--muted-foreground)' }}
+                        strokeWidth={2}
+                      />
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium leading-tight truncate">{event.name}</p>
-                        <div className="flex items-center gap-2 mt-1 text-[11px] text-muted-foreground">
-                          {event.time ? (
-                            <span className="inline-flex items-center gap-1 tabular-nums font-medium text-foreground/80">
-                              <Clock className="h-3 w-3" />
-                              {event.time}
-                            </span>
-                          ) : (
-                            <span className="font-medium text-foreground/70">All day</span>
-                          )}
+                        <div className="flex items-center gap-2 mt-0.5 text-[11px] text-muted-foreground">
+                          <span
+                            className="uppercase tracking-wide font-medium"
+                            style={style.accent ? { color: style.accent } : undefined}
+                          >
+                            {style.label}
+                          </span>
                           {event.classes && (
                             <>
                               <span className="text-muted-foreground/40">·</span>
@@ -702,6 +639,11 @@ const RaceCalendar = forwardRef<RaceCalendarHandle, RaceCalendarProps>(function 
                           )}
                         </div>
                       </div>
+                      {event.time ? (
+                        <span className="text-xs text-muted-foreground tabular-nums shrink-0">{event.time}</span>
+                      ) : (
+                        <span className="text-[11px] uppercase tracking-wide text-muted-foreground shrink-0">All day</span>
+                      )}
                       <ChevronRight className="h-4 w-4 text-muted-foreground/50 shrink-0" />
                     </div>
                   </button>

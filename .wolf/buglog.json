@@ -1015,15 +1015,15 @@
       "error_message": "Significant refactor of ",
       "file": "src/components/RaceCalendar.tsx",
       "root_cause": "3 lines replaced/restructured",
-      "fix": "Rewrote 7→8 lines (3 removed) | Also: <Card>; <CardTitle className=\"text-base leading-tight\">{ev | Also: <Card>; <CardHeader className=\"pb-2\">",
+      "fix": "Rewrote 7→8 lines (3 removed) | Also: <Card>; <CardTitle className=\"text-base leading-tight\">{ev | Also: <Card>; <CardHeader className=\"pb-2\"> | Also: iconClass: string;; badgeClass: string;",
       "tags": [
         "auto-detected",
         "refactor",
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 3,
-      "last_seen": "2026-05-20T20:27:04.183Z"
+      "occurrences": 4,
+      "last_seen": "2026-05-20T20:31:07.126Z"
     },
     {
       "id": "bug-065",
@@ -1038,8 +1038,120 @@
         "tsx"
       ],
       "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-05-20T20:31:26.395Z"
+    },
+    {
+      "id": "bug-066",
+      "timestamp": "2026-05-20T20:34:45.701Z",
+      "error_message": "Type error",
+      "file": "src/components/RaceCalendar.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
       "occurrences": 1,
-      "last_seen": "2026-05-20T20:27:28.712Z"
+      "last_seen": "2026-05-20T20:34:45.701Z"
+    },
+    {
+      "id": "bug-067",
+      "timestamp": "2026-05-20T20:35:05.029Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/RaceCalendar.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check) | Also: <div className=\"flex items-center gap-2 text-[11px] uppercas; <Icon className=\"h-3.5 w-3.5\" strokeWidth={2} />",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-05-20T20:35:27.948Z"
+    },
+    {
+      "id": "bug-068",
+      "timestamp": "2026-05-20T20:35:58.252Z",
+      "error_message": "Missing guard clause",
+      "file": "src/lib/weatherCodes.ts",
+      "root_cause": "No early return/throw for edge case: code === 0 || code === 1",
+      "fix": "Added guard clause: if (code === 0 || code === 1)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:35:58.252Z"
+    },
+    {
+      "id": "bug-069",
+      "timestamp": "2026-05-20T20:36:17.942Z",
+      "error_message": "Type error",
+      "file": "src/components/ForecastStrip.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:36:17.942Z"
+    },
+    {
+      "id": "bug-070",
+      "timestamp": "2026-05-20T20:36:51.122Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/RaceCalendar.tsx",
+      "root_cause": "Had \"h-10 w-10 text-primary shrink-0\"",
+      "fix": "Changed to \"h-10 w-10 shrink-0\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-05-20T20:37:15.011Z"
+    },
+    {
+      "id": "bug-071",
+      "timestamp": "2026-05-20T20:37:33.131Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/ConditionsHeader.tsx",
+      "root_cause": "Had \"h-12 w-12 text-primary shrink-0\"",
+      "fix": "Changed to \"h-12 w-12 shrink-0\"",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:37:33.131Z"
+    },
+    {
+      "id": "bug-072",
+      "timestamp": "2026-05-20T20:41:55.134Z",
+      "error_message": "CSS fix: animation",
+      "file": "src/index.css",
+      "root_cause": "animation: ios-push-out-back 260ms cubic-bezier(0.32, 0.72, 0, 1) → value-swap 160ms cubic-bezier(0.32, 0.72, 0, 1)",
+      "fix": "Changed animation: ios-push-out-back 260ms cubic-bezier(0.32, 0.72, 0, 1) → value-swap 160ms cubic-bezier(0.32, 0.72, 0, 1)",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "css"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:41:55.134Z"
     }
   ]
 }

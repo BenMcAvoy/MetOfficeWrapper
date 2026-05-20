@@ -289,7 +289,7 @@ export default function App() {
             )}
 
             {activeTab === 'wind' && (
-              <div key={`wind-${selectedDay.getTime()}`} className="space-y-3 animate-in fade-in-50 duration-300">
+              <div key={`wind-${selectedDay.getTime()}`} className="space-y-3 page-enter">
                 <ConditionsHeader forecasts={forecasts} selectedDay={selectedDay} sunInfo={sunInfo} />
                 <WindCard
                   forecasts={dayForecasts}
@@ -302,7 +302,7 @@ export default function App() {
               </div>
             )}
             {activeTab === 'tides' && (
-              <div key={`tides-${selectedDay.getTime()}`} className="animate-in fade-in-50 duration-300">
+              <div key={`tides-${selectedDay.getTime()}`} className="page-enter">
                 {tideData ? (
                   <TideChart tideData={tideData} selectedDay={selectedDay} />
                 ) : (
@@ -314,12 +314,12 @@ export default function App() {
               </div>
             )}
             {activeTab === 'forecast' && (
-              <div className="animate-in fade-in-50 duration-300">
+              <div className="page-enter">
                 <ForecastStrip forecasts={forecasts} chartHistoryForecasts={forecastHistory} liveWindHistory={liveWindHistory} />
               </div>
             )}
             {activeTab === 'events' && (
-              <div className="animate-in fade-in-50 duration-300">
+              <div className="page-enter">
                 <RaceCalendar
                   ref={eventsRef}
                   forecasts={forecasts}
@@ -329,7 +329,9 @@ export default function App() {
               </div>
             )}
             {activeTab === 'settings' && (
-              <SettingsPage onRefresh={loadData} />
+              <div key="settings" className="page-enter">
+                <SettingsPage onRefresh={loadData} />
+              </div>
             )}
           </div>
         )}
@@ -348,7 +350,11 @@ export default function App() {
                   active ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <Icon className="h-[22px] w-[22px] transition-transform" strokeWidth={active ? 2.4 : 1.9} />
+                <Icon
+                  key={`${id}-${active}`}
+                  className={`h-[22px] w-[22px] transition-transform ${active ? 'nav-pop' : ''}`}
+                  strokeWidth={active ? 2.4 : 1.9}
+                />
                 <span className={`text-[10.5px] tracking-tight ${active ? 'font-semibold' : 'font-medium'}`}>{label}</span>
               </button>
             );

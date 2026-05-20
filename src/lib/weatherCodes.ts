@@ -49,6 +49,20 @@ export function getWeatherInfo(code: number): WeatherInfo {
   return WEATHER_CODES[code] ?? FALLBACK;
 }
 
+// Returns a CSS color (a var()) for a weather icon, mapped to themed accents
+// so the forecast strip glance-reads at a distance.
+export function getWeatherIconColor(code: number): string {
+  if (code === 0 || code === 1) return 'var(--accent-gold)';        // clear / sunny
+  if (code === 2 || code === 3) return 'var(--warn)';               // partly cloudy
+  if (code === 5 || code === 6) return 'var(--muted-foreground)';   // mist / fog
+  if (code === 7 || code === 8) return 'var(--muted-foreground)';   // cloudy / overcast
+  if (code >= 9 && code <= 18) return 'var(--primary)';             // rain / sleet
+  if (code >= 19 && code <= 21) return 'var(--destructive)';        // hail
+  if (code >= 22 && code <= 27) return 'var(--accent-offshore)';    // snow
+  if (code >= 28) return 'var(--destructive)';                      // thunder
+  return 'var(--primary)';
+}
+
 export function visibilityLabel(metres: number): string {
   if (metres < 1000) return `Poor (${metres}m)`;
   if (metres < 4000) return `Moderate (${(metres / 1000).toFixed(1)}km)`;

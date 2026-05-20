@@ -368,3 +368,33 @@
 | 21:27 | Edited src/components/RaceCalendar.tsx | expanded (+21 lines) | ~858 |
 | 21:27 | events page: amendments 2026-1/2026-2 applied, names normalized, category icons/badges added | src/lib/calendar.ts, src/components/RaceCalendar.tsx | done | ~7k |
 | 21:27 | Session end: 71 writes across 2 files (calendar.ts, RaceCalendar.tsx) | 5 reads | ~11295 tok |
+| 21:31 | Edited src/components/RaceCalendar.tsx | reduced (-60 lines) | ~296 |
+| 21:31 | Edited src/components/RaceCalendar.tsx | 39→41 lines | ~632 |
+| 21:31 | Edited src/components/RaceCalendar.tsx | reduced (-6 lines) | ~317 |
+| 21:31 | Edited src/components/RaceCalendar.tsx | reduced (-6 lines) | ~324 |
+| 21:32 | Session end: 75 writes across 2 files (calendar.ts, RaceCalendar.tsx) | 6 reads | ~16214 tok |
+| 21:34 | Edited src/index.css | expanded (+6 lines) | ~106 |
+| 21:34 | Edited src/index.css | expanded (+6 lines) | ~114 |
+| 21:34 | Edited src/components/RaceCalendar.tsx | 20→22 lines | ~441 |
+| 21:35 | Edited src/components/RaceCalendar.tsx | added nullish coalescing | ~756 |
+| 21:35 | Edited src/components/RaceCalendar.tsx | added nullish coalescing | ~330 |
+| 21:35 | Edited src/components/RaceCalendar.tsx | added nullish coalescing | ~181 |
+| 21:35 | Edited src/lib/weatherCodes.ts | added 8 condition(s) | ~280 |
+| 21:36 | Edited src/components/ForecastStrip.tsx | inline fix | ~21 |
+| 21:36 | Edited src/components/ForecastStrip.tsx | CSS: color | ~72 |
+| 21:36 | Edited src/components/RaceCalendar.tsx | inline fix | ~21 |
+| 21:36 | Edited src/components/RaceCalendar.tsx | CSS: color | ~84 |
+| 21:37 | Edited src/components/RaceCalendar.tsx | CSS: color | ~86 |
+| 21:37 | Edited src/components/RaceCalendar.tsx | "h-4 w-4 text-primary" → "h-4 w-4" | ~38 |
+| 21:37 | Edited src/components/ConditionsHeader.tsx | inline fix | ~21 |
+| 21:37 | Edited src/components/ConditionsHeader.tsx | "h-12 w-12 text-primary sh" → "h-12 w-12 shrink-0" | ~42 |
+| 21:37 | Session end: 90 writes across 6 files (calendar.ts, RaceCalendar.tsx, index.css, weatherCodes.ts, ForecastStrip.tsx) | 10 reads | ~22570 tok |
+| 21:41 | Edited src/index.css | expanded (+30 lines) | ~313 |
+| 21:42 | Edited src/App.tsx | inline fix | ~3 |
+| 21:42 | Edited src/App.tsx | 3→5 lines | ~55 |
+| 21:42 | Edited src/App.tsx | 1→5 lines | ~66 |
+| 21:42 | Edited src/components/WindCard.tsx | modified disp() | ~222 |
+| 21:42 | Edited src/components/WindCard.tsx | modified disp() | ~113 |
+| 21:43 | Edited src/components/WindCard.tsx | CSS: transition | ~110 |
+| 21:43 | Edited src/components/RaceCalendar.tsx | 4→4 lines | ~78 |
+| 21:43 | Session end: 98 writes across 8 files (calendar.ts, RaceCalendar.tsx, index.css, weatherCodes.ts, ForecastStrip.tsx) | 11 reads | ~28016 tok |

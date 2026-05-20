@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-05-17T07:44:52.450Z",
   "lifetime": {
-    "total_tokens_estimated": 871345,
-    "total_reads": 374,
-    "total_writes": 2013,
+    "total_tokens_estimated": 938145,
+    "total_reads": 401,
+    "total_writes": 2276,
     "total_sessions": 7,
-    "anatomy_hits": 12,
-    "anatomy_misses": 362,
-    "repeated_reads_blocked": 240,
-    "estimated_savings_vs_bare_cli": 1115517
+    "anatomy_hits": 21,
+    "anatomy_misses": 380,
+    "repeated_reads_blocked": 247,
+    "estimated_savings_vs_bare_cli": 1169707
   },
   "sessions": [
     {
@@ -12998,6 +12998,1534 @@
         "writes_count": 71,
         "repeated_reads_blocked": 0,
         "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-05-20-2117",
+      "started": "2026-05-20T20:17:19.847Z",
+      "ended": "2026-05-20T20:32:21.491Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 6912,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/NoR-2026.pdf",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/2026-1.pdf",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/2026-2.pdf",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 3350,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 70,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 146,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 140,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 96,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 5,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 5,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 5,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 12,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 12,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 626,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 194,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 811,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 445,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 452,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 20,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 858,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 296,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 632,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 317,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 324,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 10262,
+        "output_tokens_estimated": 5952,
+        "reads_count": 6,
+        "writes_count": 75,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 2
+      }
+    },
+    {
+      "id": "session-2026-05-20-2117",
+      "started": "2026-05-20T20:17:19.847Z",
+      "ended": "2026-05-20T20:37:56.456Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 8311,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/NoR-2026.pdf",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/2026-1.pdf",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/2026-2.pdf",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 3350,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 2364,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ForecastStrip.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 70,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 146,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 140,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 96,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 5,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 5,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 5,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 12,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 12,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 626,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 194,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 811,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 445,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 452,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 20,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 858,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 296,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 632,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 317,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 324,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 106,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 114,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 756,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 181,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 280,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ForecastStrip.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ForecastStrip.tsx",
+          "tokens_estimated": 72,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 84,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 86,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 38,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 42,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 14025,
+        "output_tokens_estimated": 8545,
+        "reads_count": 10,
+        "writes_count": 90,
+        "repeated_reads_blocked": 3,
+        "anatomy_lookups": 3
+      }
+    },
+    {
+      "id": "session-2026-05-20-2117",
+      "started": "2026-05-20T20:17:19.847Z",
+      "ended": "2026-05-20T20:43:30.336Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 8311,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/NoR-2026.pdf",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/2026-1.pdf",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/2026-2.pdf",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 3350,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 2524,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ForecastStrip.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 4326,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 70,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 146,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 140,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 96,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 5,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 5,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 5,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 12,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 12,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 9,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 13,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 10,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 626,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 194,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 811,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 445,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 452,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 20,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 858,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 296,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 632,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 317,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 324,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 106,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 114,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 756,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 181,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 280,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ForecastStrip.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ForecastStrip.tsx",
+          "tokens_estimated": 72,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 84,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 86,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 38,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 42,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 313,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 55,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 66,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 222,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 113,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 110,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 78,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 18511,
+        "output_tokens_estimated": 9505,
+        "reads_count": 11,
+        "writes_count": 98,
+        "repeated_reads_blocked": 4,
+        "anatomy_lookups": 4
       }
     }
   ],
