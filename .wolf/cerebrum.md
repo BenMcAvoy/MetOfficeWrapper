@@ -12,6 +12,8 @@
 
 <!-- Project-specific conventions discovered during development. -->
 
+[2026-05-20] Trophy race categorization: all trophy events in this club's calendar have the literal word "trophy" in their name. The `getEventCategory` trophy rule should be just `/trophy/i` — do not add `cup|regatta|championship|nationals|teapot|paint` etc; those names belong in other buckets (e.g. cruiser, dinghy default).
+
 ## Do-Not-Repeat
 
 <!-- Mistakes made and corrected. Each entry prevents the same mistake recurring. -->

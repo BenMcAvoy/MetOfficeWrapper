@@ -1200,6 +1200,54 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-20T22:34:52.137Z"
+    },
+    {
+      "id": "bug-076",
+      "timestamp": "2026-05-20T22:39:50.539Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "src/main.tsx",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T22:39:50.539Z"
+    },
+    {
+      "id": "bug-077",
+      "timestamp": "2026-05-20T22:40:01.036Z",
+      "error_message": "Missing error handling in unknown",
+      "file": "src/App.tsx",
+      "root_cause": "Code path had no error handling — exceptions would propagate uncaught",
+      "fix": "Added try/catch block",
+      "tags": [
+        "auto-detected",
+        "error-handling",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T22:40:01.036Z"
+    },
+    {
+      "id": "bug-078",
+      "timestamp": "2026-05-20T22:43:57.638Z",
+      "error_message": "Wrong condition in logic",
+      "file": "src/lib/calendar.ts",
+      "root_cause": "Condition was: if (/trophy|cup|regatta|championship|nationals|round t)",
+      "fix": "Changed to: if (/trophy/i.test(n)",
+      "tags": [
+        "auto-detected",
+        "logic-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-05-20T22:46:44.538Z"
     }
   ]
 }

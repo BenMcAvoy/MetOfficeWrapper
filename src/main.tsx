@@ -32,6 +32,7 @@ function setupPwaUpdates(): void {
   const reloadForUpdate = () => {
     if (hasReloadedForUpdate) return;
     hasReloadedForUpdate = true;
+    try { sessionStorage.setItem('wx-just-updated', '1'); } catch { /* ignore */ }
     window.location.reload();
   };
 

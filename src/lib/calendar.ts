@@ -456,11 +456,11 @@ export function getEventCategory(event: RaceEvent): EventCategory {
   // Fires before pyra so "PYRA — RNLI Pursuit Race" lands here rather than pyra.
   if (/pursuit|sherwood/i.test(n)) return 'pursuit';
   if (/^pyra\b|pyra —/i.test(n)) return 'pyra';
-  if (/trophy|cup|regatta|championship|nationals|round the island|teapot|paint/i.test(n)) return 'trophy';
+  if (/trophy/i.test(n)) return 'trophy';
   if (/\bopen\b/i.test(n) && !lower.includes('open ')) return 'open';
   if (/\bopen$|open \(/i.test(n)) return 'open';
   // Visiting/invitational/multi-day external events held at the club.
-  if (/invitational|itca|poole week|super south|powerboat/i.test(n)) return 'open';
+  if (/invitational|itca|poole week|super south|powerboat|nationals|championships|round the island|poole yacht club regatta/i.test(n)) return 'open';
   // Briefings/boat checks/club-admin notices come before training so
   // "Youth Training & Race Briefing", "Youth Training Boat Check", and
   // "No Club Racing" don't get swallowed by later rules.

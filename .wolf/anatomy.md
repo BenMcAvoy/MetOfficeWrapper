@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-20T22:38:19.540Z
-> Files: 3 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-20T22:46:44.506Z
+> Files: 5 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
@@ -15,6 +15,8 @@
 
 ## src/
 
+- `App.tsx` — useThemeMode (~4892 tok)
+- `main.tsx` — setupPwaUpdates (~954 tok)
 
 ## src/components/
 
@@ -22,4 +24,4 @@
 
 ## src/lib/
 
-- `calendar.ts` — Exports RaceEvent, RACE_CALENDAR (~11437 tok)
+- `calendar.ts` — Exports RaceEvent, RACE_CALENDAR (~11438 tok)

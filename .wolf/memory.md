@@ -419,3 +419,27 @@
 | 23:38 | Edited src/components/RaceCalendar.tsx | CSS: pursuit, special | ~178 |
 | 23:38 | Created _cat_audit.ts | — | ~128 |
 | 23:38 | Session end: 12 writes across 3 files (calendar.ts, RaceCalendar.tsx, _cat_audit.ts) | 2 reads | ~1744 tok |
+
+## Session: 2026-05-20 23:39
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 23:39 | Edited src/main.tsx | added error handling | ~64 |
+| 23:40 | Edited src/App.tsx | added error handling | ~444 |
+| 23:40 | Edited src/App.tsx | CSS: bottom | ~160 |
+| 23:40 | Session end: 3 writes across 2 files (main.tsx, App.tsx) | 2 reads | ~668 tok |
+
+## Session: 2026-05-20 23:42
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 23:43 | Edited src/lib/calendar.ts | added 1 condition(s) | ~101 |
+| 23:43 | Fixed category for International Paint Regatta | src/lib/calendar.ts | cruiser check now precedes trophy; removed `paint` keyword | ~12 |
+| 23:43 | Session end: 1 writes across 1 files (calendar.ts) | 1 reads | ~11538 tok |
+| 23:43 | Edited src/lib/calendar.ts | inline fix | ~12 |
+| 23:44 | Edited src/lib/calendar.ts | 5→2 lines | ~26 |
+| 23:44 | Session end: 3 writes across 1 files (calendar.ts) | 1 reads | ~11576 tok |
+| 23:46 | Edited src/lib/calendar.ts | inline fix | ~36 |
+| 23:46 | Edited src/lib/calendar.ts | inline fix | ~43 |
+| 23:47 | Audited race-category rules | src/lib/calendar.ts | nationals/championships/round-the-island/PYC Regatta now route to `open` | ~10 |
+| 23:47 | Session end: 5 writes across 1 files (calendar.ts) | 1 reads | ~11637 tok |

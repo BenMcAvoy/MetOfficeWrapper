@@ -1,100 +1,51 @@
 {
-  "session_id": "session-2026-05-20-2326",
-  "started": "2026-05-20T22:26:46.940Z",
+  "session_id": "session-2026-05-20-2342",
+  "started": "2026-05-20T22:42:28.392Z",
   "files_read": {
     "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-05-20T22:27:05.725Z"
-    },
-    "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-05-20T22:30:14.566Z"
+      "count": 2,
+      "tokens": 11419,
+      "first_read": "2026-05-20T22:43:00.595Z"
     }
   },
   "files_written": [
     {
       "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 378,
-      "at": "2026-05-20T22:30:52.679Z"
+      "tokens": 101,
+      "at": "2026-05-20T22:43:17.260Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 58,
-      "at": "2026-05-20T22:30:58.463Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 51,
-      "at": "2026-05-20T22:31:04.262Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 91,
-      "at": "2026-05-20T22:31:09.922Z"
+      "tokens": 12,
+      "at": "2026-05-20T22:43:57.632Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 224,
-      "at": "2026-05-20T22:34:01.542Z"
+      "tokens": 26,
+      "at": "2026-05-20T22:44:05.834Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 118,
-      "at": "2026-05-20T22:34:52.130Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/_cat_audit.ts",
-      "action": "create",
-      "tokens": 128,
-      "at": "2026-05-20T22:35:14.936Z"
+      "tokens": 36,
+      "at": "2026-05-20T22:46:21.938Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 268,
-      "at": "2026-05-20T22:37:40.204Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
-      "action": "edit",
-      "tokens": 66,
-      "at": "2026-05-20T22:37:50.766Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 56,
-      "at": "2026-05-20T22:37:56.563Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 178,
-      "at": "2026-05-20T22:38:04.839Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/_cat_audit.ts",
-      "action": "create",
-      "tokens": 128,
-      "at": "2026-05-20T22:38:19.546Z"
+      "tokens": 43,
+      "at": "2026-05-20T22:46:44.530Z"
     }
   ],
   "edit_counts": {
-    "src/lib/calendar.ts": 6,
-    "src/components/RaceCalendar.tsx": 4,
-    "_cat_audit.ts": 2
+    "src/lib/calendar.ts": 5
   },
-  "anatomy_hits": 0,
-  "anatomy_misses": 2,
-  "repeated_reads_warned": 0,
+  "anatomy_hits": 1,
+  "anatomy_misses": 0,
+  "repeated_reads_warned": 1,
   "cerebrum_warnings": 0,
-  "stop_count": 4
+  "stop_count": 3
 }

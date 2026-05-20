@@ -118,8 +118,45 @@ export default function App() {
   const [loadState, setLoadState] = useState<LoadState>('idle');
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>('wind');
-  const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
+  const [activeTab, setActiveTab] = useState<Tab>(() => {
+    try {
+      const saved = sessionStorage.getItem('wx-active-tab');
+      if (saved === 'wind' || saved === 'tides' || saved === 'forecast' || saved === 'events' || saved === 'settings') return saved;
+    } catch { /* ignore */ }
+    return 'wind';
+  });
+  const [selectedDay, setSelectedDay] = useState<Date>(() => {
+    try {
+      const saved = sessionStorage.getItem('wx-selected-day');
+      if (saved) {
+        const d = startOfDay(new Date(Number(saved)));
+        // Only restore if it's still in the available 7-day window.
+        const todayMs = startOfDay(new Date()).getTime();
+        const diffDays = Math.round((d.getTime() - todayMs) / 86_400_000);
+        if (diffDays >= 0 && diffDays < 7) return d;
+      }
+    } catch { /* ignore */ }
+    return startOfDay(new Date());
+  });
+  const [showUpdatedToast, setShowUpdatedToast] = useState(false);
+
+  useEffect(() => {
+    try { sessionStorage.setItem('wx-active-tab', activeTab); } catch { /* ignore */ }
+  }, [activeTab]);
+  useEffect(() => {
+    try { sessionStorage.setItem('wx-selected-day', String(selectedDay.getTime())); } catch { /* ignore */ }
+  }, [selectedDay]);
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('wx-just-updated') === '1') {
+        sessionStorage.removeItem('wx-just-updated');
+        setShowUpdatedToast(true);
+        const t = window.setTimeout(() => setShowUpdatedToast(false), 3500);
+        return () => window.clearTimeout(t);
+      }
+    } catch { /* ignore */ }
+  }, []);
   const eventsRef = useRef<RaceCalendarHandle>(null);
   const nowMs = useNow(15_000);
 
@@ -336,6 +373,17 @@ export default function App() {
           </div>
         )}
       </main>
+
+      {showUpdatedToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed left-1/2 -translate-x-1/2 z-30 px-3.5 py-2 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg backdrop-blur"
+          style={{ bottom: 'calc(5.5rem + env(safe-area-inset-bottom))' }}
+        >
+          Updated to latest version
+        </div>
+      )}
 
       <nav className="fixed bottom-0 inset-x-0 z-20 bg-background/95 backdrop-blur-lg border-t" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="max-w-2xl mx-auto flex px-2 pt-1.5 pb-1">
