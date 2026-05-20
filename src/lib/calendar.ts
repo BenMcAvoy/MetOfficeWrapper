@@ -433,13 +433,16 @@ export function getEventsForDay(date: Date): RaceEvent[] {
 
 export type EventCategory =
   | 'holiday'
+  | 'special'
   | 'trophy'
+  | 'pursuit'
   | 'pyra'
   | 'open'
   | 'cruiser'
   | 'dinghy'
   | 'laser'
   | 'youth'
+  | 'training'
   | 'briefing'
   | 'social';
 
@@ -447,14 +450,27 @@ export function getEventCategory(event: RaceEvent): EventCategory {
   const n = event.name;
   const lower = n.toLowerCase();
   if (/bank holiday|christmas eve|easter sunday|easter monday|good friday/i.test(n) && !event.time) return 'holiday';
+  // Named one-off / themed club races that don't fit a series or trophy bucket.
+  if (/helm race/i.test(n)) return 'special';
+  // Pursuit races are a distinct format from trophy races — keep separate.
+  // Fires before pyra so "PYRA — RNLI Pursuit Race" lands here rather than pyra.
+  if (/pursuit|sherwood/i.test(n)) return 'pursuit';
   if (/^pyra\b|pyra —/i.test(n)) return 'pyra';
-  if (/trophy|cup|regatta|championship|pursuit race|nationals|round the island|sherwood|teapot|paint/i.test(n)) return 'trophy';
+  if (/trophy|cup|regatta|championship|nationals|round the island|teapot|paint/i.test(n)) return 'trophy';
   if (/\bopen\b/i.test(n) && !lower.includes('open ')) return 'open';
   if (/\bopen$|open \(/i.test(n)) return 'open';
+  // Visiting/invitational/multi-day external events held at the club.
+  if (/invitational|itca|poole week|super south|powerboat/i.test(n)) return 'open';
+  // Briefings/boat checks/club-admin notices come before training so
+  // "Youth Training & Race Briefing", "Youth Training Boat Check", and
+  // "No Club Racing" don't get swallowed by later rules.
+  if (/briefing|prize giving|dinner|disco|boat check|return|depart|no club racing/i.test(n)) return 'briefing';
+  // Training is scoped narrowly to in-club adult/youth training sessions —
+  // not external "training weekends" (those are caught by the open rule above).
+  if (/big shots|youth training/i.test(n)) return 'training';
   if (/laser|frostbite/i.test(n)) return 'laser';
   if (/cruiser/i.test(n)) return 'cruiser';
-  if (/youth|big shots|parent & child|mirror/i.test(n)) return 'youth';
-  if (/briefing|prize giving|dinner|disco|boat check|return|depart/i.test(n)) return 'briefing';
+  if (/youth|parent & child|mirror/i.test(n)) return 'youth';
   if (/sociable|friendly|social/i.test(n)) return 'social';
   if (/dinghy|r19|ywdb|gp14/i.test(n)) return 'dinghy';
   return 'dinghy';
@@ -465,15 +481,18 @@ export function getEventCategory(event: RaceEvent): EventCategory {
 // caller sort).
 const CATEGORY_RANK: Record<EventCategory, number> = {
   holiday: 0,
-  trophy: 1,
-  pyra: 2,
-  open: 3,
-  cruiser: 4,
-  dinghy: 5,
-  laser: 6,
-  youth: 7,
-  briefing: 8,
-  social: 9,
+  special: 1,
+  trophy: 2,
+  pursuit: 3,
+  pyra: 4,
+  open: 5,
+  cruiser: 6,
+  dinghy: 7,
+  laser: 8,
+  youth: 9,
+  training: 10,
+  briefing: 11,
+  social: 12,
 };
 
 export function sortEventsByCategory(events: RaceEvent[]): RaceEvent[] {

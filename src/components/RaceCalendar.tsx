@@ -7,7 +7,7 @@ import { msToKnots, convertWind, windUnitLabel, beaufortScale, beaufortColor, be
 import { useSettings } from '@/lib/settings';
 import { getWeatherInfo, getWeatherIconColor } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves, Trophy, Sailboat, Anchor, Sparkles, GraduationCap, Megaphone, Users, Sun, Ship } from 'lucide-react';
+import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves, Trophy, Sailboat, Anchor, Sparkles, GraduationCap, Megaphone, Users, Sun, Ship, Target, Crosshair, Star } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { format, addMinutes, startOfDay, endOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
 import { TideChartInner } from '@/components/charts';
@@ -36,6 +36,8 @@ interface CategoryStyle {
 
 const CATEGORY_STYLES: Record<EventCategory, CategoryStyle> = {
   trophy:   { Icon: Trophy,        label: 'Trophy',   accent: 'var(--accent-gold)',     accentBg: 'var(--accent-gold-bg)' },
+  pursuit:  { Icon: Crosshair,     label: 'Pursuit',  accent: 'var(--accent-gold)',     accentBg: 'var(--accent-gold-bg)' },
+  special:  { Icon: Star,          label: 'Special',  accent: 'var(--accent-gold)',     accentBg: 'var(--accent-gold-bg)' },
   holiday:  { Icon: Sun,           label: 'Holiday',  accent: 'var(--warn)',            accentBg: 'var(--warn-bg)' },
   pyra:     { Icon: Ship,          label: 'PYRA',     accent: 'var(--accent-offshore)', accentBg: 'var(--accent-offshore-bg)' },
   open:     { Icon: Sparkles,      label: 'Open',     accent: 'var(--primary)',         accentBg: 'oklch(from var(--primary) l c h / 0.08)' },
@@ -43,6 +45,7 @@ const CATEGORY_STYLES: Record<EventCategory, CategoryStyle> = {
   dinghy:   { Icon: Sailboat,      label: 'Dinghy',   accent: 'var(--accent-fresh)',    accentBg: null },
   laser:    { Icon: Sailboat,      label: 'Laser',    accent: 'var(--accent-fresh)',    accentBg: null },
   youth:    { Icon: GraduationCap, label: 'Youth',    accent: null,                     accentBg: null },
+  training: { Icon: Target,        label: 'Training', accent: null,                     accentBg: null },
   briefing: { Icon: Megaphone,     label: 'Briefing', accent: null,                     accentBg: null },
   social:   { Icon: Users,         label: 'Social',   accent: null,                     accentBg: null },
 };

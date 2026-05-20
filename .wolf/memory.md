@@ -398,3 +398,24 @@
 | 21:43 | Edited src/components/WindCard.tsx | CSS: transition | ~110 |
 | 21:43 | Edited src/components/RaceCalendar.tsx | 4→4 lines | ~78 |
 | 21:43 | Session end: 98 writes across 8 files (calendar.ts, RaceCalendar.tsx, index.css, weatherCodes.ts, ForecastStrip.tsx) | 11 reads | ~28016 tok |
+
+## Session: 2026-05-20 23:26
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 23:30 | Edited src/lib/calendar.ts | added 1 condition(s) | ~378 |
+| 23:30 | Edited src/lib/calendar.ts | 12→13 lines | ~58 |
+| 23:31 | Edited src/components/RaceCalendar.tsx | inline fix | ~51 |
+| 23:31 | Edited src/components/RaceCalendar.tsx | CSS: training | ~91 |
+| 23:31 | Session end: 4 writes across 2 files (calendar.ts, RaceCalendar.tsx) | 2 reads | ~578 tok |
+| 23:32 | Session end: 4 writes across 2 files (calendar.ts, RaceCalendar.tsx) | 2 reads | ~578 tok |
+| 23:34 | Edited src/lib/calendar.ts | added 1 condition(s) | ~224 |
+| 23:34 | Edited src/lib/calendar.ts | 5→5 lines | ~118 |
+| 23:35 | Created _cat_audit.ts | — | ~128 |
+| 23:35 | Session end: 7 writes across 3 files (calendar.ts, RaceCalendar.tsx, _cat_audit.ts) | 2 reads | ~1048 tok |
+| 23:37 | Edited src/lib/calendar.ts | added 2 condition(s) | ~268 |
+| 23:37 | Edited src/lib/calendar.ts | 13→15 lines | ~66 |
+| 23:37 | Edited src/components/RaceCalendar.tsx | inline fix | ~56 |
+| 23:38 | Edited src/components/RaceCalendar.tsx | CSS: pursuit, special | ~178 |
+| 23:38 | Created _cat_audit.ts | — | ~128 |
+| 23:38 | Session end: 12 writes across 3 files (calendar.ts, RaceCalendar.tsx, _cat_audit.ts) | 2 reads | ~1744 tok |

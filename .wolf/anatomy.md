@@ -1,10 +1,11 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-20T20:43:10.663Z
-> Files: 13 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-20T22:38:19.540Z
+> Files: 3 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
+- `_cat_audit.ts` — Declares seen (~128 tok)
 
 ## api/
 
@@ -14,22 +15,11 @@
 
 ## src/
 
-- `App.tsx` — useThemeMode (~4359 tok)
-- `index.css` — Styles: 27 rules, 131 vars (~2810 tok)
-- `main.tsx` — setupPwaUpdates (~930 tok)
 
 ## src/components/
 
-- `charts.tsx` — COLORS (~4550 tok)
-- `ConditionsHeader.tsx` — formatHM (~904 tok)
-- `ForecastStrip.tsx` — ForecastStrip (~1848 tok)
-- `RaceCalendar.tsx` — CATEGORY_STYLES (~8344 tok)
-- `SettingsPage.tsx` — THEMES (~3223 tok)
-- `WindCard.tsx` — WindCard (~3454 tok)
+- `RaceCalendar.tsx` — CATEGORY_STYLES (~8453 tok)
 
 ## src/lib/
 
-- `calendar.ts` — Exports RaceEvent, RACE_CALENDAR (~11151 tok)
-- `haptics.ts` — Lightweight haptic feedback. Uses the Vibration API where available (~212 tok)
-- `useSwipe.ts` — Distance in px the finger must travel horizontally to count. Default 60. (~634 tok)
-- `weatherCodes.ts` — Exports WeatherInfo, getWeatherInfo, getWeatherIconColor, visibilityLabel (~1242 tok)
+- `calendar.ts` — Exports RaceEvent, RACE_CALENDAR (~11437 tok)
