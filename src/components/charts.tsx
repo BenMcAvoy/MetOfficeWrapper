@@ -13,33 +13,9 @@ import {
 import type { SeriesPoint, WindChartRow } from '@/lib/windChartData';
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine, ReferenceArea
+  ResponsiveContainer, ReferenceLine
 } from 'recharts';
 import { format, subHours, startOfHour } from 'date-fns';
-
-export interface ChartEvent {
-  start: number;
-  timeLabel: string;
-  name: string;
-}
-
-interface InternalWindow { start: number; end: number; }
-
-const EVENT_PRE_MS = 30 * 60 * 1000;
-const EVENT_POST_MS = 150 * 60 * 1000;
-
-function buildMergedWindows(events: ChartEvent[]): InternalWindow[] {
-  const raw = events
-    .map(e => ({ start: e.start - EVENT_PRE_MS, end: e.start + EVENT_POST_MS }))
-    .sort((a, b) => a.start - b.start);
-  const merged: InternalWindow[] = [];
-  for (const w of raw) {
-    const last = merged[merged.length - 1];
-    if (last && w.start <= last.end) last.end = Math.max(last.end, w.end);
-    else merged.push({ ...w });
-  }
-  return merged;
-}
 
 interface WindChartProps {
   forecasts: HourlyForecast[];
@@ -47,7 +23,6 @@ interface WindChartProps {
   startRefLine?: number;
   liveHistory?: LiveWindHistoryPoint[];
   includePastHours?: number;
-  events?: ChartEvent[];
 }
 
 const COLORS = {
@@ -61,7 +36,6 @@ type LegendEntry = {
   label: string;
   color: string;
   dashed: boolean;
-  kind?: 'line' | 'band';
 };
 
 function WindLegend({ entries }: { entries: LegendEntry[] }) {
@@ -70,29 +44,15 @@ function WindLegend({ entries }: { entries: LegendEntry[] }) {
       {entries.map(e => (
         <div key={e.label} className="flex items-center gap-1.5">
           <svg width="26" height="10" aria-hidden>
-            {e.kind === 'band' ? (
-              <rect
-                x="0"
-                y="0"
-                width="26"
-                height="10"
-                fill={e.color}
-                fillOpacity={0.18}
-                stroke={e.color}
-                strokeOpacity={0.5}
-                strokeDasharray="3 3"
-              />
-            ) : (
-              <line
-                x1="0"
-                x2="26"
-                y1="5"
-                y2="5"
-                stroke={e.color}
-                strokeWidth={2}
-                strokeDasharray={e.dashed ? FORECAST_DASH : undefined}
-              />
-            )}
+            <line
+              x1="0"
+              x2="26"
+              y1="5"
+              y2="5"
+              stroke={e.color}
+              strokeWidth={2}
+              strokeDasharray={e.dashed ? FORECAST_DASH : undefined}
+            />
           </svg>
           <span>{e.label}</span>
         </div>
@@ -179,10 +139,7 @@ export function WindChart({
   startRefLine,
   liveHistory = [],
   includePastHours = 0,
-  events = [],
 }: WindChartProps) {
-  const eventWindows = buildMergedWindows(events);
-  const sortedEvents = [...events].sort((a, b) => a.start - b.start);
   const [activeRow, setActiveRow] = useState<WindChartRow | null>(null);
   const now = Date.now();
   const nowHour = startOfHour(new Date(now)).getTime();
@@ -298,40 +255,6 @@ export function WindChart({
             content={() => null}
             cursor={{ stroke: 'var(--muted-foreground)', strokeOpacity: 0.5, strokeWidth: 1 }}
           />
-          {eventWindows.map((w, i) => {
-            const x1 = Math.max(w.start, xMin);
-            const x2 = Math.min(w.end, xMax);
-            if (x2 <= x1) return null;
-            return (
-              <ReferenceArea
-                key={`evt-${i}`}
-                x1={x1}
-                x2={x2}
-                fill="var(--primary)"
-                fillOpacity={0.08}
-                stroke="var(--primary)"
-                strokeOpacity={0.25}
-                strokeDasharray="3 3"
-                ifOverflow="hidden"
-              />
-            );
-          })}
-          {sortedEvents.map((e, i) => {
-            if (e.start < xMin || e.start > xMax) return null;
-            const yOffset = (i % 2) * 11;
-            return (
-              <ReferenceLine
-                key={`mk-${i}`}
-                x={e.start}
-                stroke="var(--primary)"
-                strokeOpacity={0.35}
-                strokeWidth={1}
-                strokeDasharray="2 3"
-                label={{ value: e.timeLabel, fill: 'var(--primary)', fillOpacity: 0.7, fontSize: 9, position: 'insideTop', dy: yOffset }}
-                ifOverflow="hidden"
-              />
-            );
-          })}
           {startRefLine && (
             <ReferenceLine
               x={startRefLine}
@@ -413,12 +336,9 @@ interface TideChartInnerProps {
   startRefLine?: number;
   nowRefLine?: number;
   height?: number;
-  events?: ChartEvent[];
 }
 
-export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalHours = 3, startRefLine, nowRefLine, height = 176, events = [] }: TideChartInnerProps) {
-  const eventWindows = buildMergedWindows(events);
-  const sortedEvents = [...events].sort((a, b) => a.start - b.start);
+export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalHours = 3, startRefLine, nowRefLine, height = 176 }: TideChartInnerProps) {
   const data = tideData.heights
     .filter(h => h.time >= windowStart && h.time <= windowEnd)
     .map(h => ({ t: h.time.getTime(), height: Math.round(h.height * 100) / 100 }));
@@ -449,47 +369,6 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
           <XAxis dataKey="t" type="number" scale="time" domain={['dataMin', 'dataMax']} ticks={ticks} tickFormatter={t => format(new Date(t), 'HH:mm')} tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }} />
           <YAxis tick={<YAxisTick unit="m" />} width={40} domain={['auto', 'auto']} />
           <Tooltip {...tooltipStyle} labelFormatter={t => format(new Date(t), 'HH:mm')} formatter={v => [`${Number(v).toFixed(2)}m`, 'Height']} />
-          {(() => {
-            const xMin = data[0]?.t ?? windowStart.getTime();
-            const xMax = data[data.length - 1]?.t ?? windowEnd.getTime();
-            return (
-              <>
-                {eventWindows.map((w, i) => {
-                  const x1 = Math.max(w.start, xMin);
-                  const x2 = Math.min(w.end, xMax);
-                  if (x2 <= x1) return null;
-                  return (
-                    <ReferenceArea
-                      key={`evt-${i}`}
-                      x1={x1}
-                      x2={x2}
-                      fill="var(--primary)"
-                      fillOpacity={0.08}
-                      stroke="var(--primary)"
-                      strokeOpacity={0.25}
-                      strokeDasharray="3 3"
-                      ifOverflow="hidden"
-                    />
-                  );
-                })}
-                {sortedEvents.map((e, i) => {
-                  if (e.start < xMin || e.start > xMax) return null;
-                  const yOffset = (i % 2) * 12;
-                  return (
-                    <ReferenceLine
-                      key={`mk-${i}`}
-                      x={e.start}
-                      stroke="var(--primary)"
-                      strokeOpacity={0.55}
-                      strokeWidth={1}
-                      label={{ value: e.timeLabel, fill: 'var(--primary)', fontSize: 10, position: 'insideTop', dy: yOffset }}
-                      ifOverflow="hidden"
-                    />
-                  );
-                })}
-              </>
-            );
-          })()}
           {nowRefLine !== undefined && (
             <ReferenceLine y={nowRefLine} stroke="var(--primary)" strokeDasharray="4 4" label={(props: { viewBox?: { x?: number; y?: number } }) => (
               <text x={props.viewBox?.x} y={(props.viewBox?.y ?? 0) - 4} style={{ fill: 'var(--primary)' }} fontSize={10} textAnchor="middle">Now</text>

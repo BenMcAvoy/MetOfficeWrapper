@@ -1,5 +1,4 @@
 import type { HourlyForecast, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
-import type { ChartEvent } from '@/components/charts';
 import { msToKnots, convertWind, windUnitLabel, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { useSettings } from '@/lib/settings';
 import { useNow } from '@/lib/useNow';
@@ -15,12 +14,11 @@ interface WindCardProps {
   selectedDay: Date;
   liveWind: LiveWind | null;
   liveWindHistory: LiveWindHistoryPoint[];
-  events?: ChartEvent[];
 }
 
 
 
-export default function WindCard({ forecasts, chartForecasts, chartHistoryForecasts, selectedDay, liveWind, liveWindHistory, events = [] }: WindCardProps) {
+export default function WindCard({ forecasts, chartForecasts, chartHistoryForecasts, selectedDay, liveWind, liveWindHistory }: WindCardProps) {
   const nowMs = useNow(1000);
   const { windUnit } = useSettings();
   const unitLabel = windUnitLabel(windUnit);
@@ -184,7 +182,6 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
         historyForecasts={isToday ? chartHistoryForecasts : []}
         liveWindHistory={isToday ? liveWindHistory : []}
         includePastHours={isToday ? 3 : 0}
-        events={events}
       />
 
       {/* Hourly breakdown table */}

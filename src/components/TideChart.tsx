@@ -1,5 +1,4 @@
 import type { TideData } from '@/lib/api';
-import type { ChartEvent } from '@/components/charts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Waves, Anchor } from 'lucide-react';
@@ -9,7 +8,6 @@ import { isAfter, isBefore, addHours, startOfDay, endOfDay, isSameDay, format } 
 interface TideChartProps {
   tideData: TideData;
   selectedDay: Date;
-  events?: ChartEvent[];
 }
 
 function TideExtremeRow({ time, height, type }: { time: Date; height: number; type: 'High' | 'Low' }) {
@@ -94,7 +92,7 @@ function getTidalCharacter(extremes: import('@/lib/api').TideExtreme[], forDay: 
   return { label, range, className };
 }
 
-export default function TideChart({ tideData, selectedDay, events = [] }: TideChartProps) {
+export default function TideChart({ tideData, selectedDay }: TideChartProps) {
   const now = new Date();
   const isToday = isSameDay(selectedDay, now);
 
@@ -173,7 +171,6 @@ export default function TideChart({ tideData, selectedDay, events = [] }: TideCh
             windowEnd={chartEnd}
             nowRefLine={currentHeight ?? undefined}
             height={224}
-            events={events}
           />
         </CardContent>
       </Card>
