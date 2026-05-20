@@ -736,6 +736,38 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-20T19:47:31.073Z"
+    },
+    {
+      "id": "bug-047",
+      "timestamp": "2026-05-20T19:49:22.210Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/main.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:49:22.210Z"
+    },
+    {
+      "id": "bug-048",
+      "timestamp": "2026-05-20T19:52:13.218Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/main.tsx",
+      "root_cause": "3 lines replaced/restructured",
+      "fix": "Rewrote 11→29 lines (3 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:52:13.218Z"
     }
   ]
 }

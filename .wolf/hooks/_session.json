@@ -86,14 +86,27 @@
       "action": "edit",
       "tokens": 0,
       "at": "2026-05-20T19:47:41.526Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/main.tsx",
+      "action": "edit",
+      "tokens": 559,
+      "at": "2026-05-20T19:49:22.208Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/main.tsx",
+      "action": "edit",
+      "tokens": 269,
+      "at": "2026-05-20T19:52:13.215Z"
     }
   ],
   "edit_counts": {
-    "src/components/charts.tsx": 13
+    "src/components/charts.tsx": 13,
+    "src/main.tsx": 2
   },
   "anatomy_hits": 1,
   "anatomy_misses": 0,
   "repeated_reads_warned": 6,
   "cerebrum_warnings": 0,
-  "stop_count": 7
+  "stop_count": 10
 }

@@ -27,6 +27,7 @@ function setupPwaUpdates(): void {
   window.__wxPwaUpdateSetup = true;
 
   let hasReloadedForUpdate = false;
+  let initialControllerSeen = false;
 
   const reloadForUpdate = () => {
     if (hasReloadedForUpdate) return;
@@ -34,22 +35,31 @@ function setupPwaUpdates(): void {
     window.location.reload();
   };
 
-  const updateSW = registerSW({
+  // controllerchange fires once when the very first SW takes control of an
+  // uncontrolled page (initial install). We only want to reload when a NEW
+  // SW replaces an existing controller.
+  initialControllerSeen = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!initialControllerSeen) {
+      initialControllerSeen = true;
+      return;
+    }
+    reloadForUpdate();
+  });
+
+  registerSW({
     immediate: true,
-    onNeedRefresh() {
-      void updateSW(true);
-    },
     onRegisteredSW(_swUrl: string, registration: ServiceWorkerRegistration | undefined) {
       if (!registration) return;
 
-      const applyIfWaiting = () => {
-        if (registration.waiting) void updateSW(true);
+      const activateIfWaiting = () => {
+        registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
       };
 
       const checkForUpdate = async () => {
         try {
           await registration.update();
-          applyIfWaiting();
+          activateIfWaiting();
         } catch {
           // network or sw fetch failure — try again on next event
         }
@@ -61,6 +71,9 @@ function setupPwaUpdates(): void {
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') void checkForUpdate();
       });
+      // iOS standalone PWAs frequently restore from bfcache on resume —
+      // visibilitychange/focus may not fire, but pageshow always does.
+      window.addEventListener('pageshow', () => void checkForUpdate());
 
       // Periodic poll while the tab is visible, so a long-running session
       // still picks up new deploys without needing focus events to fire.
@@ -71,12 +84,12 @@ function setupPwaUpdates(): void {
       registration.addEventListener('updatefound', () => {
         const installing = registration.installing;
         if (!installing) return;
-        installing.addEventListener('statechange', applyIfWaiting);
+        installing.addEventListener('statechange', () => {
+          if (installing.state === 'installed') activateIfWaiting();
+        });
       });
     },
   });
-
-  navigator.serviceWorker.addEventListener('controllerchange', reloadForUpdate);
 }
 
 setupPwaUpdates();
