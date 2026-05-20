@@ -1,284 +1,468 @@
 {
-  "session_id": "session-2026-05-20-2057",
-  "started": "2026-05-20T19:57:29.569Z",
+  "session_id": "session-2026-05-20-2117",
+  "started": "2026-05-20T20:17:19.847Z",
   "files_read": {
-    "C:/Users/Ben/metofficewrapper/src/App.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-05-20T19:57:47.249Z"
-    },
-    "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-05-20T20:01:00.319Z"
-    },
-    "C:/Users/Ben/AppData/Local/Temp/claude/C--Users-Ben-metofficewrapper/2ad80183-6148-4cf6-8547-789d365197ed/tasks/bw6io8rm8.output": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-05-20T20:01:14.552Z"
-    },
-    "C:/Users/Ben/metofficewrapper/src/lib/useNow.ts": {
-      "count": 1,
-      "tokens": 0,
-      "first_read": "2026-05-20T20:02:04.567Z"
-    },
     "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx": {
-      "count": 3,
-      "tokens": 0,
-      "first_read": "2026-05-20T20:06:43.922Z"
+      "count": 1,
+      "tokens": 6912,
+      "first_read": "2026-05-20T20:18:45.340Z"
     },
-    "C:/Users/Ben/metofficewrapper/src/index.css": {
+    "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts": {
       "count": 1,
       "tokens": 0,
-      "first_read": "2026-05-20T20:06:44.085Z"
+      "first_read": "2026-05-20T20:18:52.243Z"
     },
-    "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx": {
+    "C:/Users/Ben/metofficewrapper/NoR-2026.pdf": {
       "count": 1,
       "tokens": 0,
-      "first_read": "2026-05-20T20:07:11.766Z"
+      "first_read": "2026-05-20T20:18:57.422Z"
     },
-    "C:/Users/Ben/metofficewrapper/src/components/SettingsPage.tsx": {
+    "C:/Users/Ben/metofficewrapper/2026-1.pdf": {
       "count": 1,
       "tokens": 0,
-      "first_read": "2026-05-20T20:07:12.324Z"
+      "first_read": "2026-05-20T20:19:05.684Z"
+    },
+    "C:/Users/Ben/metofficewrapper/2026-2.pdf": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-20T20:19:09.895Z"
     }
   },
   "files_written": [
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 70,
+      "at": "2026-05-20T20:20:10.224Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 146,
+      "at": "2026-05-20T20:20:19.390Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 140,
+      "at": "2026-05-20T20:20:27.941Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 41,
+      "at": "2026-05-20T20:20:33.181Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
       "tokens": 96,
-      "at": "2026-05-20T20:01:55.246Z"
+      "at": "2026-05-20T20:20:43.075Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 30,
-      "at": "2026-05-20T20:02:08.649Z"
+      "tokens": 10,
+      "at": "2026-05-20T20:21:07.463Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 119,
-      "at": "2026-05-20T20:02:14.911Z"
+      "tokens": 11,
+      "at": "2026-05-20T20:21:12.891Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 25,
-      "at": "2026-05-20T20:02:20.172Z"
+      "tokens": 10,
+      "at": "2026-05-20T20:21:16.979Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 75,
-      "at": "2026-05-20T20:02:26.137Z"
+      "tokens": 10,
+      "at": "2026-05-20T20:21:21.260Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 101,
-      "at": "2026-05-20T20:02:36.315Z"
+      "tokens": 8,
+      "at": "2026-05-20T20:21:26.643Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 320,
-      "at": "2026-05-20T20:02:46.942Z"
+      "tokens": 5,
+      "at": "2026-05-20T20:21:31.371Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/lib/haptics.ts",
-      "action": "create",
-      "tokens": 213,
-      "at": "2026-05-20T20:07:47.733Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 23,
-      "at": "2026-05-20T20:07:51.886Z"
+      "tokens": 9,
+      "at": "2026-05-20T20:21:36.106Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 39,
-      "at": "2026-05-20T20:07:53.970Z"
+      "tokens": 7,
+      "at": "2026-05-20T20:21:41.014Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 61,
-      "at": "2026-05-20T20:07:56.192Z"
+      "tokens": 7,
+      "at": "2026-05-20T20:21:45.712Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
       "action": "edit",
-      "tokens": 37,
-      "at": "2026-05-20T20:08:02.216Z"
+      "tokens": 6,
+      "at": "2026-05-20T20:21:50.452Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 5,
+      "at": "2026-05-20T20:21:54.834Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 9,
+      "at": "2026-05-20T20:21:58.834Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:22:03.038Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 9,
+      "at": "2026-05-20T20:22:08.014Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 9,
+      "at": "2026-05-20T20:22:12.435Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:22:16.695Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:22:21.665Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:22:25.792Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:22:30.158Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:22:34.751Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:22:39.307Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:22:43.799Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:22:47.750Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 9,
+      "at": "2026-05-20T20:22:52.056Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:22:56.729Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:23:01.902Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:23:05.972Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:23:10.570Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:23:15.097Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:23:19.596Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:23:24.356Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:23:28.562Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:23:33.667Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 5,
+      "at": "2026-05-20T20:23:38.023Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 6,
+      "at": "2026-05-20T20:23:47.493Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 6,
+      "at": "2026-05-20T20:23:51.702Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 6,
+      "at": "2026-05-20T20:23:55.636Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 9,
+      "at": "2026-05-20T20:24:02.113Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:24:10.440Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 10,
+      "at": "2026-05-20T20:24:15.182Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:24:20.068Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 12,
+      "at": "2026-05-20T20:24:25.419Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 13,
+      "at": "2026-05-20T20:24:30.173Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 13,
+      "at": "2026-05-20T20:24:35.455Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 13,
+      "at": "2026-05-20T20:24:40.720Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 10,
+      "at": "2026-05-20T20:24:45.914Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:24:51.135Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 6,
+      "at": "2026-05-20T20:24:55.665Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 12,
+      "at": "2026-05-20T20:25:00.393Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 8,
+      "at": "2026-05-20T20:25:05.014Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 10,
+      "at": "2026-05-20T20:25:10.327Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:25:15.579Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 6,
+      "at": "2026-05-20T20:25:19.922Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 3,
+      "at": "2026-05-20T20:25:24.406Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 6,
+      "at": "2026-05-20T20:25:28.517Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 7,
+      "at": "2026-05-20T20:25:33.313Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 9,
+      "at": "2026-05-20T20:25:38.261Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 13,
+      "at": "2026-05-20T20:25:48.945Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 10,
+      "at": "2026-05-20T20:25:53.764Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "action": "edit",
+      "tokens": 626,
+      "at": "2026-05-20T20:26:12.398Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
       "action": "edit",
-      "tokens": 43,
-      "at": "2026-05-20T20:08:04.768Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/SettingsPage.tsx",
-      "action": "edit",
-      "tokens": 37,
-      "at": "2026-05-20T20:08:07.035Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/SettingsPage.tsx",
-      "action": "edit",
-      "tokens": 32,
-      "at": "2026-05-20T20:08:08.440Z"
+      "tokens": 194,
+      "at": "2026-05-20T20:26:22.688Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
       "action": "edit",
-      "tokens": 75,
-      "at": "2026-05-20T20:08:13.922Z"
+      "tokens": 811,
+      "at": "2026-05-20T20:26:40.692Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
       "action": "edit",
-      "tokens": 31,
-      "at": "2026-05-20T20:08:15.586Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/index.css",
-      "action": "edit",
-      "tokens": 244,
-      "at": "2026-05-20T20:08:27.754Z"
+      "tokens": 445,
+      "at": "2026-05-20T20:26:52.998Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
       "action": "edit",
-      "tokens": 136,
-      "at": "2026-05-20T20:08:38.964Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/lib/useSwipe.ts",
-      "action": "create",
-      "tokens": 634,
-      "at": "2026-05-20T20:08:56.416Z"
+      "tokens": 452,
+      "at": "2026-05-20T20:27:04.179Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
       "action": "edit",
-      "tokens": 32,
-      "at": "2026-05-20T20:09:01.216Z"
+      "tokens": 20,
+      "at": "2026-05-20T20:27:09.191Z"
     },
     {
       "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
       "action": "edit",
-      "tokens": 132,
-      "at": "2026-05-20T20:09:05.114Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 111,
-      "at": "2026-05-20T20:09:11.180Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
-      "action": "edit",
-      "tokens": 35,
-      "at": "2026-05-20T20:09:19.459Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
-      "action": "edit",
-      "tokens": 202,
-      "at": "2026-05-20T20:09:24.358Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
-      "action": "edit",
-      "tokens": 40,
-      "at": "2026-05-20T20:09:29.509Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 72,
-      "at": "2026-05-20T20:09:38.858Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 131,
-      "at": "2026-05-20T20:09:42.978Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 236,
-      "at": "2026-05-20T20:09:50.914Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 261,
-      "at": "2026-05-20T20:10:06.585Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
-      "action": "edit",
-      "tokens": 268,
-      "at": "2026-05-20T20:10:13.237Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
-      "action": "edit",
-      "tokens": 188,
-      "at": "2026-05-20T20:10:27.172Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
-      "action": "edit",
-      "tokens": 71,
-      "at": "2026-05-20T20:10:33.172Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/lib/haptics.ts",
-      "action": "edit",
-      "tokens": 51,
-      "at": "2026-05-20T20:10:47.789Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
-      "action": "edit",
-      "tokens": 23,
-      "at": "2026-05-20T20:13:47.342Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
-      "action": "edit",
-      "tokens": 61,
-      "at": "2026-05-20T20:13:52.343Z"
-    },
-    {
-      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
-      "action": "edit",
-      "tokens": 35,
-      "at": "2026-05-20T20:13:54.229Z"
+      "tokens": 858,
+      "at": "2026-05-20T20:27:28.706Z"
     }
   ],
   "edit_counts": {
-    "src/App.tsx": 17,
-    "src/components/WindCard.tsx": 2,
-    "src/lib/haptics.ts": 2,
-    "src/components/RaceCalendar.tsx": 12,
-    "src/components/SettingsPage.tsx": 2,
-    "src/index.css": 1,
-    "src/lib/useSwipe.ts": 1
+    "src/lib/calendar.ts": 65,
+    "src/components/RaceCalendar.tsx": 6
   },
-  "anatomy_hits": 0,
-  "anatomy_misses": 8,
-  "repeated_reads_warned": 2,
+  "anatomy_hits": 1,
+  "anatomy_misses": 4,
+  "repeated_reads_warned": 0,
   "cerebrum_warnings": 0,
-  "stop_count": 3
+  "stop_count": 1
 }

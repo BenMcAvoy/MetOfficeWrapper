@@ -290,3 +290,81 @@
 | 21:13 | Edited src/App.tsx | modified if() | ~61 |
 | 21:13 | Edited src/App.tsx | inline fix | ~35 |
 | 21:14 | Session end: 37 writes across 7 files (App.tsx, WindCard.tsx, haptics.ts, RaceCalendar.tsx, SettingsPage.tsx) | 8 reads | ~4320 tok |
+
+## Session: 2026-05-20 21:17
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 21:20 | Edited src/lib/calendar.ts | 5→3 lines | ~70 |
+| 21:20 | Edited src/lib/calendar.ts | 4→6 lines | ~146 |
+| 21:20 | Edited src/lib/calendar.ts | 4→5 lines | ~140 |
+| 21:20 | Edited src/lib/calendar.ts | 2→2 lines | ~41 |
+| 21:20 | Edited src/lib/calendar.ts | 9→5 lines | ~96 |
+| 21:21 | Edited src/lib/calendar.ts | "New Years Day (BANK HOLID" → "New Year\" | ~10 |
+| 21:21 | Edited src/lib/calendar.ts | "Cruisers New Year Day Pur" → "Cruiser New Year\" | ~11 |
+| 21:21 | Edited src/lib/calendar.ts | "Dinghy Russell Cup Pursui" → "Dinghy Russell Cup Pursui" | ~10 |
+| 21:21 | Edited src/lib/calendar.ts | "Prize Giving Poole YC 13:" → "Prize Giving (Poole YC, 1" | ~10 |
+| 21:21 | Edited src/lib/calendar.ts | "GOOD FRIDAY BANK HOLIDAY" → "Good Friday (Bank Holiday" | ~8 |
+| 21:21 | Edited src/lib/calendar.ts | "EASTER SUNDAY" → "Easter Sunday" | ~5 |
+| 21:21 | Edited src/lib/calendar.ts | "EASTER MONDAY BANK HOLIDA" → "Easter Monday (Bank Holid" | ~9 |
+| 21:21 | Edited src/lib/calendar.ts | "EARLY MAY BANK HOLIDAY" → "Early May Bank Holiday" | ~7 |
+| 21:21 | Edited src/lib/calendar.ts | "LATE MAY BANK HOLIDAY" → "Late May Bank Holiday" | ~7 |
+| 21:21 | Edited src/lib/calendar.ts | "AUGUST BANK HOLIDAY" → "August Bank Holiday" | ~6 |
+| 21:21 | Edited src/lib/calendar.ts | "CHRISTMAS EVE" → "Christmas Eve" | ~5 |
+| 21:21 | Edited src/lib/calendar.ts | "CHRISTMAS DAY (BANK HOLID" → "Christmas Day (Bank Holid" | ~9 |
+| 21:22 | Edited src/lib/calendar.ts | "BOXING DAY (BANK HOLIDAY)" → "Boxing Day (Bank Holiday)" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - ALDERNEY R" → "PYRA — Poole to Alderney " | ~9 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - ALDERNEY - POOLE R" → "PYRA — Alderney to Poole " | ~9 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - COWES RACE" → "PYRA — Poole to Cowes Rac" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - LYMINGTON" → "PYRA — Poole to Lymington" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -LYMINGTON - POOLE" → "PYRA — Lymington to Poole" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - CHERBOURG" → "PYRA — Poole to Cherbourg" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -CHERBOURG - POOLE" → "PYRA — Cherbourg to Poole" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -POOLE - HAMBLE" → "PYRA — Poole to Hamble" | ~7 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -HAMBLE - POOLE" → "PYRA — Hamble to Poole" | ~7 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -POOLE - ALDERNEY" → "PYRA — Poole to Alderney" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - ALDERNEY - GUERNSE" → "PYRA — Alderney to Guerns" | ~9 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - 2 HANDED RACE" → "PYRA — Two Handed Race" | ~7 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - RNLI PURSUIT RACE" → "PYRA — RNLI Pursuit Race" | ~8 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - POOLE - ST VAAST" → "PYRA — Poole to St Vaast" | ~8 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - ST VAAST - POOLE" → "PYRA — St Vaast to Poole" | ~8 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - POOLE - COWES" → "PYRA — Poole to Cowes" | ~7 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - COWES - POOLE" → "PYRA — Cowes to Poole" | ~7 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - POOLE - WEYMOUTH" → "PYRA — Poole to Weymouth" | ~8 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - WEYMOUTH - POOLE" → "PYRA — Weymouth to Poole" | ~8 |
+| 21:23 | Edited src/lib/calendar.ts | "STUDLAND TROPHY RACE" → "Studland Trophy Race" | ~7 |
+| 21:23 | Edited src/lib/calendar.ts | "LAKESHORE CUP" → "Lakeshore Cup" | ~5 |
+| 21:23 | Edited src/lib/calendar.ts | "WAREHAM TROPHY RACE" → "Wareham Trophy Race" | ~6 |
+| 21:23 | Edited src/lib/calendar.ts | "SWANAGE TROPHY RACE" → "Swanage Trophy Race" | ~6 |
+| 21:23 | Edited src/lib/calendar.ts | "GRIFFIN TROPHY RACE" → "Griffin Trophy Race" | ~6 |
+| 21:24 | Edited src/lib/calendar.ts | "BOURNEMOUTH PIER TROPHY R" → "Bournemouth Pier Trophy R" | ~9 |
+| 21:24 | Edited src/lib/calendar.ts | "BOUY TROPHY RACE" → "Bar Buoy Trophy Race" | ~7 |
+| 21:24 | Edited src/lib/calendar.ts | "ROUND HARBOUR ISLANDS TRO" → "Round Harbour Islands Tro" | ~10 |
+| 21:24 | Edited src/lib/calendar.ts | "POOLE YACHT CLUB REGATTA" → "Poole Yacht Club Regatta" | ~8 |
+| 21:24 | Edited src/lib/calendar.ts | "POOLE YACHT CLUB REGATTA " → "Poole Yacht Club Regatta " | ~12 |
+| 21:24 | Edited src/lib/calendar.ts | "SHERWOOD CUP (Dinghy Purs" → "Sherwood Cup (Dinghy Purs" | ~13 |
+| 21:24 | Edited src/lib/calendar.ts | "SHERWOOD CUP (Dinghy Purs" → "Sherwood Cup (Dinghy Purs" | ~13 |
+| 21:24 | Edited src/lib/calendar.ts | "SHERWOOD CUP (Dinghy Purs" → "Sherwood Cup (Dinghy Purs" | ~13 |
+| 21:24 | Edited src/lib/calendar.ts | "COMMODORES CHARITY PURSUI" → "Commodore\" | ~10 |
+| 21:24 | Edited src/lib/calendar.ts | "R19 TEAPOT TROPHY RACE" → "R19 Teapot Trophy Race" | ~7 |
+| 21:24 | Edited src/lib/calendar.ts | "R19 CHAMPIONSHIPS" → "R19 Championships" | ~6 |
+| 21:25 | Edited src/lib/calendar.ts | "INTERNATIONAL PAINT REGAT" → "International Paint Regat" | ~12 |
+| 21:25 | Edited src/lib/calendar.ts | "OSPREY & CONTENDER OPEN" → "Osprey & Contender Open" | ~8 |
+| 21:25 | Edited src/lib/calendar.ts | "YW DAYBOAT NATIONALS & GP" → "YW Dayboat Nationals & GP" | ~10 |
+| 21:25 | Edited src/lib/calendar.ts | "YW DAYBOAT NATIONALS" → "YW Dayboat Nationals" | ~7 |
+| 21:25 | Edited src/lib/calendar.ts | "HOBIE 16 NATIONALS" → "Hobie 16 Nationals" | ~6 |
+| 21:25 | Edited src/lib/calendar.ts | "OK OPEN" → "OK Open" | ~3 |
+| 21:25 | Edited src/lib/calendar.ts | "TOPPER SUPER SOUTH" → "Topper Super South" | ~6 |
+| 21:25 | Edited src/lib/calendar.ts | "IOCA UK CHAMPIONSHIPS" → "IOCA UK Championships" | ~7 |
+| 21:25 | Edited src/lib/calendar.ts | "ZENITH, ZEN & ZEN2 NATION" → "Zenith, Zen & Zen2 Nation" | ~9 |
+| 21:25 | Edited src/lib/calendar.ts | "ITCA (topper) INVITATIONA" → "ITCA Topper Invitational " | ~13 |
+| 21:25 | Edited src/lib/calendar.ts | "ISC - ROUND THE ISLAND RA" → "ISC — Round the Island Ra" | ~10 |
+| 21:26 | Edited src/lib/calendar.ts | added 15 condition(s) | ~626 |
+| 21:26 | Edited src/components/RaceCalendar.tsx | added 1 import(s) | ~194 |
+| 21:26 | Edited src/components/RaceCalendar.tsx | modified parseEventTime() | ~811 |
+| 21:26 | Edited src/components/RaceCalendar.tsx | expanded (+18 lines) | ~445 |
+| 21:27 | Edited src/components/RaceCalendar.tsx | expanded (+18 lines) | ~452 |
+| 21:27 | Edited src/components/RaceCalendar.tsx | inline fix | ~20 |
+| 21:27 | Edited src/components/RaceCalendar.tsx | expanded (+21 lines) | ~858 |
+| 21:27 | events page: amendments 2026-1/2026-2 applied, names normalized, category icons/badges added | src/lib/calendar.ts, src/components/RaceCalendar.tsx | done | ~7k |
+| 21:27 | Session end: 71 writes across 2 files (calendar.ts, RaceCalendar.tsx) | 5 reads | ~11295 tok |

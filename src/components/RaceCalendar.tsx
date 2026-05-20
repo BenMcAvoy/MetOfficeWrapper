@@ -1,13 +1,14 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useSwipe } from '@/lib/useSwipe';
 import type { HourlyForecast, TideData, LiveWindHistoryPoint } from '@/lib/api';
-import type { RaceEvent } from '@/lib/calendar';
-import { RACE_CALENDAR, getEventsForDay } from '@/lib/calendar';
+import type { RaceEvent, EventCategory } from '@/lib/calendar';
+import { RACE_CALENDAR, getEventsForDay, getEventCategory, sortEventsByCategory } from '@/lib/calendar';
 import { msToKnots, convertWind, windUnitLabel, beaufortScale, beaufortColor, beaufortBg } from '@/lib/units';
 import { useSettings } from '@/lib/settings';
 import { getWeatherInfo } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves } from 'lucide-react';
+import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves, Trophy, Sailboat, Anchor, Sparkles, GraduationCap, Megaphone, Users, Sun, Ship } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { format, addMinutes, startOfDay, endOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
 import { TideChartInner } from '@/components/charts';
 import WindChartCard from '@/components/WindChartCard';
@@ -22,6 +23,87 @@ interface RaceCalendarProps {
 export interface RaceCalendarHandle {
   popToRoot: () => void;
 }
+
+interface CategoryStyle {
+  Icon: LucideIcon;
+  label: string;
+  iconClass: string;
+  badgeClass: string;
+  accentClass: string;
+}
+
+const CATEGORY_STYLES: Record<EventCategory, CategoryStyle> = {
+  holiday: {
+    Icon: Sun,
+    label: 'Holiday',
+    iconClass: 'text-amber-600 dark:text-amber-400',
+    badgeClass: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 ring-1 ring-inset ring-amber-500/30',
+    accentClass: 'before:bg-amber-500',
+  },
+  trophy: {
+    Icon: Trophy,
+    label: 'Trophy',
+    iconClass: 'text-yellow-600 dark:text-yellow-400',
+    badgeClass: 'bg-yellow-500/15 text-yellow-700 dark:text-yellow-300 ring-1 ring-inset ring-yellow-500/30',
+    accentClass: 'before:bg-yellow-500',
+  },
+  pyra: {
+    Icon: Ship,
+    label: 'PYRA',
+    iconClass: 'text-indigo-600 dark:text-indigo-400',
+    badgeClass: 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 ring-1 ring-inset ring-indigo-500/30',
+    accentClass: 'before:bg-indigo-500',
+  },
+  open: {
+    Icon: Sparkles,
+    label: 'Open',
+    iconClass: 'text-fuchsia-600 dark:text-fuchsia-400',
+    badgeClass: 'bg-fuchsia-500/15 text-fuchsia-700 dark:text-fuchsia-300 ring-1 ring-inset ring-fuchsia-500/30',
+    accentClass: 'before:bg-fuchsia-500',
+  },
+  cruiser: {
+    Icon: Anchor,
+    label: 'Cruiser',
+    iconClass: 'text-sky-600 dark:text-sky-400',
+    badgeClass: 'bg-sky-500/15 text-sky-700 dark:text-sky-300 ring-1 ring-inset ring-sky-500/30',
+    accentClass: 'before:bg-sky-500',
+  },
+  dinghy: {
+    Icon: Sailboat,
+    label: 'Dinghy',
+    iconClass: 'text-emerald-600 dark:text-emerald-400',
+    badgeClass: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-500/30',
+    accentClass: 'before:bg-emerald-500',
+  },
+  laser: {
+    Icon: Sailboat,
+    label: 'Laser',
+    iconClass: 'text-teal-600 dark:text-teal-400',
+    badgeClass: 'bg-teal-500/15 text-teal-700 dark:text-teal-300 ring-1 ring-inset ring-teal-500/30',
+    accentClass: 'before:bg-teal-500',
+  },
+  youth: {
+    Icon: GraduationCap,
+    label: 'Youth',
+    iconClass: 'text-rose-600 dark:text-rose-400',
+    badgeClass: 'bg-rose-500/15 text-rose-700 dark:text-rose-300 ring-1 ring-inset ring-rose-500/30',
+    accentClass: 'before:bg-rose-500',
+  },
+  briefing: {
+    Icon: Megaphone,
+    label: 'Briefing',
+    iconClass: 'text-slate-600 dark:text-slate-400',
+    badgeClass: 'bg-slate-500/15 text-slate-700 dark:text-slate-300 ring-1 ring-inset ring-slate-500/30',
+    accentClass: 'before:bg-slate-500',
+  },
+  social: {
+    Icon: Users,
+    label: 'Social',
+    iconClass: 'text-violet-600 dark:text-violet-400',
+    badgeClass: 'bg-violet-500/15 text-violet-700 dark:text-violet-300 ring-1 ring-inset ring-violet-500/30',
+    accentClass: 'before:bg-violet-500',
+  },
+};
 
 function parseEventTime(date: Date, timeStr: string): Date {
   const [h, m] = timeStr.split(':').map(Number);
@@ -93,18 +175,36 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
         <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
         <span>{format(selectedDay, 'd MMM')}</span>
       </button>
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base leading-tight">{event.name}</CardTitle>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
-            <Clock className="h-3 w-3" />
-            <span>{format(selectedDay, 'EEEE d MMM')} · All day</span>
-          </div>
-          {event.classes && (
-            <span className="text-xs text-muted-foreground">Classes: {event.classes}</span>
-          )}
-        </CardHeader>
-      </Card>
+      {(() => {
+        const cat = getEventCategory(event);
+        const style = CATEGORY_STYLES[cat];
+        const Icon = style.Icon;
+        return (
+          <Card className="overflow-hidden">
+            <CardHeader className="pb-3">
+              <div className="flex items-start gap-3">
+                <div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${style.badgeClass}`}>
+                  <Icon className={`h-5 w-5 ${style.iconClass}`} strokeWidth={2} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className={`text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded ${style.badgeClass}`}>{style.label}</span>
+                    <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">All day</span>
+                  </div>
+                  <CardTitle className="text-base leading-tight mt-1.5">{event.name}</CardTitle>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+                    <Clock className="h-3 w-3" />
+                    <span>{format(selectedDay, 'EEEE d MMM')}</span>
+                  </div>
+                  {event.classes && (
+                    <p className="text-xs text-muted-foreground mt-0.5">Classes: {event.classes}</p>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+        );
+      })()}
 
       {!hasForecastData && (
         <Card>
@@ -263,18 +363,36 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
         <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
         <span>{format(selectedDay, 'd MMM')}</span>
       </button>
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base leading-tight">{event.name}</CardTitle>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
-            <Clock className="h-3 w-3" />
-            <span>{format(selectedDay, 'EEE d MMM')} · Start {event.time} · 2hr window</span>
-          </div>
-          {event.classes && (
-            <span className="text-xs text-muted-foreground">Classes: {event.classes}</span>
-          )}
-        </CardHeader>
-      </Card>
+      {(() => {
+        const cat = getEventCategory(event);
+        const style = CATEGORY_STYLES[cat];
+        const Icon = style.Icon;
+        return (
+          <Card className="overflow-hidden">
+            <CardHeader className="pb-3">
+              <div className="flex items-start gap-3">
+                <div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${style.badgeClass}`}>
+                  <Icon className={`h-5 w-5 ${style.iconClass}`} strokeWidth={2} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className={`text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded ${style.badgeClass}`}>{style.label}</span>
+                    <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Start {event.time}</span>
+                  </div>
+                  <CardTitle className="text-base leading-tight mt-1.5">{event.name}</CardTitle>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-1">
+                    <Clock className="h-3 w-3" />
+                    <span>{format(selectedDay, 'EEE d MMM')} · 2hr window</span>
+                  </div>
+                  {event.classes && (
+                    <p className="text-xs text-muted-foreground mt-0.5">Classes: {event.classes}</p>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+        );
+      })()}
 
       {!hasForecastData && (
         <Card>
@@ -480,7 +598,7 @@ const RaceCalendar = forwardRef<RaceCalendarHandle, RaceCalendarProps>(function 
     },
   }), [selectedEvent]);
 
-  const events = getEventsForDay(selectedDay);
+  const events = sortEventsByCategory(getEventsForDay(selectedDay));
 
   if (selectedEvent) {
     return (
@@ -536,38 +654,59 @@ const RaceCalendar = forwardRef<RaceCalendarHandle, RaceCalendarProps>(function 
 
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">{format(selectedDay, 'EEEE d MMMM')}</CardTitle>
+          <div className="flex items-baseline justify-between gap-2">
+            <CardTitle className="text-sm">{format(selectedDay, 'EEEE d MMMM')}</CardTitle>
+            {events.length > 0 && (
+              <span className="text-[11px] font-medium text-muted-foreground tabular-nums">
+                {events.length} event{events.length === 1 ? '' : 's'}
+              </span>
+            )}
+          </div>
         </CardHeader>
         <CardContent className="p-0 pb-1">
           {!events.length ? (
             <p className="text-center text-muted-foreground text-sm py-6 px-4">No events scheduled.</p>
           ) : (
             <div className="divide-y divide-border">
-              {events.map((event, i) => (
-                <button
-                  key={i}
-                  onClick={() => { haptic('medium'); setSelectedEvent(event); }}
-                  className="w-full text-left px-4 py-3 hover:bg-muted/50 active:bg-muted/70 press-row"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium leading-tight">{event.name}</p>
-                      {event.classes && (
-                        <p className="text-xs text-muted-foreground mt-0.5">Classes: {event.classes}</p>
-                      )}
-                    </div>
-                    {event.time ? (
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums shrink-0">
-                        <Clock className="h-3 w-3" />
-                        <span>{event.time}</span>
+              {events.map((event, i) => {
+                const cat = getEventCategory(event);
+                const style = CATEGORY_STYLES[cat];
+                const Icon = style.Icon;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => { haptic('medium'); setSelectedEvent(event); }}
+                    className={`relative w-full text-left pl-4 pr-3 py-3 hover:bg-muted/50 active:bg-muted/70 press-row
+                      before:absolute before:left-0 before:top-2 before:bottom-2 before:w-[3px] before:rounded-r ${style.accentClass}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${style.badgeClass}`}>
+                        <Icon className={`h-[18px] w-[18px] ${style.iconClass}`} strokeWidth={2} />
                       </div>
-                    ) : (
-                      <span className="text-xs text-muted-foreground shrink-0">All day</span>
-                    )}
-                    <ChevronRight className="h-4 w-4 text-muted-foreground/50 shrink-0" />
-                  </div>
-                </button>
-              ))}
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium leading-tight truncate">{event.name}</p>
+                        <div className="flex items-center gap-2 mt-1 text-[11px] text-muted-foreground">
+                          {event.time ? (
+                            <span className="inline-flex items-center gap-1 tabular-nums font-medium text-foreground/80">
+                              <Clock className="h-3 w-3" />
+                              {event.time}
+                            </span>
+                          ) : (
+                            <span className="font-medium text-foreground/70">All day</span>
+                          )}
+                          {event.classes && (
+                            <>
+                              <span className="text-muted-foreground/40">·</span>
+                              <span className="truncate">{event.classes}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground/50 shrink-0" />
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           )}
         </CardContent>
