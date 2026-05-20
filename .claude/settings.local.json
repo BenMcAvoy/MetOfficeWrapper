@@ -31,7 +31,8 @@
       "Bash(curl -s -A \"Mozilla/5.0\" -L -b \"wind_speed_unit=knots\" \"https://weather.metoffice.gov.uk/forecast/gcn86rd2z\" -o mo_kn.html)",
       "Bash(curl -s -A \"Mozilla/5.0\" -L -b \"wind_units=kn\" \"https://weather.metoffice.gov.uk/forecast/gcn86rd2z\" -o mo_kn2.html)",
       "Bash(git checkout *)",
-      "Bash(rm src/components/EventsStrip.tsx)"
+      "Bash(rm src/components/EventsStrip.tsx)",
+      "Bash(bun add *)"
     ]
   }
 }

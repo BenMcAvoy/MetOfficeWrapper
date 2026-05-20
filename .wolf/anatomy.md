@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-19T16:34:42.202Z
-> Files: 6 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-20T19:25:45.417Z
+> Files: 1 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
@@ -14,15 +14,10 @@
 
 ## src/
 
-- `App.tsx` — useThemeMode (~4136 tok)
+- `App.tsx` — useThemeMode (~4115 tok)
 
 ## src/components/
 
-- `charts.tsx` — EVENT_PRE_MS (~5126 tok)
-- `EventsStrip.tsx` — dateKey (~2005 tok)
-- `TideChart.tsx` — TideExtremeRow (~2161 tok)
-- `WindCard.tsx` — WindCard (~3364 tok)
-- `WindChartCard.tsx` — WindChartCard (~355 tok)
 
 ## src/lib/
 

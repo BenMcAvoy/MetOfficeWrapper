@@ -18,6 +18,7 @@ import {
   Wind, CalendarDays, Anchor, Settings as SettingsIcon,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay } from 'date-fns';
+import { Analytics } from '@vercel/analytics/react';
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
 type Tab = 'wind' | 'tides' | 'forecast' | 'events' | 'settings';
@@ -215,6 +216,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <Analytics />
       <header className="sticky top-0 z-10 bg-background/75 backdrop-blur-xl border-b border-border/60" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="max-w-2xl mx-auto px-4 pt-3 pb-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0">
