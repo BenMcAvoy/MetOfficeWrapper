@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { useNow } from '@/lib/useNow';
+import { haptic } from '@/lib/haptics';
 import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { fetchMetOfficeHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
@@ -43,14 +45,17 @@ function DateSelector({ selected, onChange, availableDays }: {
   availableDays: Date[];
 }) {
   return (
-    <div className="flex gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollbar touch-pan-x -mx-4 px-4">
+    <div
+      className="flex gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollbar touch-pan-x -mx-4 px-4"
+      style={{ maskImage: 'linear-gradient(to right, black calc(100% - 32px), transparent)', WebkitMaskImage: 'linear-gradient(to right, black calc(100% - 32px), transparent)' }}
+    >
       {availableDays.map((day, i) => {
         const active = isSameDay(day, selected);
         const label = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : format(day, 'EEE d');
         return (
           <button
             key={i}
-            onClick={() => onChange(day)}
+            onClick={() => { haptic('light'); onChange(day); }}
             aria-pressed={active}
             className={`flex-shrink-0 min-h-10 px-4 rounded-full text-sm font-medium transition-colors active:scale-[0.97] ${
               active
@@ -72,6 +77,16 @@ const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
   { id: 'forecast', label: '7-Day',    Icon: CalendarDays },
   { id: 'events',   label: 'Events',   Icon: Anchor },
 ];
+
+function formatRelativeTime(date: Date, nowMs: number): string {
+  const seconds = Math.max(0, Math.round((nowMs - date.getTime()) / 1000));
+  if (seconds < 10) return 'just now';
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.round(minutes / 60);
+  return `${hours}h ago`;
+}
 
 function LoadingSkeleton() {
   return (
@@ -106,8 +121,10 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('wind');
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
   const eventsRef = useRef<RaceCalendarHandle>(null);
+  const nowMs = useNow(15_000);
 
   const onNavTap = useCallback((id: Tab) => {
+    haptic('light');
     if (id === activeTab && id === 'events') {
       eventsRef.current?.popToRoot();
       return;
@@ -231,16 +248,16 @@ export default function App() {
               <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground/70" />
             ) : lastUpdated && (
               <span className="text-muted-foreground/60 text-[11px] tabular-nums" title={`Updated ${format(lastUpdated, 'HH:mm:ss')}`}>
-                {format(lastUpdated, 'HH:mm')}
+                {formatRelativeTime(lastUpdated, nowMs)}
               </span>
             )}
             <button
-              onClick={() => setActiveTab(t => t === 'settings' ? 'wind' : 'settings')}
+              onClick={() => { haptic('light'); setActiveTab(t => t === 'settings' ? 'wind' : 'settings'); }}
               aria-label="Settings"
               aria-pressed={activeTab === 'settings'}
-              className={`p-1.5 -mr-1.5 rounded-lg transition-colors active:scale-95 ${
+              className={`p-2 -mr-2 rounded-full transition-colors active:opacity-60 ${
                 activeTab === 'settings'
-                  ? 'text-primary bg-primary/10'
+                  ? 'text-primary'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -327,14 +344,12 @@ export default function App() {
                 key={id}
                 onClick={() => onNavTap(id)}
                 aria-current={active ? 'page' : undefined}
-                className={`flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-all active:scale-95 ${
-                  active
-                    ? 'text-primary bg-primary/10'
-                    : 'text-muted-foreground hover:text-foreground'
+                className={`flex-1 flex flex-col items-center gap-1 py-1.5 rounded-xl transition-colors active:opacity-60 ${
+                  active ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.5 : 1.75} />
-                <span className={`text-[11px] tracking-wide ${active ? 'font-semibold' : 'font-normal'}`}>{label}</span>
+                <Icon className="h-[22px] w-[22px] transition-transform" strokeWidth={active ? 2.4 : 1.9} />
+                <span className={`text-[10.5px] tracking-tight ${active ? 'font-semibold' : 'font-medium'}`}>{label}</span>
               </button>
             );
           })}

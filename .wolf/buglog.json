@@ -784,6 +784,182 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-20T19:55:04.921Z"
+    },
+    {
+      "id": "bug-050",
+      "timestamp": "2026-05-20T20:01:55.251Z",
+      "error_message": "Type error",
+      "file": "src/App.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:01:55.251Z"
+    },
+    {
+      "id": "bug-051",
+      "timestamp": "2026-05-20T20:02:14.918Z",
+      "error_message": "Missing guard clause",
+      "file": "src/App.tsx",
+      "root_cause": "No early return/throw for edge case: seconds < 10",
+      "fix": "Added guard clause: if (seconds < 10)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:02:14.918Z"
+    },
+    {
+      "id": "bug-052",
+      "timestamp": "2026-05-20T20:02:26.141Z",
+      "error_message": "CSS fix: HH",
+      "file": "src/App.tsx",
+      "root_cause": "HH: mm') → mm:ss')",
+      "fix": "Changed HH: mm') → mm:ss')",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:02:26.141Z"
+    },
+    {
+      "id": "bug-053",
+      "timestamp": "2026-05-20T20:08:02.223Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/App.tsx",
+      "root_cause": "Had 'settings'",
+      "fix": "Changed to 'light'",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:08:02.224Z"
+    },
+    {
+      "id": "bug-054",
+      "timestamp": "2026-05-20T20:08:13.926Z",
+      "error_message": "CSS fix: hover",
+      "file": "src/components/RaceCalendar.tsx",
+      "root_cause": "hover: bg-muted/50 transition-colors\" → bg-muted/50 active:bg-muted/70 transition-colors\"",
+      "fix": "Changed hover: bg-muted/50 transition-colors\" → bg-muted/50 active:bg-muted/70 transition-colors\"",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-05-20T20:09:50.922Z"
+    },
+    {
+      "id": "bug-055",
+      "timestamp": "2026-05-20T20:08:38.970Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/RaceCalendar.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 15→17 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:08:38.970Z"
+    },
+    {
+      "id": "bug-056",
+      "timestamp": "2026-05-20T20:09:11.185Z",
+      "error_message": "Type error",
+      "file": "src/components/RaceCalendar.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:09:11.185Z"
+    },
+    {
+      "id": "bug-057",
+      "timestamp": "2026-05-20T20:09:24.361Z",
+      "error_message": "Missing guard clause",
+      "file": "src/App.tsx",
+      "root_cause": "No early return/throw for edge case: id === activeTab && id === 'events'",
+      "fix": "Added guard clause: if (id === activeTab && id === 'events')",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:09:24.361Z"
+    },
+    {
+      "id": "bug-058",
+      "timestamp": "2026-05-20T20:10:27.175Z",
+      "error_message": "CSS fix: active",
+      "file": "src/App.tsx",
+      "root_cause": "active: scale-95 ${ → opacity-60 ${",
+      "fix": "Changed active: scale-95 ${ → opacity-60 ${",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-05-20T20:10:33.177Z"
+    },
+    {
+      "id": "bug-059",
+      "timestamp": "2026-05-20T20:10:47.796Z",
+      "error_message": "Wrong condition in logic",
+      "file": "src/lib/haptics.ts",
+      "root_cause": "Condition was: if (!v)",
+      "fix": "Changed to: if (!nav.vibrate)",
+      "tags": [
+        "auto-detected",
+        "logic-fix",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:10:47.796Z"
+    },
+    {
+      "id": "bug-060",
+      "timestamp": "2026-05-20T20:13:52.347Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/App.tsx",
+      "root_cause": "11 lines replaced/restructured",
+      "fix": "Rewrote 23→8 lines (11 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T20:13:52.347Z"
     }
   ]
 }

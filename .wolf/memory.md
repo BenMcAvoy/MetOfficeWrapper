@@ -234,3 +234,59 @@
 | 20:55 | Edited src/components/charts.tsx | 9→9 lines | ~70 |
 | 20:55 | Edited src/components/charts.tsx | 3→4 lines | ~34 |
 | 20:55 | Session end: 21 writes across 2 files (charts.tsx, main.tsx) | 1 reads | ~6757 tok |
+
+## Session: 2026-05-20 20:56
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-05-20 20:57
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 20:58 | designqc: captured 4 screenshots (124KB, ~10000 tok) | / | ready for eval | ~0 |
+| 21:01 | Edited src/App.tsx | CSS: maskImage, WebkitMaskImage | ~96 |
+| 21:02 | Edited src/App.tsx | added 1 import(s) | ~30 |
+| 21:02 | Edited src/App.tsx | CSS: date, nowMs | ~119 |
+| 21:02 | Edited src/App.tsx | 1→2 lines | ~25 |
+| 21:02 | Edited src/App.tsx | 5→5 lines | ~75 |
+| 21:02 | Edited src/components/WindCard.tsx | 8→7 lines | ~101 |
+| 21:02 | Edited src/components/WindCard.tsx | 18→20 lines | ~320 |
+| 21:03 | designqc: captured 4 screenshots (122KB, ~10000 tok) | / | ready for eval | ~0 |
+| 21:03 | mobile polish: scroll fade on date selector, relative "Xm ago" header timestamp, fixed Hourly Breakdown header alignment | App.tsx, WindCard.tsx | ok | ~3k |
+| 21:03 | Session end: 7 writes across 2 files (App.tsx, WindCard.tsx) | 4 reads | ~766 tok |
+| 21:07 | Created src/lib/haptics.ts | — | ~213 |
+| 21:07 | Edited src/App.tsx | added 1 import(s) | ~23 |
+| 21:07 | Edited src/App.tsx | 4→4 lines | ~39 |
+| 21:07 | Edited src/App.tsx | modified if() | ~61 |
+| 21:08 | Edited src/App.tsx | 2→2 lines | ~37 |
+| 21:08 | Edited src/components/RaceCalendar.tsx | added 1 import(s) | ~43 |
+| 21:08 | Edited src/components/SettingsPage.tsx | added 1 import(s) | ~37 |
+| 21:08 | Edited src/components/SettingsPage.tsx | 3→3 lines | ~32 |
+| 21:08 | Edited src/components/RaceCalendar.tsx | CSS: active | ~75 |
+| 21:08 | Edited src/components/RaceCalendar.tsx | 3→3 lines | ~31 |
+| 21:08 | Edited src/index.css | expanded (+26 lines) | ~244 |
+| 21:08 | Edited src/components/RaceCalendar.tsx | modified if() | ~136 |
+| 21:08 | Created src/lib/useSwipe.ts | — | ~634 |
+| 21:09 | Edited src/components/RaceCalendar.tsx | added 1 import(s) | ~32 |
+| 21:09 | Edited src/components/RaceCalendar.tsx | modified if() | ~132 |
+| 21:09 | Edited src/components/RaceCalendar.tsx | modified EventDetailContainer() | ~111 |
+| 21:09 | Edited src/App.tsx | added 1 import(s) | ~35 |
+| 21:09 | Edited src/App.tsx | added 1 condition(s) | ~202 |
+| 21:09 | Edited src/App.tsx | inline fix | ~40 |
+| 21:09 | Edited src/components/RaceCalendar.tsx | 5→5 lines | ~72 |
+| 21:09 | Edited src/components/RaceCalendar.tsx | CSS: active | ~131 |
+| 21:09 | Edited src/components/RaceCalendar.tsx | CSS: active, active | ~236 |
+| 21:10 | Edited src/components/RaceCalendar.tsx | CSS: active, active | ~261 |
+| 21:10 | Edited src/components/RaceCalendar.tsx | CSS: active, active | ~268 |
+| 21:10 | Edited src/App.tsx | CSS: 4 | ~188 |
+| 21:10 | Edited src/App.tsx | 5→5 lines | ~71 |
+| 21:10 | Edited src/lib/haptics.ts | call() → vibrate() | ~51 |
+| 21:10 | designqc: captured 0 screenshots (0KB, ~0 tok) | C:/Program Files/Git/ | ready for eval | ~0 |
+| 21:11 | designqc: captured 4 screenshots (122KB, ~10000 tok) | / | ready for eval | ~0 |
+| 21:11 | iOS polish: haptics, slide+swipe-back for event detail, tab swipe, iOS bottom nav, primary back chevron, unified press states | App.tsx, RaceCalendar.tsx, SettingsPage.tsx, index.css, haptics.ts, useSwipe.ts | ok | ~9k |
+| 21:11 | Session end: 34 writes across 7 files (App.tsx, WindCard.tsx, haptics.ts, RaceCalendar.tsx, SettingsPage.tsx) | 8 reads | ~4201 tok |
+| 21:13 | Edited src/App.tsx | 3→2 lines | ~23 |
+| 21:13 | Edited src/App.tsx | modified if() | ~61 |
+| 21:13 | Edited src/App.tsx | inline fix | ~35 |
+| 21:14 | Session end: 37 writes across 7 files (App.tsx, WindCard.tsx, haptics.ts, RaceCalendar.tsx, SettingsPage.tsx) | 8 reads | ~4320 tok |

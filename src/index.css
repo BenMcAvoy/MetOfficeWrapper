@@ -190,3 +190,29 @@ button, [role="button"] {
 html, body {
   overscroll-behavior-y: none;
 }
+
+/* iOS-style push transitions for drill-in views (event detail). */
+@keyframes ios-push-in {
+  from { transform: translate3d(20%, 0, 0); opacity: 0.4; }
+  to   { transform: translate3d(0,   0, 0); opacity: 1; }
+}
+@keyframes ios-push-out-back {
+  from { transform: translate3d(-12%, 0, 0); opacity: 0.5; }
+  to   { transform: translate3d(0,    0, 0); opacity: 1; }
+}
+.ios-push-in {
+  animation: ios-push-in 280ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform, opacity;
+}
+.ios-push-out-back {
+  animation: ios-push-out-back 260ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform, opacity;
+}
+
+/* Generic press-state for tap surfaces — feels like an iOS row. */
+.press-row {
+  transition: background-color 120ms ease, transform 120ms ease;
+}
+.press-row:active {
+  transform: scale(0.985);
+}

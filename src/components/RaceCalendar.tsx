@@ -1,4 +1,5 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
+import { useSwipe } from '@/lib/useSwipe';
 import type { HourlyForecast, TideData, LiveWindHistoryPoint } from '@/lib/api';
 import type { RaceEvent } from '@/lib/calendar';
 import { RACE_CALENDAR, getEventsForDay } from '@/lib/calendar';
@@ -10,6 +11,7 @@ import { ArrowUp, Calendar, ChevronLeft, ChevronRight, Clock, Waves } from 'luci
 import { format, addMinutes, startOfDay, endOfDay, isSameDay, startOfMonth, addMonths, getDaysInMonth, getDay } from 'date-fns';
 import { TideChartInner } from '@/components/charts';
 import WindChartCard from '@/components/WindChartCard';
+import { haptic } from '@/lib/haptics';
 
 interface RaceCalendarProps {
   forecasts: HourlyForecast[];
@@ -84,12 +86,16 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
 
   return (
     <div className="space-y-3">
+      <button
+        onClick={onBack}
+        className="-ml-2 -mt-1 flex items-center gap-0.5 text-primary text-sm font-medium px-2 py-1.5 rounded-lg active:bg-primary/10 active:scale-[0.97] transition-all"
+      >
+        <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
+        <span>{format(selectedDay, 'd MMM')}</span>
+      </button>
       <Card>
         <CardHeader className="pb-3">
-          <button onClick={onBack} className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-xs mb-1 transition-colors">
-            <ChevronLeft className="h-3.5 w-3.5" /> Back to {format(selectedDay, 'd MMMM')}
-          </button>
-          <CardTitle className="text-sm leading-tight">{event.name}</CardTitle>
+          <CardTitle className="text-base leading-tight">{event.name}</CardTitle>
           <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
             <Clock className="h-3 w-3" />
             <span>{format(selectedDay, 'EEEE d MMM')} · All day</span>
@@ -250,12 +256,16 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
 
   return (
     <div className="space-y-3">
+      <button
+        onClick={onBack}
+        className="-ml-2 -mt-1 flex items-center gap-0.5 text-primary text-sm font-medium px-2 py-1.5 rounded-lg active:bg-primary/10 active:scale-[0.97] transition-all"
+      >
+        <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
+        <span>{format(selectedDay, 'd MMM')}</span>
+      </button>
       <Card>
         <CardHeader className="pb-2">
-          <button onClick={onBack} className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-xs mb-1 transition-colors">
-            <ChevronLeft className="h-3.5 w-3.5" /> Back to {format(selectedDay, 'd MMMM')}
-          </button>
-          <CardTitle className="text-sm leading-tight">{event.name}</CardTitle>
+          <CardTitle className="text-base leading-tight">{event.name}</CardTitle>
           <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
             <Clock className="h-3 w-3" />
             <span>{format(selectedDay, 'EEE d MMM')} · Start {event.time} · 2hr window</span>
@@ -418,8 +428,8 @@ function MonthCalendar({ month, selectedDay, onSelect }: {
           return (
             <button
               key={i}
-              onClick={() => onSelect(date)}
-              className={`relative flex flex-col items-center py-1 rounded-md text-xs font-medium transition-colors
+              onClick={() => { haptic('light'); onSelect(date); }}
+              className={`relative flex flex-col items-center py-1 rounded-md text-xs font-medium active:scale-95 transition-all
                 ${isSelected ? 'bg-primary text-primary-foreground' : isToday ? 'bg-muted' : 'hover:bg-muted/60'}
                 ${!hasEvents && !isSelected ? 'text-muted-foreground' : ''}
               `}
@@ -432,6 +442,18 @@ function MonthCalendar({ month, selectedDay, onSelect }: {
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function EventDetailContainer({ onBack, children }: { onBack: () => void; children: React.ReactNode }) {
+  const ref = useSwipe<HTMLDivElement>({
+    onSwipeRight: onBack,
+    edgeRightOnly: true,
+  });
+  return (
+    <div ref={ref} className="ios-push-in">
+      {children}
     </div>
   );
 }
@@ -462,19 +484,23 @@ const RaceCalendar = forwardRef<RaceCalendarHandle, RaceCalendarProps>(function 
 
   if (selectedEvent) {
     return (
-      <EventWeatherView
-        event={selectedEvent}
-        selectedDay={selectedDay}
-        forecasts={forecasts}
-        tideData={tideData}
-        liveWindHistory={liveWindHistory}
-        onBack={() => setSelectedEvent(null)}
-      />
+      <EventDetailContainer
+        onBack={() => { haptic('light'); setSelectedEvent(null); }}
+      >
+        <EventWeatherView
+          event={selectedEvent}
+          selectedDay={selectedDay}
+          forecasts={forecasts}
+          tideData={tideData}
+          liveWindHistory={liveWindHistory}
+          onBack={() => { haptic('light'); setSelectedEvent(null); }}
+        />
+      </EventDetailContainer>
     );
   }
 
   return (
-    <div className="space-y-3">
+    <div key="event-root" className="space-y-3 ios-push-out-back">
       <Card>
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
@@ -483,14 +509,16 @@ const RaceCalendar = forwardRef<RaceCalendarHandle, RaceCalendarProps>(function 
             </CardTitle>
             <div className="flex items-center gap-1">
               <button
-                onClick={() => setCurrentMonth(m => addMonths(m, -1))}
-                className="p-1 text-muted-foreground hover:text-foreground transition-colors rounded"
+                onClick={() => { haptic('light'); setCurrentMonth(m => addMonths(m, -1)); }}
+                aria-label="Previous month"
+                className="h-8 w-8 -my-1 flex items-center justify-center text-muted-foreground hover:text-foreground active:scale-90 transition-all rounded-full"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
               <button
-                onClick={() => setCurrentMonth(m => addMonths(m, 1))}
-                className="p-1 text-muted-foreground hover:text-foreground transition-colors rounded"
+                onClick={() => { haptic('light'); setCurrentMonth(m => addMonths(m, 1)); }}
+                aria-label="Next month"
+                className="h-8 w-8 -my-1 flex items-center justify-center text-muted-foreground hover:text-foreground active:scale-90 transition-all rounded-full"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -518,8 +546,8 @@ const RaceCalendar = forwardRef<RaceCalendarHandle, RaceCalendarProps>(function 
               {events.map((event, i) => (
                 <button
                   key={i}
-                  onClick={() => setSelectedEvent(event)}
-                  className="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors"
+                  onClick={() => { haptic('medium'); setSelectedEvent(event); }}
+                  className="w-full text-left px-4 py-3 hover:bg-muted/50 active:bg-muted/70 press-row"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">

@@ -17,6 +17,8 @@
 <!-- Mistakes made and corrected. Each entry prevents the same mistake recurring. -->
 <!-- Format: [YYYY-MM-DD] Description of what went wrong and what to do instead. -->
 
+[2026-05-20] Do NOT add horizontal swipe-between-tabs gestures on the main content area. User found it frustrating — likely conflicts with horizontal scrollers (date strip, forecast strip) and chart pan. Bottom-nav taps are the only intended tab-switch path. Edge-swipe-back inside a drilled-in view (like event detail) is fine.
+
 ## Decision Log
 
 <!-- Significant technical decisions with rationale. Why X was chosen over Y. -->

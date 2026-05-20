@@ -192,9 +192,8 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
         <CardContent className="p-0">
           <div className="divide-y divide-border">
             {/* Header */}
-            <div className="grid grid-cols-[3rem_2rem_3.5rem_1fr_1fr_3rem] gap-2 px-4 py-2 text-xs text-muted-foreground uppercase tracking-wide">
+            <div className="grid grid-cols-[3rem_5.5rem_1fr_1fr_3rem] gap-2 px-4 py-2 text-xs text-muted-foreground uppercase tracking-wide">
               <span>Time</span>
-              <span></span>
               <span>Dir</span>
               <span>Avg</span>
               <span className="text-[var(--chart-gust)]">Gust</span>
@@ -207,7 +206,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
               return (
                 <div
                   key={i}
-                  className={`relative grid grid-cols-[3rem_2rem_3.5rem_1fr_1fr_3rem] gap-2 px-4 py-2.5 items-center text-sm ${
+                  className={`relative grid grid-cols-[3rem_5.5rem_1fr_1fr_3rem] gap-2 px-4 py-2.5 items-center text-sm ${
                     isCurrentHour ? 'bg-primary/5' : ''
                   }`}
                 >
@@ -217,12 +216,14 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   <span className={`text-xs tabular-nums ${isCurrentHour ? 'font-semibold text-primary' : 'text-muted-foreground'}`}>
                     {isCurrentHour ? 'Now' : format(f.time, 'HH:mm')}
                   </span>
-                  <ArrowUp
-                    className="h-4 w-4 text-primary"
-                    style={{ transform: `rotate(${f.windDirectionFrom10m}deg)` }}
-                    strokeWidth={2.5}
-                  />
-                  <span className="text-xs text-muted-foreground">{degreesToCardinal(f.windDirectionFrom10m)}</span>
+                  <div className="flex items-center gap-1.5">
+                    <ArrowUp
+                      className="h-4 w-4 text-primary shrink-0"
+                      style={{ transform: `rotate(${f.windDirectionFrom10m}deg)` }}
+                      strokeWidth={2.5}
+                    />
+                    <span className="text-xs text-muted-foreground">{degreesToCardinal(f.windDirectionFrom10m)}</span>
+                  </div>
                   <span className={`font-semibold tabular-nums ${beaufortColor(bf.force)}`}>
                     {disp(f.windSpeed10m)} {unitLabel}
                   </span>
