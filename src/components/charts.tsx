@@ -141,6 +141,7 @@ export function WindChart({
   includePastHours = 0,
 }: WindChartProps) {
   const [activeRow, setActiveRow] = useState<WindChartRow | null>(null);
+  const [interacted, setInteracted] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const rowsRef = useRef<WindChartRow[]>([]);
   const now = Date.now();
@@ -178,6 +179,12 @@ export function WindChart({
   const hasObserved = observedSeries.length > 0;
   const showNow = now >= xMin && now <= xMax;
 
+  const latestRow: WindChartRow = rows.reduce(
+    (best, r) => (Math.abs(r.t - now) < Math.abs(best.t - now) ? r : best),
+    rows[0],
+  );
+  const readoutRow: WindChartRow | null = activeRow ?? (interacted ? null : latestRow);
+
   const yAxisWidth = 52;
   const rightMargin = 4;
 
@@ -201,6 +208,7 @@ export function WindChart({
         const d = Math.abs(rs[i].t - t);
         if (d < bestDelta) { best = rs[i]; bestDelta = d; }
       }
+      setInteracted(true);
       setActiveRow(prev => (prev?.t === best.t ? prev : best));
     };
     const onTouchStart = (e: TouchEvent) => {
@@ -234,12 +242,12 @@ export function WindChart({
 
   return (
     <div>
-      {activeRow && (
+      {readoutRow && (
         <WindReadoutStrip
-          t={activeRow.t}
+          t={readoutRow.t}
           forecastSeries={forecastSeries}
           observedSeries={observedSeries}
-          pinned={true}
+          pinned={!!activeRow}
           showLive={hasObserved}
         />
       )}
@@ -266,6 +274,7 @@ export function WindChart({
             const d = Math.abs(rs[i].t - t);
             if (d < bestDelta) { best = rs[i]; bestDelta = d; }
           }
+          setInteracted(true);
           setActiveRow(prev => (prev?.t === best.t ? prev : best));
         }}
       >
@@ -322,7 +331,6 @@ export function WindChart({
               stroke="var(--muted-foreground)"
               strokeOpacity={0.6}
               strokeDasharray="2 4"
-              label={{ value: 'Now', fill: 'var(--muted-foreground)', fontSize: 10, position: 'insideTopRight' }}
             />
           )}
 

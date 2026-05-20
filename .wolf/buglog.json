@@ -768,6 +768,22 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-20T19:52:13.218Z"
+    },
+    {
+      "id": "bug-049",
+      "timestamp": "2026-05-20T19:55:04.921Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:55:04.921Z"
     }
   ]
 }
