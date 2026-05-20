@@ -178,8 +178,6 @@ export function WindChart({
   const hasObserved = observedSeries.length > 0;
   const showNow = now >= xMin && now <= xMax;
 
-  const displayRow: WindChartRow | null = activeRow ?? rows[rows.length - 1] ?? null;
-
   const yAxisWidth = 52;
   const rightMargin = 4;
 
@@ -215,16 +213,11 @@ export function WindChart({
       e.preventDefault();
       pickFromClientX(e.touches[0].clientX);
     };
-    const onTouchEnd = () => setActiveRow(null);
     el.addEventListener('touchstart', onTouchStart, { passive: false, capture: true });
     el.addEventListener('touchmove', onTouchMove, { passive: false, capture: true });
-    el.addEventListener('touchend', onTouchEnd, { capture: true });
-    el.addEventListener('touchcancel', onTouchEnd, { capture: true });
     return () => {
       el.removeEventListener('touchstart', onTouchStart, { capture: true } as EventListenerOptions);
       el.removeEventListener('touchmove', onTouchMove, { capture: true } as EventListenerOptions);
-      el.removeEventListener('touchend', onTouchEnd, { capture: true } as EventListenerOptions);
-      el.removeEventListener('touchcancel', onTouchEnd, { capture: true } as EventListenerOptions);
     };
   }, []);
 
@@ -241,13 +234,15 @@ export function WindChart({
 
   return (
     <div>
-      <WindReadoutStrip
-        t={displayRow?.t ?? null}
-        forecastSeries={forecastSeries}
-        observedSeries={observedSeries}
-        pinned={!!activeRow}
-        showLive={hasObserved}
-      />
+      {activeRow && (
+        <WindReadoutStrip
+          t={activeRow.t}
+          forecastSeries={forecastSeries}
+          observedSeries={observedSeries}
+          pinned={true}
+          showLive={hasObserved}
+        />
+      )}
       <div
         ref={wrapperRef}
         className="h-44 [&_*]:touch-none [&_.recharts-area]:pointer-events-none"
@@ -273,7 +268,6 @@ export function WindChart({
           }
           setActiveRow(prev => (prev?.t === best.t ? prev : best));
         }}
-        onMouseLeave={() => setActiveRow(null)}
       >
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ComposedChart

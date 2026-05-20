@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-05-17T07:44:52.450Z",
   "lifetime": {
-    "total_tokens_estimated": 813408,
-    "total_reads": 343,
-    "total_writes": 1771,
+    "total_tokens_estimated": 818962,
+    "total_reads": 344,
+    "total_writes": 1784,
     "total_sessions": 4,
-    "anatomy_hits": 5,
+    "anatomy_hits": 6,
     "anatomy_misses": 338,
-    "repeated_reads_blocked": 196,
-    "estimated_savings_vs_bare_cli": 934234
+    "repeated_reads_blocked": 202,
+    "estimated_savings_vs_bare_cli": 961356
   },
   "sessions": [
     {
@@ -11431,6 +11431,94 @@
         "reads_count": 1,
         "writes_count": 8,
         "repeated_reads_blocked": 1,
+        "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-05-20-2035",
+      "started": "2026-05-20T19:35:01.699Z",
+      "ended": "2026-05-20T19:47:51.615Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 4487,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 210,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 92,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 27,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 376,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 6,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 89,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 46,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 23,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 15,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 114,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 2,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 67,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 4487,
+        "output_tokens_estimated": 1067,
+        "reads_count": 1,
+        "writes_count": 13,
+        "repeated_reads_blocked": 6,
         "anatomy_lookups": 1
       }
     }

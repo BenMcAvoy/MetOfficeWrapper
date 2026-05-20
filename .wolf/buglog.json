@@ -679,15 +679,15 @@
       "error_message": "Significant refactor of ",
       "file": "src/components/charts.tsx",
       "root_cause": "3 lines replaced/restructured",
-      "fix": "Rewrote 7→4 lines (3 removed)",
+      "fix": "Rewrote 7→4 lines (3 removed) | Also: const onTouchEnd = () => setActiveRow(null);; el.addEventListener('touchend', onTouchEnd, { capt",
       "tags": [
         "auto-detected",
         "refactor",
         "tsx"
       ],
       "related_bugs": [],
-      "occurrences": 1,
-      "last_seen": "2026-05-20T19:43:54.179Z"
+      "occurrences": 2,
+      "last_seen": "2026-05-20T19:47:15.275Z"
     },
     {
       "id": "bug-044",
@@ -704,6 +704,38 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-20T19:43:58.510Z"
+    },
+    {
+      "id": "bug-045",
+      "timestamp": "2026-05-20T19:47:04.324Z",
+      "error_message": "CSS fix: displayRow",
+      "file": "src/components/charts.tsx",
+      "root_cause": "displayRow: WindChartRow | null = activeRow ?? rows[rows.length - 1] ?? null → WindChartRow | null = activeRow",
+      "fix": "Changed displayRow: WindChartRow | null = activeRow ?? rows[rows.length - 1] ?? null → WindChartRow | null = activeRow",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:47:04.324Z"
+    },
+    {
+      "id": "bug-046",
+      "timestamp": "2026-05-20T19:47:31.073Z",
+      "error_message": "Wrong operator: ?? should be &&",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Used \"??\" instead of \"&&\"",
+      "fix": "Changed operator ?? → &&",
+      "tags": [
+        "auto-detected",
+        "operator-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-20T19:47:31.073Z"
     }
   ]
 }
