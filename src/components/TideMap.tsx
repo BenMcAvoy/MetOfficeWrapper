@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { MapContainer, TileLayer, Marker, CircleMarker, useMap } from 'react-leaflet';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { MarineGrid, MarineLocation, MarinePoint } from '@/lib/api';
@@ -15,8 +15,26 @@ interface TideMapProps {
   at: Date;
 }
 
-// Display cell ~1.6 km — one arrow per cell after sampling.
+// Input sampling grid cell (~1.6 km). This is the finest resolution we can
+// show arrows at; the displayed bucket cell scales up from here at low zoom.
 const ARROW_CELL_DEG = 0.015;
+
+// Target on-screen spacing between arrows in pixels. Display cell width is
+// derived from this and the current map zoom.
+const TARGET_ARROW_PX = 46;
+
+function cellDegForZoom(zoom: number, lat: number): { lat: number; lon: number } {
+  // 1 deg lon at given lat → pixels: 256 * 2^zoom * cos(lat) / 360
+  const lonPxPerDeg = (256 * Math.pow(2, zoom) * Math.cos((lat * Math.PI) / 180)) / 360;
+  const latPxPerDeg = (256 * Math.pow(2, zoom)) / 360;
+  // No floor: at high zoom the bucket can go finer than the input sample step.
+  // We compensate by snapping to the nearest input sample's flow values, so
+  // adjacent cells happily share values (the ocean model is ~9 km anyway).
+  return {
+    lat: TARGET_ARROW_PX / latPxPerDeg,
+    lon: TARGET_ARROW_PX / lonPxPerDeg,
+  };
+}
 
 function buildGridPoints(centerLat: number, centerLon: number): { lat: number; lon: number }[] {
   // Dense sample over a wide area so we get good coverage of harbour, channels, and open sea.
@@ -37,15 +55,110 @@ function buildGridPoints(centerLat: number, centerLon: number): { lat: number; l
   return points;
 }
 
-// FitBounds: react-leaflet child that runs once after the map mounts and fits
-// the view to the supplied bounds with sensible padding.
+// FitBounds: fits the camera to the supplied bounds exactly ONCE, the first
+// time non-null bounds arrive. Subsequent re-renders (e.g. when `at` ticks
+// with `useNow`) must not override the user's zoom/pan.
 function FitBounds({ bounds }: { bounds: L.LatLngBoundsExpression | null }) {
   const map = useMap();
+  const didFit = useRef(false);
   useEffect(() => {
-    if (!bounds) return;
+    if (didFit.current || !bounds) return;
+    didFit.current = true;
     map.fitBounds(bounds, { padding: [24, 24], maxZoom: 13 });
   }, [bounds, map]);
   return null;
+}
+
+// Subscribes to map zoom changes and re-renders the arrow layer with a bucket
+// cell that scales with current zoom — sparser when zoomed out, denser in.
+function FlowArrowLayer({
+  grid, at, centerLat, centerLon,
+}: {
+  grid: MarineGrid;
+  at: Date;
+  centerLat: number;
+  centerLon: number;
+}) {
+  const map = useMap();
+  const [view, setView] = useState(() => ({ zoom: map.getZoom(), bounds: map.getBounds() }));
+  useMapEvents({
+    moveend: () => setView({ zoom: map.getZoom(), bounds: map.getBounds() }),
+  });
+
+  const arrows = useMemo(() => {
+    // 1. Build the list of usable input samples (water + valid flow).
+    const samples: { lat: number; lon: number; flow: MarinePoint }[] = [];
+    for (const loc of grid.locations) {
+      if (loc.elevation != null && loc.elevation > 1) continue;
+      const flow = nearestFlow(loc.points, at);
+      if (!flow || flow.currentDirection == null || flow.currentVelocity == null) continue;
+      samples.push({ lat: loc.lat, lon: loc.lon, flow });
+    }
+    if (!samples.length) return [];
+
+    // 2. Build display grid aligned to (centerLat, centerLon). Clip to the
+    // intersection of (visible viewport) ∩ (input-sample bounding box) so we
+    // don't render arrows outside the sampled region.
+    const cell = cellDegForZoom(view.zoom, centerLat);
+    let minLat = Infinity, maxLat = -Infinity, minLon = Infinity, maxLon = -Infinity;
+    for (const s of samples) {
+      if (s.lat < minLat) minLat = s.lat;
+      if (s.lat > maxLat) maxLat = s.lat;
+      if (s.lon < minLon) minLon = s.lon;
+      if (s.lon > maxLon) maxLon = s.lon;
+    }
+    const vb = view.bounds;
+    const lo = vb.getSouthWest(), hi = vb.getNorthEast();
+    minLat = Math.max(minLat, lo.lat);
+    maxLat = Math.min(maxLat, hi.lat);
+    minLon = Math.max(minLon, lo.lng);
+    maxLon = Math.min(maxLon, hi.lng);
+    if (minLat > maxLat || minLon > maxLon) return [];
+
+    // 3. For each display cell in range, find the nearest water sample. If
+    // it's within ~one input-grid step, render an arrow at the cell centre
+    // with the sample's flow values. Otherwise skip (treats it as land/gap).
+    const maxDistSq = (ARROW_CELL_DEG * 1.2) ** 2;
+    const yStart = Math.floor((minLat - centerLat) / cell.lat);
+    const yEnd = Math.ceil((maxLat - centerLat) / cell.lat);
+    const xStart = Math.floor((minLon - centerLon) / cell.lon);
+    const xEnd = Math.ceil((maxLon - centerLon) / cell.lon);
+
+    const out: { key: string; lat: number; lon: number; flow: MarinePoint }[] = [];
+    for (let dy = yStart; dy <= yEnd; dy++) {
+      for (let dx = xStart; dx <= xEnd; dx++) {
+        const lat = centerLat + dy * cell.lat;
+        const lon = centerLon + dx * cell.lon;
+        let nearest = samples[0];
+        let nearestDistSq = Infinity;
+        for (const s of samples) {
+          const dLat = s.lat - lat;
+          const dLon = s.lon - lon;
+          const dSq = dLat * dLat + dLon * dLon;
+          if (dSq < nearestDistSq) {
+            nearestDistSq = dSq;
+            nearest = s;
+          }
+        }
+        if (nearestDistSq > maxDistSq) continue;
+        out.push({ key: `${dy}|${dx}`, lat, lon, flow: nearest.flow });
+      }
+    }
+    return out;
+  }, [grid, at, view, centerLat, centerLon]);
+
+  return (
+    <>
+      {arrows.map(a => (
+        <Marker
+          key={a.key}
+          position={[a.lat, a.lon]}
+          icon={flowArrowIcon(a.flow.currentDirection!, (a.flow.currentVelocity ?? 0) * KMH_TO_KNOTS)}
+          interactive={false}
+        />
+      ))}
+    </>
+  );
 }
 
 function nearestFlow(points: MarinePoint[], at: Date): MarinePoint | null {
@@ -107,45 +220,35 @@ export default function TideMap({ centerLat, centerLon, locationName, at }: Tide
     return () => { cancelled = true; };
   }, [gridPoints]);
 
-  const arrows: { loc: MarineLocation; flow: MarinePoint }[] = [];
+  // Water-only locations for fit-bounds + peak-knots summary.
+  // Filter once here (not per zoom) since the bounds shouldn't shift on zoom.
+  const waterLocations: { loc: MarineLocation; flow: MarinePoint }[] = [];
   if (grid) {
-    // Spatial bucket dedup: one arrow per ~1.6 km cell. This gives a uniform
-    // arrow field across water so the eye reads it as a flow pattern, even
-    // though adjacent buckets often share values (Open-Meteo's ocean model
-    // resolution is ~9 km). Land points return null currents and are dropped.
-    const seen = new Map<string, { loc: MarineLocation; flow: MarinePoint; distSq: number }>();
-    const cell = ARROW_CELL_DEG;
     for (const loc of grid.locations) {
-      // Filter land: Open-Meteo returns positive elevation on land and
-      // negative (bathymetric depth) on sea. Tidal reaches near the coast
-      // can sit slightly above 0 m; allow a small buffer so estuaries pass.
       if (loc.elevation != null && loc.elevation > 1) continue;
       const flow = nearestFlow(loc.points, at);
       if (!flow || flow.currentDirection == null || flow.currentVelocity == null) continue;
-      const cy = Math.round((loc.lat - centerLat) / cell);
-      const cx = Math.round((loc.lon - centerLon) / cell);
-      const key = `${cy}|${cx}`;
-      const dLat = loc.lat - (centerLat + cy * cell);
-      const dLon = loc.lon - (centerLon + cx * cell);
-      const distSq = dLat * dLat + dLon * dLon;
-      const existing = seen.get(key);
-      if (!existing || distSq < existing.distSq) {
-        seen.set(key, { loc, flow, distSq });
-      }
+      waterLocations.push({ loc, flow });
     }
-    for (const v of seen.values()) arrows.push({ loc: v.loc, flow: v.flow });
   }
 
-  const maxKnots = arrows.reduce((m, a) => Math.max(m, (a.flow.currentVelocity ?? 0) * KMH_TO_KNOTS), 0);
+  const maxKnots = waterLocations.reduce(
+    (m, a) => Math.max(m, (a.flow.currentVelocity ?? 0) * KMH_TO_KNOTS),
+    0,
+  );
+  const peakArrow = waterLocations.reduce<{ loc: MarineLocation; flow: MarinePoint } | null>(
+    (best, a) => !best || (a.flow.currentVelocity ?? 0) > (best.flow.currentVelocity ?? 0) ? a : best,
+    null,
+  );
 
-  // Auto-fit bounds: include all arrow positions + the centre dot so the
+  // Auto-fit bounds: include all water positions + the centre dot so the
   // camera frames water (not a random patch including dry land).
   const bounds = useMemo<L.LatLngBoundsExpression | null>(() => {
-    if (!arrows.length) return null;
-    const pts: [number, number][] = arrows.map(a => [a.loc.lat, a.loc.lon]);
+    if (!waterLocations.length) return null;
+    const pts: [number, number][] = waterLocations.map(a => [a.loc.lat, a.loc.lon]);
     pts.push([centerLat, centerLon]);
     return pts;
-  }, [arrows, centerLat, centerLon]);
+  }, [waterLocations, centerLat, centerLon]);
 
   return (
     <div className="space-y-2">
@@ -167,22 +270,10 @@ export default function TideMap({ centerLat, centerLon, locationName, at }: Tide
             maxZoom={18}
             opacity={0.9}
           />
-          <CircleMarker
-            center={[centerLat, centerLon]}
-            radius={6}
-            pathOptions={{ color: 'var(--primary)', fillColor: 'var(--primary)', fillOpacity: 1, weight: 2 }}
-          />
-          {arrows.map(({ loc, flow }) => (
-            <Marker
-              key={`${loc.lat}-${loc.lon}`}
-              position={[loc.lat, loc.lon]}
-              icon={flowArrowIcon(flow.currentDirection!, (flow.currentVelocity ?? 0) * KMH_TO_KNOTS)}
-              interactive={false}
-            />
-          ))}
+          {grid && <FlowArrowLayer grid={grid} at={at} centerLat={centerLat} centerLon={centerLon} />}
           <FitBounds bounds={bounds} />
         </MapContainer>
-        {grid && arrows.length === 0 && (
+        {grid && waterLocations.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/70 backdrop-blur-sm pointer-events-none">
             <p className="text-sm text-muted-foreground px-3 py-1.5 rounded-md bg-background/80 border border-border">
               No tidal flow data for this area
@@ -194,10 +285,10 @@ export default function TideMap({ centerLat, centerLon, locationName, at }: Tide
         <span>{locationName}</span>
         {error
           ? <span className="text-destructive">Flow data unavailable</span>
-          : arrows.length > 0
+          : waterLocations.length > 0
             ? <span>
                 Peak {maxKnots.toFixed(1)}kt
-                {arrows[0]?.flow.currentDirection != null && ` ${degreesToCardinal(arrows[0].flow.currentDirection)}`}
+                {peakArrow?.flow.currentDirection != null && ` ${degreesToCardinal(peakArrow.flow.currentDirection)}`}
               </span>
             : <span>Loading flow…</span>}
       </div>

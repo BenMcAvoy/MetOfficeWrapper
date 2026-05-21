@@ -534,3 +534,21 @@
 | 09:18 | Edited src/components/TideMap.tsx | CSS: land | ~171 |
 | 09:18 | designqc: captured 2 screenshots (101KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
 | 09:19 | Session end: 58 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 10 reads | ~22263 tok |
+| 09:21 | Edited src/components/TideMap.tsx | inline fix | ~29 |
+| 09:21 | Edited src/components/TideMap.tsx | modified cellDegForZoom() | ~236 |
+| 09:22 | Edited src/components/TideMap.tsx | added nullish coalescing | ~639 |
+| 09:22 | Edited src/components/TideMap.tsx | CSS: waterLocations, a | ~373 |
+| 09:22 | Edited src/components/TideMap.tsx | reduced (-7 lines) | ~62 |
+| 09:22 | Edited src/components/TideMap.tsx | 6→6 lines | ~82 |
+| 09:23 | designqc: captured 2 screenshots (92KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:23 | Session end: 64 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 10 reads | ~23684 tok |
+| 09:37 | Edited src/components/TideMap.tsx | inline fix | ~25 |
+| 09:37 | Edited src/components/TideMap.tsx | 6→1 lines | ~30 |
+| 09:38 | Edited src/components/TideMap.tsx | max() → values() | ~179 |
+| 09:38 | Edited src/components/TideMap.tsx | added 7 condition(s) | ~964 |
+| 09:39 | designqc: captured 2 screenshots (91KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:39 | Session end: 68 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 10 reads | ~24882 tok |
+| 09:42 | Session end: 68 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 10 reads | ~24882 tok |
+| 09:43 | Edited src/components/TideMap.tsx | inline fix | ~18 |
+| 09:43 | Edited src/components/TideMap.tsx | modified FitBounds() | ~153 |
+| 09:43 | Session end: 70 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 10 reads | ~25053 tok |

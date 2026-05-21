@@ -1607,15 +1607,111 @@
       "error_message": "Null/undefined access in ",
       "file": "src/components/TideMap.tsx",
       "root_cause": "Property access on potentially null/undefined value",
-      "fix": "Added null safety (optional chaining or null check)",
+      "fix": "Added null safety (optional chaining or null check) | Also: // Subscribes to map zoom changes and re-renders the arrow l; // cell that scales with current zoom — sparser when zoomed ",
       "tags": [
         "auto-detected",
         "null-safety",
         "tsx"
       ],
       "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-05-21T08:22:12.821Z"
+    },
+    {
+      "id": "bug-102",
+      "timestamp": "2026-05-21T08:21:56.941Z",
+      "error_message": "Type error",
+      "file": "src/components/TideMap.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
       "occurrences": 1,
-      "last_seen": "2026-05-21T08:18:23.514Z"
+      "last_seen": "2026-05-21T08:21:56.941Z"
+    },
+    {
+      "id": "bug-103",
+      "timestamp": "2026-05-21T08:22:33.054Z",
+      "error_message": "CSS fix: loc, bounds, pts",
+      "file": "src/components/TideMap.tsx",
+      "root_cause": "loc: v.loc, flow: v.flow → MarineLocation; bounds: include all arrow positions + the centre dot so the → include all water positions + the centre dot so the; pts: [number, number][] = arrows.map(a => [a.loc.lat, a.loc.lon]) → [number, number][] = waterLocations.map(a => [a.loc.lat, a.loc.lon])",
+      "fix": "Changed loc: v.loc, flow: v.flow → MarineLocation; bounds: include all arrow positions + the centre dot so the → include all water positions + the centre dot so the; pts: [number, number][] = arrows.map(a => [a.loc.lat, a.loc.lon]) → [number, number][] = waterLocations.map(a => [a.loc.lat, a.loc.lon])",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T08:22:33.054Z"
+    },
+    {
+      "id": "bug-104",
+      "timestamp": "2026-05-21T08:22:41.564Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/TideMap.tsx",
+      "root_cause": "9 lines replaced/restructured",
+      "fix": "Rewrote 11→4 lines (9 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T08:22:41.564Z"
+    },
+    {
+      "id": "bug-105",
+      "timestamp": "2026-05-21T08:38:08.106Z",
+      "error_message": "CSS fix: lon, lat",
+      "file": "src/components/TideMap.tsx",
+      "root_cause": "lon: number → TARGET_ARROW_PX / lonPxPerDeg,; lat: cellLat, lon: cellLon → TARGET_ARROW_PX / latPxPerDeg,",
+      "fix": "Changed lon: number → TARGET_ARROW_PX / lonPxPerDeg,; lat: cellLat, lon: cellLon → TARGET_ARROW_PX / latPxPerDeg,",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T08:38:08.106Z"
+    },
+    {
+      "id": "bug-106",
+      "timestamp": "2026-05-21T08:38:35.255Z",
+      "error_message": "Type error",
+      "file": "src/components/TideMap.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T08:38:35.255Z"
+    },
+    {
+      "id": "bug-107",
+      "timestamp": "2026-05-21T08:43:21.390Z",
+      "error_message": "CSS fix: FitBounds",
+      "file": "src/components/TideMap.tsx",
+      "root_cause": "FitBounds: react-leaflet child that runs once after the map mounts and fits → fits the camera to the supplied bounds exactly ONCE, the first",
+      "fix": "Changed FitBounds: react-leaflet child that runs once after the map mounts and fits → fits the camera to the supplied bounds exactly ONCE, the first",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T08:43:21.390Z"
     }
   ]
 }

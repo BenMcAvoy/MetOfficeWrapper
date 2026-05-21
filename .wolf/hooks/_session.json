@@ -401,6 +401,78 @@
       "action": "edit",
       "tokens": 171,
       "at": "2026-05-21T08:18:23.507Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 29,
+      "at": "2026-05-21T08:21:47.004Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 236,
+      "at": "2026-05-21T08:21:56.934Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 639,
+      "at": "2026-05-21T08:22:12.813Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 373,
+      "at": "2026-05-21T08:22:33.048Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 62,
+      "at": "2026-05-21T08:22:41.556Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 82,
+      "at": "2026-05-21T08:22:48.919Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 25,
+      "at": "2026-05-21T08:37:49.766Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 30,
+      "at": "2026-05-21T08:37:57.022Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 179,
+      "at": "2026-05-21T08:38:08.094Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 964,
+      "at": "2026-05-21T08:38:35.246Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 18,
+      "at": "2026-05-21T08:43:12.227Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+      "action": "edit",
+      "tokens": 153,
+      "at": "2026-05-21T08:43:21.379Z"
     }
   ],
   "edit_counts": {
@@ -410,12 +482,12 @@
     "src/App.tsx": 12,
     "src/components/TideChart.tsx": 13,
     "src/components/charts.tsx": 4,
-    "src/components/TideMap.tsx": 14,
+    "src/components/TideMap.tsx": 26,
     "vite.config.ts": 2
   },
   "anatomy_hits": 2,
   "anatomy_misses": 8,
   "repeated_reads_warned": 3,
   "cerebrum_warnings": 0,
-  "stop_count": 6
+  "stop_count": 10
 }
