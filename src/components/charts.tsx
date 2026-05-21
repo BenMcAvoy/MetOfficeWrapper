@@ -147,44 +147,6 @@ export function WindChart({
   const now = Date.now();
   const nowHour = startOfHour(new Date(now)).getTime();
   const forcedMin = includePastHours > 0 ? subHours(nowHour, includePastHours).getTime() : null;
-
-  const forecastSeries = buildForecastSeries(historyForecasts, forecasts);
-  const observedSeries = buildObservedSeries(liveHistory);
-
-  if (!forecastSeries.length && !observedSeries.length) return null;
-
-  const firstT = Math.min(
-    forecastSeries[0]?.t ?? Number.POSITIVE_INFINITY,
-    observedSeries[0]?.t ?? Number.POSITIVE_INFINITY,
-  );
-  const lastT = Math.max(
-    forecastSeries[forecastSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
-    observedSeries[observedSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
-  );
-
-  const xMin = bucket10(forcedMin ?? firstT);
-  const xMax = bucket10(Math.max(lastT, xMin + HOUR));
-
-  const rows = buildWindChartRows(forecastSeries, observedSeries, xMin, xMax);
-  rowsRef.current = rows;
-  if (!rows.length) return null;
-
-  const xTicks: number[] = [];
-  {
-    let t = startOfHour(new Date(xMin)).getTime();
-    if (t < xMin) t += HOUR;
-    for (; t <= xMax; t += HOUR) xTicks.push(t);
-  }
-
-  const hasObserved = observedSeries.length > 0;
-  const showNow = now >= xMin && now <= xMax;
-
-  const latestRow: WindChartRow = rows.reduce(
-    (best, r) => (Math.abs(r.t - now) < Math.abs(best.t - now) ? r : best),
-    rows[0],
-  );
-  const readoutRow: WindChartRow | null = activeRow ?? (interacted ? null : latestRow);
-
   const yAxisWidth = 52;
   const rightMargin = 4;
 
@@ -228,6 +190,43 @@ export function WindChart({
       el.removeEventListener('touchmove', onTouchMove, { capture: true } as EventListenerOptions);
     };
   }, []);
+
+  const forecastSeries = buildForecastSeries(historyForecasts, forecasts);
+  const observedSeries = buildObservedSeries(liveHistory);
+
+  if (!forecastSeries.length && !observedSeries.length) return null;
+
+  const firstT = Math.min(
+    forecastSeries[0]?.t ?? Number.POSITIVE_INFINITY,
+    observedSeries[0]?.t ?? Number.POSITIVE_INFINITY,
+  );
+  const lastT = Math.max(
+    forecastSeries[forecastSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
+    observedSeries[observedSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
+  );
+
+  const xMin = bucket10(forcedMin ?? firstT);
+  const xMax = bucket10(Math.max(lastT, xMin + HOUR));
+
+  const rows = buildWindChartRows(forecastSeries, observedSeries, xMin, xMax);
+  rowsRef.current = rows;
+  if (!rows.length) return null;
+
+  const xTicks: number[] = [];
+  {
+    let t = startOfHour(new Date(xMin)).getTime();
+    if (t < xMin) t += HOUR;
+    for (; t <= xMax; t += HOUR) xTicks.push(t);
+  }
+
+  const hasObserved = observedSeries.length > 0;
+  const showNow = now >= xMin && now <= xMax;
+
+  const latestRow: WindChartRow = rows.reduce(
+    (best, r) => (Math.abs(r.t - now) < Math.abs(best.t - now) ? r : best),
+    rows[0],
+  );
+  const readoutRow: WindChartRow | null = activeRow ?? (interacted ? null : latestRow);
 
   const legendEntries: LegendEntry[] = [
     ...(hasObserved

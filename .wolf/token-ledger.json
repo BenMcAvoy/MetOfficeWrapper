@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-05-17T07:44:52.450Z",
   "lifetime": {
-    "total_tokens_estimated": 2102048,
-    "total_reads": 742,
-    "total_writes": 3975,
-    "total_sessions": 14,
-    "anatomy_hits": 144,
-    "anatomy_misses": 598,
+    "total_tokens_estimated": 2152202,
+    "total_reads": 752,
+    "total_writes": 3983,
+    "total_sessions": 17,
+    "anatomy_hits": 150,
+    "anatomy_misses": 602,
     "repeated_reads_blocked": 427,
-    "estimated_savings_vs_bare_cli": 2100247
+    "estimated_savings_vs_bare_cli": 2101447
   },
   "sessions": [
     {
@@ -25777,6 +25777,156 @@
         "writes_count": 49,
         "repeated_reads_blocked": 17,
         "anatomy_lookups": 8
+      }
+    },
+    {
+      "id": "session-2026-05-21-1659",
+      "started": "2026-05-21T15:59:13.469Z",
+      "ended": "2026-05-21T16:05:07.358Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 9767,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [],
+      "totals": {
+        "input_tokens_estimated": 13759,
+        "output_tokens_estimated": 0,
+        "reads_count": 2,
+        "writes_count": 0,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 2
+      }
+    },
+    {
+      "id": "session-2026-05-21-1659",
+      "started": "2026-05-21T15:59:13.469Z",
+      "ended": "2026-05-21T16:06:43.483Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 9767,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/.claude/projects/C--Users-Ben-metofficewrapper/memory/MEMORY.md",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/.claude/projects/C--Users-Ben-metofficewrapper/memory/sailing-suitability-feature-goal.md",
+          "tokens_estimated": 1960,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/.claude/projects/C--Users-Ben-metofficewrapper/memory/MEMORY.md",
+          "tokens_estimated": 46,
+          "action": "create"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 13759,
+        "output_tokens_estimated": 2006,
+        "reads_count": 3,
+        "writes_count": 2,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 2
+      }
+    },
+    {
+      "id": "session-2026-05-21-1706",
+      "started": "2026-05-21T16:06:56.540Z",
+      "ended": "2026-05-21T16:14:37.494Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/.claude/projects/C--Users-Ben-metofficewrapper/memory/sailing-suitability-feature-goal.md",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 9767,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ui/sheet.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/sailingScore.ts",
+          "tokens_estimated": 3282,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/sailingScore.ts",
+          "tokens_estimated": 136,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/sailingScore.ts",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 154,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3282,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 17,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 13759,
+        "output_tokens_estimated": 6871,
+        "reads_count": 5,
+        "writes_count": 6,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 2
       }
     }
   ],

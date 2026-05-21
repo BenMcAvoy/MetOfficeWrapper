@@ -581,14 +581,14 @@ function TidesCardHome({ tideData, onNavigate }: { tideData: TideData | null; on
   const hovered = activeRow != null;
   const displayHeight = hovered ? activeRow!.h : currentHeight?.height ?? null;
   // Rising or falling, based on the nearest pair of samples in tideData.heights.
-  const trend = useMemo(() => {
+  const trend = (() => {
     const t = hovered ? activeRow!.t : now;
     const heights = tideData.heights;
     if (heights.length < 2) return null;
     const idx = heights.findIndex(h => h.time.getTime() >= t);
     if (idx <= 0) return null;
     return heights[idx].height > heights[idx - 1].height ? 'rising' : 'falling';
-  }, [hovered, activeRow, tideData.heights, now]);
+  })();
 
   return (
     <div className="rounded-2xl bg-card border border-border/60 transition-colors hover:border-border">
