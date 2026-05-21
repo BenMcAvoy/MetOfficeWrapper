@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-21T13:56:50.277Z
-> Files: 14 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-21T15:58:34.396Z
+> Files: 15 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
@@ -11,6 +11,7 @@
 ## api/
 
 - `marine.ts` — API routes: GET (2 endpoints) (~1218 tok)
+- `tides.ts` — API routes: GET (2 endpoints) (~1000 tok)
 
 ## api/admin/
 
@@ -23,7 +24,7 @@
 ## src/components/
 
 - `charts.tsx` — COLORS (~5726 tok)
-- `HomePage.tsx` — WIND_AVG (~5136 tok)
+- `HomePage.tsx` — WIND_AVG (~9767 tok)
 - `RaceCalendar.tsx` — CATEGORY_STYLES (~8453 tok)
 - `TideChart.tsx` — KMH_TO_KNOTS (~3878 tok)
 - `TideMap.tsx` — Watches the app's `.dark` class so map elements (arrows, popover) can (~5312 tok)

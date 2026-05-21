@@ -39,8 +39,10 @@ export default async function handler(req: Request): Promise<Response> {
     haversineKm(lat, lon, s.Latitude, s.Longitude) < haversineKm(lat, lon, best.Latitude, best.Longitude) ? s : best
   );
 
+  // Anchor heights to start-of-today (UTC) so the home-screen 24h chart can be
+  // drawn midnight-to-midnight. UKHO TidalHeights accepts past start times.
   const startDatetime = new Date();
-  startDatetime.setMinutes(0, 0, 0);
+  startDatetime.setUTCHours(0, 0, 0, 0);
   const endDatetime = new Date(startDatetime.getTime() + 5 * 24 * 60 * 60 * 1000);
 
   const startStr = startDatetime.toISOString().replace(/\.\d{3}Z$/, 'Z');

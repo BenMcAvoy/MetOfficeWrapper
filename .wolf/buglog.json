@@ -2112,6 +2112,182 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-21T13:56:13.845Z"
+    },
+    {
+      "id": "bug-133",
+      "timestamp": "2026-05-21T14:01:38.407Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 4→9 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T14:01:38.407Z"
+    },
+    {
+      "id": "bug-134",
+      "timestamp": "2026-05-21T14:01:46.814Z",
+      "error_message": "Wrong operator: !== should be ||",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "Used \"!==\" instead of \"||\"",
+      "fix": "Changed operator !== → ||",
+      "tags": [
+        "auto-detected",
+        "operator-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T14:01:46.814Z"
+    },
+    {
+      "id": "bug-135",
+      "timestamp": "2026-05-21T14:01:56.466Z",
+      "error_message": "CSS fix: date",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "date: d, code: midday.significantWeatherCode, windMax → d, code: midday.significantWeatherCode, windMax, tempMax",
+      "fix": "Changed date: d, code: midday.significantWeatherCode, windMax → d, code: midday.significantWeatherCode, windMax, tempMax",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T14:01:56.466Z"
+    },
+    {
+      "id": "bug-136",
+      "timestamp": "2026-05-21T14:08:12.799Z",
+      "error_message": "CSS fix: h",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "h: TideHeight) => ({ t: h.time.getTime(), h: h.height → number",
+      "fix": "Changed h: TideHeight) => ({ t: h.time.getTime(), h: h.height → number",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T14:08:12.799Z"
+    },
+    {
+      "id": "bug-137",
+      "timestamp": "2026-05-21T14:12:40.884Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 5→8 lines (2 removed) | Also: const out: { date: Date; code: number; windMax: nu; const windMax = Math.max(...same.map(f => f.windSp",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-05-21T14:13:35.958Z"
+    },
+    {
+      "id": "bug-138",
+      "timestamp": "2026-05-21T14:14:39.902Z",
+      "error_message": "Wrong operator: ?? should be >=",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "Used \"??\" instead of \">=\"",
+      "fix": "Changed operator ?? → >=",
+      "tags": [
+        "auto-detected",
+        "operator-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T14:14:39.902Z"
+    },
+    {
+      "id": "bug-139",
+      "timestamp": "2026-05-21T14:20:59.019Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T14:20:59.019Z"
+    },
+    {
+      "id": "bug-140",
+      "timestamp": "2026-05-21T14:27:15.579Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check) | Also: {nowAvg && nowAvg.oAvg != null && (; <ReferenceDot x={nowAvg.t} y={nowAvg.oAvg} r={6} fill={WIND_ | Also: forecasts, forecastHistory, liveWindHistory, onActiveRow,; }: {",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-05-21T14:28:48.230Z"
+    },
+    {
+      "id": "bug-141",
+      "timestamp": "2026-05-21T14:29:27.225Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "14 lines replaced/restructured",
+      "fix": "Rewrote 71→109 lines (14 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T14:29:27.225Z"
+    },
+    {
+      "id": "bug-142",
+      "timestamp": "2026-05-21T14:30:13.389Z",
+      "error_message": "Type error",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T14:30:13.389Z"
+    },
+    {
+      "id": "bug-143",
+      "timestamp": "2026-05-21T15:58:14.096Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check) | Also: const [activeRow, setActiveRow] = useState<TideRow | null>(n; let defaultSecondary: React.ReactNode = null;",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-05-21T15:58:34.447Z"
     }
   ]
 }

@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-05-17T07:44:52.450Z",
   "lifetime": {
-    "total_tokens_estimated": 1640870,
-    "total_reads": 641,
-    "total_writes": 3703,
-    "total_sessions": 13,
-    "anatomy_hits": 87,
-    "anatomy_misses": 554,
-    "repeated_reads_blocked": 352,
-    "estimated_savings_vs_bare_cli": 1584502
+    "total_tokens_estimated": 2102048,
+    "total_reads": 742,
+    "total_writes": 3975,
+    "total_sessions": 14,
+    "anatomy_hits": 144,
+    "anatomy_misses": 598,
+    "repeated_reads_blocked": 427,
+    "estimated_savings_vs_bare_cli": 2100247
   },
   "sessions": [
     {
@@ -23675,6 +23675,2108 @@
         "writes_count": 22,
         "repeated_reads_blocked": 5,
         "anatomy_lookups": 6
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T14:00:03.935Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 4994,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 467,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 35246,
+        "output_tokens_estimated": 11219,
+        "reads_count": 11,
+        "writes_count": 22,
+        "repeated_reads_blocked": 5,
+        "anatomy_lookups": 6
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T14:02:29.389Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 4994,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 467,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 210,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 198,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 180,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 35246,
+        "output_tokens_estimated": 12229,
+        "reads_count": 11,
+        "writes_count": 27,
+        "repeated_reads_blocked": 5,
+        "anatomy_lookups": 6
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T14:08:33.240Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5481,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 467,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 210,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 198,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 180,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 782,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 35733,
+        "output_tokens_estimated": 13011,
+        "reads_count": 11,
+        "writes_count": 28,
+        "repeated_reads_blocked": 6,
+        "anatomy_lookups": 6
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T14:15:09.452Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5782,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 8453,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 467,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 210,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 198,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 180,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 782,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 134,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 959,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 1160,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 44487,
+        "output_tokens_estimated": 15298,
+        "reads_count": 12,
+        "writes_count": 32,
+        "repeated_reads_blocked": 9,
+        "anatomy_lookups": 7
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T14:21:22.310Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5782,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 8453,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 528,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 467,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 210,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 198,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 180,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 782,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 134,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 959,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 1160,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 91,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 559,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 45015,
+        "output_tokens_estimated": 15948,
+        "reads_count": 14,
+        "writes_count": 34,
+        "repeated_reads_blocked": 9,
+        "anatomy_lookups": 8
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T14:25:44.552Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5782,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 8453,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 528,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 467,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 210,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 198,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 180,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 782,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 134,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 959,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 1160,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 91,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 559,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 45015,
+        "output_tokens_estimated": 15948,
+        "reads_count": 14,
+        "writes_count": 34,
+        "repeated_reads_blocked": 9,
+        "anatomy_lookups": 8
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T14:31:12.307Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 8706,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 8453,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 528,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 467,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 210,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 198,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 180,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 782,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 134,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 959,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 1160,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 91,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 559,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 408,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 272,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 121,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 18,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 38,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 999,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 1352,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 35,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 38,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 190,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 203,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 47939,
+        "output_tokens_estimated": 19702,
+        "reads_count": 14,
+        "writes_count": 46,
+        "repeated_reads_blocked": 15,
+        "anatomy_lookups": 8
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T15:58:55.574Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 8719,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/RaceCalendar.tsx",
+          "tokens_estimated": 8453,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 528,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 467,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 210,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 198,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 180,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 782,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 134,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 959,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 1160,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 91,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 559,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 408,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 272,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 121,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 18,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 38,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 999,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 1352,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 35,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 38,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 190,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 203,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 68,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 714,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 706,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 47952,
+        "output_tokens_estimated": 21190,
+        "reads_count": 14,
+        "writes_count": 49,
+        "repeated_reads_blocked": 17,
+        "anatomy_lookups": 8
       }
     }
   ],

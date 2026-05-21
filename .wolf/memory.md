@@ -660,3 +660,49 @@
 | 14:56 | Edited src/components/HomePage.tsx | modified convertWind() | ~467 |
 | 13:12 | add gust line (both forecast dashed and live solid) to home wind mini chart; show avg/gust split in header | src/components/HomePage.tsx | ok | ~0.5k |
 | 14:57 | Session end: 22 writes across 2 files (HomePage.tsx, App.tsx) | 11 reads | ~46465 tok |
+| 15:00 | Session end: 22 writes across 2 files (HomePage.tsx, App.tsx) | 11 reads | ~46465 tok |
+| 15:01 | Edited src/components/HomePage.tsx | 12→12 lines | ~166 |
+| 15:01 | Edited src/components/HomePage.tsx | modified convertWind() | ~210 |
+| 15:01 | Edited src/components/HomePage.tsx | modified degreesToCardinal() | ~256 |
+| 15:01 | Edited src/components/HomePage.tsx | CSS: tempMax | ~198 |
+| 15:02 | Edited src/components/HomePage.tsx | 9→10 lines | ~180 |
+| 13:20 | final tweaks: unified now-line, h-24 wind chart, 7-day temp+wind, avg+gust deltas with >=2 threshold | src/components/HomePage.tsx | ok | ~0.5k |
+| 15:02 | Session end: 27 writes across 2 files (HomePage.tsx, App.tsx) | 11 reads | ~47475 tok |
+| 15:08 | Edited src/components/HomePage.tsx | CSS: nowPoint | ~782 |
+| 13:28 | tide now indicator: replace dashed vertical line with filled dot on curve (interpolated current height) + halo | src/components/HomePage.tsx | ok | ~0.4k |
+| 15:08 | Session end: 28 writes across 2 files (HomePage.tsx, App.tsx) | 11 reads | ~48744 tok |
+| 15:12 | Edited src/components/HomePage.tsx | modified TideMiniChart() | ~134 |
+| 15:13 | Edited src/components/HomePage.tsx | modified WeekDayWindArrow() | ~959 |
+| 15:14 | Edited src/components/HomePage.tsx | inline fix | ~34 |
+| 15:14 | Edited src/components/HomePage.tsx | CSS: target, now, transform | ~1160 |
+| 13:42 | improve home cards: tide window = today midnight->midnight; 7-day adds wind arrow+rain%+hi/lo temp; race card redesign with countdown, classes, beaufort warn | src/components/HomePage.tsx | ok | ~1.5k |
+| 15:15 | Session end: 32 writes across 2 files (HomePage.tsx, App.tsx) | 12 reads | ~59785 tok |
+| 15:20 | Edited api/tides.ts | 3→5 lines | ~91 |
+| 15:20 | Edited src/components/HomePage.tsx | added nullish coalescing | ~559 |
+| 13:55 | tide chart: anchor api request to start-of-day UTC; client-side cosine backfill from xMin to first sample so home chart fills 00:00->24:00 | api/tides.ts, src/components/HomePage.tsx | ok | ~0.8k |
+| 15:21 | Session end: 34 writes across 3 files (HomePage.tsx, App.tsx, tides.ts) | 14 reads | ~60963 tok |
+| 15:25 | Session end: 34 writes across 3 files (HomePage.tsx, App.tsx, tides.ts) | 14 reads | ~60963 tok |
+| 15:27 | Edited src/components/HomePage.tsx | added nullish coalescing | ~408 |
+| 15:27 | Edited src/components/HomePage.tsx | expanded (+6 lines) | ~272 |
+| 15:27 | Edited src/components/HomePage.tsx | CSS: Out-of-season | ~121 |
+| 15:28 | Edited src/components/HomePage.tsx | inline fix | ~18 |
+| 15:28 | Edited src/components/HomePage.tsx | 3→4 lines | ~38 |
+| 15:28 | Edited src/components/HomePage.tsx | added optional chaining | ~999 |
+| 15:29 | Edited src/components/HomePage.tsx | modified WindCardHome() | ~1352 |
+| 15:29 | Edited src/components/HomePage.tsx | 6→7 lines | ~35 |
+| 15:29 | Edited src/components/HomePage.tsx | inline fix | ~38 |
+| 15:30 | Edited src/components/HomePage.tsx | modified convertWind() | ~80 |
+| 15:30 | Edited src/components/HomePage.tsx | expanded (+13 lines) | ~190 |
+| 15:30 | Edited src/components/HomePage.tsx | 11→11 lines | ~203 |
+| 14:15 | home tweaks: now-dot on wind chart, Y floor=0, hide race >14d out, tide 06/12/18 ticks, sunsummary in card, interactive cursor scrub on wind chart updates header readout | src/components/HomePage.tsx | ok | ~2k |
+| 15:31 | Session end: 46 writes across 3 files (HomePage.tsx, App.tsx, tides.ts) | 14 reads | ~67641 tok |
+| 16:57 | Edited src/components/HomePage.tsx | CSS: t, h, row | ~68 |
+| 16:58 | Edited src/components/HomePage.tsx | added optional chaining | ~714 |
+| 16:58 | Edited src/components/HomePage.tsx | added optional chaining | ~706 |
+| 14:25 | tide chart on home: same cursor-scrub pattern as wind; header shows hovered height + time + rising/falling | src/components/HomePage.tsx | ok | ~1k |
+| 16:58 | Session end: 49 writes across 3 files (HomePage.tsx, App.tsx, tides.ts) | 14 reads | ~69142 tok |
+
+## Session: 2026-05-21 16:59
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
