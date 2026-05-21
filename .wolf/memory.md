@@ -706,3 +706,19 @@
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
+| 17:06 | Created ../.claude/projects/C--Users-Ben-metofficewrapper/memory/sailing-suitability-feature-goal.md | — | ~1830 |
+| 17:06 | Created ../.claude/projects/C--Users-Ben-metofficewrapper/memory/MEMORY.md | — | ~43 |
+| 17:06 | Session end: 2 writes across 2 files (sailing-suitability-feature-goal.md, MEMORY.md) | 3 reads | ~15765 tok |
+
+## Session: 2026-05-21 17:06
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 17:10 | Created src/lib/sailingScore.ts | — | ~3282 |
+| 17:10 | Edited src/lib/sailingScore.ts | modified directionFactor() | ~136 |
+| 17:10 | Edited src/lib/sailingScore.ts | — | ~0 |
+| 17:11 | Edited src/components/HomePage.tsx | expanded (+7 lines) | ~154 |
+| 17:11 | Edited src/components/HomePage.tsx | added nullish coalescing | ~3282 |
+| 17:12 | Edited src/components/HomePage.tsx | inline fix | ~17 |
+| 16:45 | Added sailing suitability feature on home page | src/lib/sailingScore.ts, src/components/HomePage.tsx, src/components/ui/sheet.tsx | new SailingSuitability section with star rating + prefs sheet; typecheck + build pass | ~2800 |
+| 17:14 | Session end: 6 writes across 2 files (sailingScore.ts, HomePage.tsx) | 5 reads | ~20630 tok |

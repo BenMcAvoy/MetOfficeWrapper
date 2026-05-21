@@ -2288,6 +2288,22 @@
       "related_bugs": [],
       "occurrences": 2,
       "last_seen": "2026-05-21T15:58:34.447Z"
+    },
+    {
+      "id": "bug-144",
+      "timestamp": "2026-05-21T16:11:53.790Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/HomePage.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T16:11:53.790Z"
     }
   ]
 }

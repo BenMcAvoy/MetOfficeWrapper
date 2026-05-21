@@ -14,11 +14,15 @@ import { getWeatherInfo, getWeatherIconColor } from '@/lib/weatherCodes';
 import { haptic } from '@/lib/haptics';
 import { useNow } from '@/lib/useNow';
 import { format, isSameDay, startOfDay, addDays, differenceInMinutes, subHours, addHours } from 'date-fns';
-import { ChevronRight, Wind as WindIcon, Waves, CalendarDays, Anchor } from 'lucide-react';
+import { ChevronRight, Wind as WindIcon, Waves, CalendarDays, Anchor, Star, Sailboat } from 'lucide-react';
 import {
   ComposedChart, Line, Area, XAxis, YAxis, ReferenceLine, ReferenceDot,
   ResponsiveContainer,
 } from 'recharts';
+import {
+  useSailingPrefs, scoreDay, groupForecastsByDay,
+  type DayScore, type Stars,
+} from '@/lib/sailingScore';
 
 interface HomePageProps {
   forecasts: HourlyForecast[];
@@ -581,14 +585,14 @@ function TidesCardHome({ tideData, onNavigate }: { tideData: TideData | null; on
   const hovered = activeRow != null;
   const displayHeight = hovered ? activeRow!.h : currentHeight?.height ?? null;
   // Rising or falling, based on the nearest pair of samples in tideData.heights.
-  const trend = useMemo(() => {
+  const trend = (() => {
     const t = hovered ? activeRow!.t : now;
     const heights = tideData.heights;
     if (heights.length < 2) return null;
     const idx = heights.findIndex(h => h.time.getTime() >= t);
     if (idx <= 0) return null;
     return heights[idx].height > heights[idx - 1].height ? 'rising' : 'falling';
-  }, [hovered, activeRow, tideData.heights, now]);
+  })();
 
   return (
     <div className="rounded-2xl bg-card border border-border/60 transition-colors hover:border-border">
@@ -807,11 +811,112 @@ function WeekCardHome({ forecasts, onNavigate }: { forecasts: HourlyForecast[]; 
   );
 }
 
+// --- Sailing suitability ---------------------------------------------------
+
+function StarRow({ stars, size = 'sm' }: { stars: Stars; size?: 'sm' | 'lg' }) {
+  const px = size === 'lg' ? 'h-5 w-5' : 'h-3 w-3';
+  const color = stars >= 4 ? 'text-yellow-400' : stars === 3 ? 'text-primary' : 'text-muted-foreground';
+  return (
+    <div className="inline-flex items-center gap-0.5" aria-label={`${stars} out of 5 stars`}>
+      {[1, 2, 3, 4, 5].map(i => (
+        <Star
+          key={i}
+          className={`${px} ${i <= stars ? color : 'text-muted-foreground/30'}`}
+          fill={i <= stars ? 'currentColor' : 'none'}
+          strokeWidth={1.75}
+        />
+      ))}
+    </div>
+  );
+}
+
+function dayLabel(d: Date, i: number): string {
+  if (i === 0) return 'Today';
+  if (i === 1) return 'Tmrw';
+  return format(d, 'EEE');
+}
+
+function SailingSuitability({
+  forecasts, tideData, sunInfo,
+}: {
+  forecasts: HourlyForecast[];
+  tideData: TideData | null;
+  sunInfo: SunInfo | null;
+}) {
+  const [prefs] = useSailingPrefs();
+
+  const days = useMemo<DayScore[]>(() => {
+    if (!forecasts.length) return [];
+    const grouped = groupForecastsByDay(forecasts);
+    const start = startOfDay(new Date());
+    const out: DayScore[] = [];
+    for (let i = 0; i < 5; i++) {
+      const d = addDays(start, i);
+      const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+      const fcs = grouped.get(key) ?? [];
+      if (fcs.length === 0) continue;
+      out.push(scoreDay(d, fcs, tideData, sunInfo, prefs));
+    }
+    return out;
+  }, [forecasts, tideData, sunInfo, prefs]);
+
+  if (days.length === 0) return null;
+  const today = days[0];
+  const rest = days.slice(1, 5);
+
+  return (
+    <div className="rounded-2xl bg-card border border-border/60">
+      <div className="flex items-center justify-between px-4 pt-3 pb-1">
+        <div className="flex items-center gap-1.5 text-muted-foreground">
+          <Sailboat className="h-3.5 w-3.5" strokeWidth={2.25} />
+          <span className="text-[11px] uppercase tracking-wider font-semibold">Sailing</span>
+        </div>
+      </div>
+
+      <div className="px-4 pb-3">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-baseline gap-2">
+              <span className="font-display text-2xl font-semibold tracking-tight">Today</span>
+              <StarRow stars={today.stars} size="lg" />
+            </div>
+            <p className="text-xs text-muted-foreground truncate mt-0.5">{today.reason}</p>
+          </div>
+        </div>
+
+        {rest.length > 0 && (
+          <div className="mt-3 overflow-x-auto snap-x pb-1">
+            <div className="flex gap-2 min-w-max">
+              {rest.map((d, i) => (
+                <div
+                  key={d.date.toISOString()}
+                  className="snap-start flex-1 min-w-[5.5rem] rounded-xl border border-border/50 bg-background/50 px-2.5 py-2"
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
+                      {dayLabel(d.date, i + 1)}
+                    </span>
+                  </div>
+                  <div className="mt-1"><StarRow stars={d.stars} /></div>
+                  <p className="text-[10px] text-muted-foreground truncate mt-1" title={d.reason}>
+                    {d.reason}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function HomePage({
   forecasts, forecastHistory, liveWind, liveWindHistory, tideData, sunInfo, onNavigate,
 }: HomePageProps) {
   return (
     <div className="space-y-3 page-enter">
+      <SailingSuitability forecasts={forecasts} tideData={tideData} sunInfo={sunInfo} />
       <SunSummary forecasts={forecasts} sunInfo={sunInfo} />
       <WindCardHome
         forecasts={forecasts}

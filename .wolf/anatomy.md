@@ -1,7 +1,12 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-21T15:58:34.396Z
-> Files: 15 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-21T16:12:15.610Z
+> Files: 18 tracked | Anatomy hits: 0 | Misses: 0
+
+## ../.claude/projects/C--Users-Ben-metofficewrapper/memory/
+
+- `MEMORY.md` (~40 tok)
+- `sailing-suitability-feature-goal.md` — Sailing Suitability Features Goal (~1735 tok)
 
 ## ./
 
@@ -24,7 +29,7 @@
 ## src/components/
 
 - `charts.tsx` — COLORS (~5726 tok)
-- `HomePage.tsx` — WIND_AVG (~9767 tok)
+- `HomePage.tsx` — WIND_AVG (~13053 tok)
 - `RaceCalendar.tsx` — CATEGORY_STYLES (~8453 tok)
 - `TideChart.tsx` — KMH_TO_KNOTS (~3878 tok)
 - `TideMap.tsx` — Watches the app's `.dark` class so map elements (arrows, popover) can (~5312 tok)
@@ -34,4 +39,5 @@
 - `api.ts` — Exports HourlyForecast, WindForecastPoint, TideExtreme, TideHeight + 15 more (~3992 tok)
 - `cache.ts` — Exports getCached, setCached, clearCache, TTL (~528 tok)
 - `calendar.ts` — Exports RaceEvent, RACE_CALENDAR (~11438 tok)
+- `sailingScore.ts` — Exports Cardinal, TideHeightPref, TideMovementPref, Stars + 9 more (~3161 tok)
 - `tileColorMask.ts` — Exports ColorMaskVerdict, Rgba, classifyMapColor, classifyMapPixelNeighbourhood, classifyBasemapPoin (~1581 tok)
