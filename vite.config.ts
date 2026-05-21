@@ -110,6 +110,66 @@ async function handleApiRequest(req: IncomingMessage, res: ServerResponse, env: 
       return true;
     }
 
+    if (url.pathname === '/api/marine') {
+      const latParam = url.searchParams.get('lat') ?? '';
+      const lonParam = url.searchParams.get('lon') ?? '';
+      const lats = latParam.split(',').map(s => parseFloat(s.trim())).filter(n => !Number.isNaN(n));
+      const lons = lonParam.split(',').map(s => parseFloat(s.trim())).filter(n => !Number.isNaN(n));
+      if (!lats.length || lats.length !== lons.length) {
+        res.statusCode = 400;
+        res.end(JSON.stringify({ error: 'lat and lon required, equal length' }));
+        return true;
+      }
+      const latStr = lats.map(n => n.toFixed(4)).join(',');
+      const lonStr = lons.map(n => n.toFixed(4)).join(',');
+      const r = await fetch(
+        `https://marine-api.open-meteo.com/v1/marine?latitude=${latStr}&longitude=${lonStr}&hourly=sea_level_height_msl,ocean_current_velocity,ocean_current_direction&forecast_days=5&timezone=UTC`
+      );
+      if (!r.ok) {
+        res.statusCode = r.status;
+        res.end(JSON.stringify({ error: 'Open-Meteo marine error' }));
+        return true;
+      }
+      const raw = await r.json() as { hourly?: Record<string, unknown> } | { hourly?: Record<string, unknown> }[];
+      const buildPoints = (loc: { hourly?: Record<string, unknown> }) => {
+        const h = (loc.hourly ?? {}) as {
+          time?: string[];
+          sea_level_height_msl?: (number | null)[];
+          ocean_current_velocity?: (number | null)[];
+          ocean_current_direction?: (number | null)[];
+        };
+        const times = h.time ?? [];
+        const seaLevel = h.sea_level_height_msl ?? [];
+        const vel = h.ocean_current_velocity ?? [];
+        const dir = h.ocean_current_direction ?? [];
+        return times.map((t, i) => ({
+          time: t,
+          seaLevelMsl: seaLevel[i] ?? null,
+          currentVelocity: vel[i] ?? null,
+          currentDirection: dir[i] ?? null,
+        }));
+      };
+      const rawArr = (Array.isArray(raw) ? raw : [raw]) as { elevation?: number; hourly?: Record<string, unknown> }[];
+      if (lats.length === 1) {
+        const single = rawArr[0];
+        res.statusCode = 200;
+        res.end(JSON.stringify({
+          elevation: single.elevation ?? null,
+          points: buildPoints(single),
+        }));
+        return true;
+      }
+      const locations = rawArr.map((loc, i) => ({
+        lat: lats[i],
+        lon: lons[i],
+        elevation: loc.elevation ?? null,
+        points: buildPoints(loc),
+      }));
+      res.statusCode = 200;
+      res.end(JSON.stringify({ locations }));
+      return true;
+    }
+
     if (url.pathname === '/api/tides') {
       const key = env.UKHO_API_KEY;
       if (!key) { res.statusCode = 503; res.end(JSON.stringify({ error: 'UKHO_API_KEY not set' })); return true; }

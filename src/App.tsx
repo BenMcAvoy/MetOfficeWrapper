@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react';
 import { useNow } from '@/lib/useNow';
 import { haptic } from '@/lib/haptics';
 import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint, MarineData } from '@/lib/api';
@@ -9,6 +9,7 @@ import { useSkyTint } from '@/lib/useSkyTint';
 import { Skeleton } from '@/components/ui/skeleton';
 import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
+const TideMap = lazy(() => import('@/components/TideMap'));
 import ForecastStrip from '@/components/ForecastStrip';
 import RaceCalendar, { type RaceCalendarHandle } from '@/components/RaceCalendar';
 import InstallButton from '@/components/InstallButton';
@@ -121,6 +122,8 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>(() => {
     try {
+      const urlTab = new URLSearchParams(window.location.search).get('tab');
+      if (urlTab === 'wind' || urlTab === 'tides' || urlTab === 'forecast' || urlTab === 'events' || urlTab === 'settings') return urlTab;
       const saved = sessionStorage.getItem('wx-active-tab');
       if (saved === 'wind' || saved === 'tides' || saved === 'forecast' || saved === 'events' || saved === 'settings') return saved;
     } catch { /* ignore */ }
@@ -310,7 +313,7 @@ export default function App() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 pt-3" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
-        {isLoading && !forecasts.length ? (
+        {isLoading && !forecasts.length && activeTab !== 'tides' ? (
           <LoadingSkeleton />
         ) : loadState === 'error' ? (
           <div className="text-center py-12 space-y-3">
@@ -344,13 +347,25 @@ export default function App() {
               </div>
             )}
             {activeTab === 'tides' && (
-              <div key={`tides-${selectedDay.getTime()}`} className="page-enter">
+              <div key={`tides-${selectedDay.getTime()}`} className="page-enter space-y-3">
+                <Suspense fallback={<div className="h-[380px] rounded-lg bg-muted/40 animate-pulse" />}>
+                  <TideMap
+                    centerLat={lat}
+                    centerLon={lon}
+                    locationName={LOCATION_NAME}
+                    at={isSameDay(selectedDay, new Date()) ? new Date() : selectedDay}
+                  />
+                </Suspense>
                 {tideData ? (
-                  <TideChart tideData={tideData} marineData={marineData} selectedDay={selectedDay} />
+                  <TideChart
+                    tideData={tideData}
+                    marineData={marineData}
+                    selectedDay={selectedDay}
+                  />
                 ) : (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <Waves className="mx-auto h-10 w-10 mb-3" />
-                    Tide data unavailable — check UKHO API key
+                  <div className="text-center py-6 text-muted-foreground text-sm">
+                    <Waves className="mx-auto h-6 w-6 mb-2 opacity-60" />
+                    Tide times unavailable — check UKHO API key
                   </div>
                 )}
               </div>

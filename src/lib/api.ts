@@ -50,6 +50,17 @@ export interface MarineData {
   points: MarinePoint[];
 }
 
+export interface MarineLocation {
+  lat: number;
+  lon: number;
+  elevation: number | null;
+  points: MarinePoint[];
+}
+
+export interface MarineGrid {
+  locations: MarineLocation[];
+}
+
 export interface SunInfo {
   sunrise: Date;
   sunset: Date;
@@ -218,6 +229,56 @@ export async function fetchMarine(lat: number, lon: number): Promise<MarineData>
     TTL.MARINE,
   );
   return { points };
+}
+
+export async function fetchMarineGrid(points: { lat: number; lon: number }[]): Promise<MarineGrid> {
+  if (!points.length) return { locations: [] };
+  const lats = points.map(p => p.lat.toFixed(4)).join(',');
+  const lons = points.map(p => p.lon.toFixed(4)).join(',');
+  const cacheKey = `marine_grid_${lats}_${lons}`;
+  type CachedLoc = { lat: number; lon: number; elevation: number | null; points: SerialisedMarinePoint[] };
+  const cached = getCached<{ locations: CachedLoc[] }>(cacheKey);
+  if (cached) {
+    return {
+      locations: cached.locations.map(loc => ({
+        lat: loc.lat,
+        lon: loc.lon,
+        elevation: loc.elevation ?? null,
+        points: loc.points.map(p => ({ ...p, time: new Date(p.time) })),
+      })),
+    };
+  }
+
+  const res = await fetch(`/api/marine?lat=${encodeURIComponent(lats)}&lon=${encodeURIComponent(lons)}`);
+  if (!res.ok) throw new Error(`Marine grid API error: ${res.status}`);
+  const data = await res.json() as { locations?: CachedLoc[] };
+  const locations = (data.locations ?? []).map(loc => ({
+    lat: loc.lat,
+    lon: loc.lon,
+    elevation: loc.elevation ?? null,
+    points: loc.points
+      .map(p => ({
+        time: parseForecastTimestamp(p.time),
+        seaLevelMsl: p.seaLevelMsl,
+        currentVelocity: p.currentVelocity,
+        currentDirection: p.currentDirection,
+      }))
+      .filter(p => !Number.isNaN(p.time.getTime())),
+  }));
+
+  setCached(
+    cacheKey,
+    {
+      locations: locations.map(loc => ({
+        lat: loc.lat,
+        lon: loc.lon,
+        elevation: loc.elevation,
+        points: loc.points.map(p => ({ ...p, time: p.time.toISOString() })),
+      })),
+    },
+    TTL.MARINE,
+  );
+  return { locations };
 }
 
 type SerialisedLiveWind = Omit<LiveWind, 'observedAt'> & { observedAt: string };

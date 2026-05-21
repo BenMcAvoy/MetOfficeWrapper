@@ -484,3 +484,53 @@
 | 08:38 | Edited src/components/charts.tsx | expanded (+14 lines) | ~213 |
 | 08:38 | Edited src/components/TideChart.tsx | added optional chaining | ~89 |
 | 08:39 | Session end: 19 writes across 6 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 7 reads | ~12413 tok |
+| 08:50 | Created api/marine.ts | — | ~729 |
+| 08:50 | Edited src/lib/api.ts | expanded (+10 lines) | ~61 |
+| 08:50 | Edited src/lib/api.ts | added nullish coalescing | ~477 |
+| 08:51 | Created src/components/TideMap.tsx | — | ~1503 |
+| 08:51 | Edited src/components/TideChart.tsx | CSS: lat, lon, locationName | ~46 |
+| 08:51 | Edited src/components/TideChart.tsx | 1→4 lines | ~44 |
+| 08:51 | Edited src/components/TideChart.tsx | inline fix | ~33 |
+| 08:51 | Edited src/components/TideChart.tsx | CSS: now | ~269 |
+| 08:51 | Edited src/App.tsx | expanded (+7 lines) | ~83 |
+| 08:52 | Session end: 28 writes across 7 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 7 reads | ~15658 tok |
+| 08:56 | Edited src/components/TideMap.tsx | sin() → grid() | ~214 |
+| 08:56 | Edited src/components/TideMap.tsx | CSS: aesthetic | ~611 |
+| 08:56 | Edited src/components/TideMap.tsx | 6→6 lines | ~60 |
+| 08:57 | Edited src/components/TideMap.tsx | 320 → 380 | ~28 |
+| 08:58 | Session end: 32 writes across 7 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 7 reads | ~16571 tok |
+| 09:02 | Edited src/components/TideMap.tsx | inline fix | ~25 |
+| 09:02 | Edited src/components/TideMap.tsx | added 1 condition(s) | ~320 |
+| 09:02 | Edited src/components/TideMap.tsx | CSS: distSq, bounds, pts | ~460 |
+| 09:02 | Edited src/components/TideMap.tsx | expanded (+8 lines) | ~223 |
+| 09:02 | Edited src/components/TideMap.tsx | "rounded-lg overflow-hidde" → "relative rounded-lg overf" | ~30 |
+| 09:04 | designqc: captured 5 screenshots (269KB, ~12500 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:04 | Edited vite.config.ts | added nullish coalescing | ~693 |
+| 09:05 | Edited src/App.tsx | added 1 condition(s) | ~152 |
+| 09:05 | designqc: captured 2 screenshots (28KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:05 | Edited src/App.tsx | inline fix | ~24 |
+| 09:05 | Edited src/App.tsx | 1→2 lines | ~31 |
+| 09:06 | Edited src/App.tsx | modified Date() | ~332 |
+| 09:06 | Edited src/components/TideChart.tsx | removed 23 lines | ~7 |
+| 09:06 | Edited src/components/TideChart.tsx | 4→1 lines | ~16 |
+| 09:06 | Edited src/components/TideChart.tsx | 8→5 lines | ~30 |
+| 09:06 | Edited src/components/TideChart.tsx | inline fix | ~26 |
+| 09:06 | Edited src/App.tsx | 9→6 lines | ~60 |
+| 09:07 | designqc: captured 2 screenshots (21KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:08 | designqc: captured 2 screenshots (21KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:08 | Edited src/App.tsx | 3→3 lines | ~39 |
+| 09:08 | designqc: captured 2 screenshots (102KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:09 | Session end: 48 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 10 reads | ~19976 tok |
+| 09:15 | Edited src/components/TideMap.tsx | modified buildGridPoints() | ~247 |
+| 09:15 | Edited src/components/TideMap.tsx | CSS: dedup | ~354 |
+| 09:16 | Edited src/components/TideMap.tsx | CSS: arrow | ~448 |
+| 09:16 | designqc: captured 2 screenshots (126KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:17 | Edited api/marine.ts | modified buildPoints() | ~84 |
+| 09:17 | Edited api/marine.ts | added nullish coalescing | ~166 |
+| 09:17 | Edited vite.config.ts | modified if() | ~365 |
+| 09:17 | Edited src/lib/api.ts | 5→6 lines | ~34 |
+| 09:18 | Edited src/lib/api.ts | modified if() | ~410 |
+| 09:18 | Edited src/lib/cache.ts | "2" → "3" | ~8 |
+| 09:18 | Edited src/components/TideMap.tsx | CSS: land | ~171 |
+| 09:18 | designqc: captured 2 screenshots (101KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:19 | Session end: 58 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 10 reads | ~22263 tok |

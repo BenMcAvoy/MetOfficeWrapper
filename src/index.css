@@ -258,3 +258,8 @@ html, body {
 .press-row:active {
   transform: scale(0.985);
 }
+/* Leaflet flow arrows: strip default div-icon chrome */
+.tide-flow-arrow {
+  background: transparent !important;
+  border: 0 !important;
+}
