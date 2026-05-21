@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-21T07:29:45.208Z
-> Files: 9 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-21T07:38:24.683Z
+> Files: 10 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
@@ -21,8 +21,9 @@
 
 ## src/components/
 
+- `charts.tsx` — COLORS (~5726 tok)
 - `RaceCalendar.tsx` — CATEGORY_STYLES (~8453 tok)
-- `TideChart.tsx` — KMH_TO_KNOTS (~3851 tok)
+- `TideChart.tsx` — KMH_TO_KNOTS (~3878 tok)
 
 ## src/lib/
 

@@ -243,7 +243,9 @@ export default function TideChart({ tideData, marineData, selectedDay }: TideCha
             windowStart={chartStart}
             windowEnd={chartEnd}
             nowRefLine={currentHeight ?? undefined}
-            height={224}
+            height={240}
+            flowPoints={marineData?.points}
+            arrowIntervalHours={isToday ? 3 : 2}
           />
         </CardContent>
       </Card>

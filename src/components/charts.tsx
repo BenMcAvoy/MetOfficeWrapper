@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
+import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint, MarinePoint } from '@/lib/api';
 import { YAxisTick, tooltipStyle } from '@/lib/chartUtils';
 import {
   buildForecastSeries,
@@ -13,7 +13,7 @@ import {
 import type { SeriesPoint, WindChartRow } from '@/lib/windChartData';
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine
+  ResponsiveContainer, ReferenceLine, Customized,
 } from 'recharts';
 import { format, subHours, startOfHour } from 'date-fns';
 
@@ -397,12 +397,100 @@ interface TideChartInnerProps {
   startRefLine?: number;
   nowRefLine?: number;
   height?: number;
+  flowPoints?: MarinePoint[];
+  arrowIntervalHours?: number;
 }
 
-export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalHours = 3, startRefLine, nowRefLine, height = 176 }: TideChartInnerProps) {
+const KMH_TO_KNOTS_CHART = 0.539957;
+
+function interpolateTideHeightAt(heights: { time: Date; height: number }[], at: number): number | null {
+  if (heights.length < 2) return null;
+  let before: { time: Date; height: number } | null = null;
+  let after: { time: Date; height: number } | null = null;
+  for (const h of heights) {
+    const t = h.time.getTime();
+    if (t <= at) before = h;
+    if (t >= at && !after) { after = h; break; }
+  }
+  if (!before || !after) return null;
+  if (before === after) return before.height;
+  const ratio = (at - before.time.getTime()) / (after.time.getTime() - before.time.getTime());
+  return before.height + ratio * (after.height - before.height);
+}
+
+interface FlowArrowsProps {
+  flowPoints: MarinePoint[];
+  arrowIntervalHours: number;
+  heights: { time: Date; height: number }[];
+  windowStart: Date;
+  windowEnd: Date;
+  xAxisMap?: Record<string, { scale: (v: number) => number }>;
+  yAxisMap?: Record<string, { scale: (v: number) => number }>;
+}
+
+function FlowArrows(props: FlowArrowsProps) {
+  const { flowPoints, arrowIntervalHours, heights, windowStart, windowEnd, xAxisMap, yAxisMap } = props;
+  const xAxis = xAxisMap && Object.values(xAxisMap)[0];
+  const yAxis = yAxisMap && Object.values(yAxisMap)[0];
+  if (!xAxis || !yAxis || !flowPoints.length) return null;
+
+  const first = new Date(windowStart);
+  first.setMinutes(0, 0, 0);
+  if (first.getTime() < windowStart.getTime()) first.setHours(first.getHours() + 1);
+  // Snap to a multiple of arrowIntervalHours from midnight for stable placement.
+  while (first.getHours() % arrowIntervalHours !== 0) first.setHours(first.getHours() + 1);
+
+  const intervalMs = arrowIntervalHours * 60 * 60 * 1000;
+  const nodes: React.ReactNode[] = [];
+  for (let t = first.getTime(); t <= windowEnd.getTime(); t += intervalMs) {
+    // Nearest marine point within 90 minutes.
+    let nearest: MarinePoint | null = null;
+    let bestDiff = Infinity;
+    for (const p of flowPoints) {
+      const d = Math.abs(p.time.getTime() - t);
+      if (d < bestDiff) { bestDiff = d; nearest = p; }
+    }
+    if (!nearest || bestDiff > 90 * 60 * 1000) continue;
+    if (nearest.currentDirection == null || nearest.currentVelocity == null) continue;
+
+    const h = interpolateTideHeightAt(heights, t);
+    if (h == null) continue;
+
+    const cx = xAxis.scale(t);
+    const cy = yAxis.scale(h);
+    if (!Number.isFinite(cx) || !Number.isFinite(cy)) continue;
+
+    const knots = nearest.currentVelocity * KMH_TO_KNOTS_CHART;
+    const dir = nearest.currentDirection;
+    // Size arrow by velocity: 0.1kt -> 10px, 1kt+ -> 18px.
+    const len = Math.min(18, 10 + Math.min(knots, 1) * 8);
+
+    nodes.push(
+      <g key={t} transform={`translate(${cx}, ${cy}) rotate(${dir})`}>
+        <circle r={9} fill="var(--background)" stroke="var(--primary)" strokeOpacity={0.4} strokeWidth={1} />
+        <path
+          d={`M 0 ${len / 2} L 0 ${-len / 2} M -3 ${-len / 2 + 4} L 0 ${-len / 2} L 3 ${-len / 2 + 4}`}
+          stroke="var(--primary)"
+          strokeWidth={1.6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      </g>
+    );
+  }
+
+  return <g>{nodes}</g>;
+}
+
+export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalHours = 3, startRefLine, nowRefLine, height = 176, flowPoints, arrowIntervalHours = 3 }: TideChartInnerProps) {
   const data = tideData.heights
     .filter(h => h.time >= windowStart && h.time <= windowEnd)
     .map(h => ({ t: h.time.getTime(), height: Math.round(h.height * 100) / 100 }));
+
+  const flowInWindow = flowPoints
+    ? flowPoints.filter(p => p.time >= windowStart && p.time <= windowEnd)
+    : [];
 
   const ticks = (() => {
     const result: number[] = [];
@@ -439,6 +527,20 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
             <ReferenceLine x={startRefLine} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
           )}
           <Area type="monotone" dataKey="height" stroke="var(--primary)" fill="url(#tideAreaGrad)" strokeWidth={2} dot={false} />
+          {flowInWindow.length > 0 && (
+            <Customized
+              component={(ctx: unknown) => (
+                <FlowArrows
+                  flowPoints={flowInWindow}
+                  arrowIntervalHours={arrowIntervalHours}
+                  heights={tideData.heights}
+                  windowStart={windowStart}
+                  windowEnd={windowEnd}
+                  {...(ctx as { xAxisMap?: Record<string, { scale: (v: number) => number }>; yAxisMap?: Record<string, { scale: (v: number) => number }> })}
+                />
+              )}
+            />
+          )}
         </ComposedChart>
       </ResponsiveContainer>
     </div>

@@ -1312,6 +1312,54 @@
       "related_bugs": [],
       "occurrences": 3,
       "last_seen": "2026-05-21T07:29:45.243Z"
+    },
+    {
+      "id": "bug-083",
+      "timestamp": "2026-05-21T07:38:10.067Z",
+      "error_message": "Missing guard clause",
+      "file": "src/components/charts.tsx",
+      "root_cause": "No early return/throw for edge case: heights.length < 2",
+      "fix": "Added guard clause: if (heights.length < 2)",
+      "tags": [
+        "auto-detected",
+        "guard-clause",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T07:38:10.067Z"
+    },
+    {
+      "id": "bug-084",
+      "timestamp": "2026-05-21T07:38:18.447Z",
+      "error_message": "Type error",
+      "file": "src/components/charts.tsx",
+      "root_cause": "Missing or incorrect type annotation",
+      "fix": "Added type assertion/annotation",
+      "tags": [
+        "auto-detected",
+        "type-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T07:38:18.447Z"
+    },
+    {
+      "id": "bug-085",
+      "timestamp": "2026-05-21T07:38:24.729Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/TideChart.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T07:38:24.729Z"
     }
   ]
 }

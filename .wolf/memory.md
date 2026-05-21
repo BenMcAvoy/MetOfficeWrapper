@@ -478,3 +478,9 @@
 | --:-- | Wired marine fetch into App | src/App.tsx | passed to TideChart | ~120 |
 | --:-- | Added hourly tide list + tidal flow card with directional arrow | src/components/TideChart.tsx | proper hourly view + flow direction | ~900 |
 | 08:30 | Session end: 14 writes across 5 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 7 reads | ~10914 tok |
+| 08:37 | Edited src/components/charts.tsx | inline fix | ~32 |
+| 08:37 | Edited src/components/charts.tsx | 4→4 lines | ~42 |
+| 08:38 | Edited src/components/charts.tsx | added 12 condition(s) | ~1123 |
+| 08:38 | Edited src/components/charts.tsx | expanded (+14 lines) | ~213 |
+| 08:38 | Edited src/components/TideChart.tsx | added optional chaining | ~89 |
+| 08:39 | Session end: 19 writes across 6 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 7 reads | ~12413 tok |
