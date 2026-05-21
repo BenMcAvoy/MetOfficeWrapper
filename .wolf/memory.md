@@ -443,3 +443,38 @@
 | 23:46 | Edited src/lib/calendar.ts | inline fix | ~43 |
 | 23:47 | Audited race-category rules | src/lib/calendar.ts | nationals/championships/round-the-island/PYC Regatta now route to `open` | ~10 |
 | 23:47 | Session end: 5 writes across 1 files (calendar.ts) | 1 reads | ~11637 tok |
+
+## Session: 2026-05-21 08:21
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+
+## Session: 2026-05-21 08:21
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 08:25 | Created api/marine.ts | — | ~464 |
+| 08:25 | Edited src/lib/api.ts | expanded (+11 lines) | ~89 |
+| 08:25 | Edited src/lib/api.ts | added nullish coalescing | ~324 |
+| 08:25 | Edited src/lib/cache.ts | "1" → "2" | ~8 |
+| 08:25 | Edited src/lib/cache.ts | 1→2 lines | ~19 |
+| 08:25 | Edited src/App.tsx | 2→2 lines | ~80 |
+| 08:25 | Edited src/App.tsx | 1→2 lines | ~40 |
+| 08:25 | Edited src/App.tsx | 5→6 lines | ~61 |
+| 08:25 | Edited src/App.tsx | added 1 condition(s) | ~82 |
+| 08:26 | Edited src/App.tsx | inline fix | ~29 |
+| 08:26 | Edited src/components/TideChart.tsx | CSS: marineData | ~190 |
+| 08:29 | Edited src/components/TideChart.tsx | added optional chaining | ~619 |
+| 08:29 | Edited src/components/TideChart.tsx | added optional chaining | ~380 |
+| 08:29 | Edited src/components/TideChart.tsx | CSS: transform | ~836 |
+
+## Session: 2026-05-21 (tide flow + hourly)
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| --:-- | Added Open-Meteo Marine proxy | api/marine.ts | hourly sea level + ocean currents | ~600 |
+| --:-- | Added MarineData types + fetcher | src/lib/api.ts | client-side cache, knots conversion | ~400 |
+| --:-- | Bumped storage version, added MARINE TTL | src/lib/cache.ts | invalidate old caches | ~80 |
+| --:-- | Wired marine fetch into App | src/App.tsx | passed to TideChart | ~120 |
+| --:-- | Added hourly tide list + tidal flow card with directional arrow | src/components/TideChart.tsx | proper hourly view + flow direction | ~900 |
+| 08:30 | Session end: 14 writes across 5 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 7 reads | ~10914 tok |

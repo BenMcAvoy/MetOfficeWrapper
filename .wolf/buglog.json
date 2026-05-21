@@ -1248,6 +1248,70 @@
       "related_bugs": [],
       "occurrences": 3,
       "last_seen": "2026-05-20T22:46:44.538Z"
+    },
+    {
+      "id": "bug-079",
+      "timestamp": "2026-05-21T07:25:21.459Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/lib/api.ts",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check)",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "ts"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T07:25:21.459Z"
+    },
+    {
+      "id": "bug-080",
+      "timestamp": "2026-05-21T07:25:52.286Z",
+      "error_message": "CSS fix: failed",
+      "file": "src/App.tsx",
+      "root_cause": "failed: ', (sun.reason as Error).message) → ', (marine.reason as Error).message)",
+      "fix": "Changed failed: ', (sun.reason as Error).message) → ', (marine.reason as Error).message)",
+      "tags": [
+        "auto-detected",
+        "style-fix",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T07:25:52.286Z"
+    },
+    {
+      "id": "bug-081",
+      "timestamp": "2026-05-21T07:26:34.413Z",
+      "error_message": "Significant refactor of ",
+      "file": "src/components/TideChart.tsx",
+      "root_cause": "2 lines replaced/restructured",
+      "fix": "Rewrote 11→16 lines (2 removed)",
+      "tags": [
+        "auto-detected",
+        "refactor",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-21T07:26:34.413Z"
+    },
+    {
+      "id": "bug-082",
+      "timestamp": "2026-05-21T07:29:13.250Z",
+      "error_message": "Null/undefined access in ",
+      "file": "src/components/TideChart.tsx",
+      "root_cause": "Property access on potentially null/undefined value",
+      "fix": "Added null safety (optional chaining or null check) | Also: // Build hourly list for the selected day (or \"rolling 24h\" ; const hourlyStart = isToday ? new Date(now.getTime() - 60 *  | Also: {currentFlow && (; <CardContent className=\"pt-4 pb-3\">",
+      "tags": [
+        "auto-detected",
+        "null-safety",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 3,
+      "last_seen": "2026-05-21T07:29:45.243Z"
     }
   ]
 }

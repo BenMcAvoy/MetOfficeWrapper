@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useNow } from '@/lib/useNow';
 import { haptic } from '@/lib/haptics';
-import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
-import { fetchMetOfficeHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory } from '@/lib/api';
+import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint, MarineData } from '@/lib/api';
+import { fetchMetOfficeHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory, fetchMarine } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
 import { filterForDay } from '@/lib/forecastUtils';
 import { useSkyTint } from '@/lib/useSkyTint';
@@ -112,6 +112,7 @@ export default function App() {
   const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
   const [forecastHistory, setForecastHistory] = useState<WindForecastPoint[]>([]);
   const [tideData, setTideData] = useState<TideData | null>(null);
+  const [marineData, setMarineData] = useState<MarineData | null>(null);
   const [sunInfo, setSunInfo] = useState<SunInfo | null>(null);
   const [liveWind, setLiveWind] = useState<LiveWind | null>(null);
   const [liveWindHistory, setLiveWindHistory] = useState<LiveWindHistoryPoint[]>([]);
@@ -175,10 +176,11 @@ export default function App() {
     setLoadState('loading');
     setError(null);
     try {
-      const [fc, td, sun] = await Promise.allSettled([
+      const [fc, td, sun, marine] = await Promise.allSettled([
         fetchMetOfficeHourly(LOCATION_GEOHASH),
         fetchTides(lat, lon),
         fetchSunInfo(lat, lon),
+        fetchMarine(lat, lon),
       ]);
 
       if (fc.status === 'fulfilled') setForecasts(fc.value);
@@ -195,6 +197,9 @@ export default function App() {
 
       if (sun.status === 'fulfilled') setSunInfo(sun.value);
       else console.warn('Sun info failed:', (sun.reason as Error).message);
+
+      if (marine.status === 'fulfilled') setMarineData(marine.value);
+      else console.warn('Marine failed:', (marine.reason as Error).message);
 
       setLoadState('ok');
       setLastUpdated(new Date());
@@ -341,7 +346,7 @@ export default function App() {
             {activeTab === 'tides' && (
               <div key={`tides-${selectedDay.getTime()}`} className="page-enter">
                 {tideData ? (
-                  <TideChart tideData={tideData} selectedDay={selectedDay} />
+                  <TideChart tideData={tideData} marineData={marineData} selectedDay={selectedDay} />
                 ) : (
                   <div className="text-center py-12 text-muted-foreground">
                     <Waves className="mx-auto h-10 w-10 mb-3" />

@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-05-17T07:44:52.450Z",
   "lifetime": {
-    "total_tokens_estimated": 977512,
-    "total_reads": 414,
-    "total_writes": 2315,
-    "total_sessions": 10,
-    "anatomy_hits": 24,
-    "anatomy_misses": 390,
-    "repeated_reads_blocked": 248,
-    "estimated_savings_vs_bare_cli": 1181726
+    "total_tokens_estimated": 988426,
+    "total_reads": 421,
+    "total_writes": 2329,
+    "total_sessions": 12,
+    "anatomy_hits": 25,
+    "anatomy_misses": 396,
+    "repeated_reads_blocked": 249,
+    "estimated_savings_vs_bare_cli": 1184727
   },
   "sessions": [
     {
@@ -14933,6 +14933,135 @@
         "output_tokens_estimated": 218,
         "reads_count": 1,
         "writes_count": 5,
+        "repeated_reads_blocked": 1,
+        "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-05-21-0821",
+      "started": "2026-05-21T07:21:26.758Z",
+      "ended": "2026-05-21T07:30:59.279Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 2801,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 4892,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 464,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 89,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 324,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 19,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 40,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 82,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 29,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 190,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 619,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 380,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 836,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 7693,
+        "output_tokens_estimated": 3221,
+        "reads_count": 7,
+        "writes_count": 14,
         "repeated_reads_blocked": 1,
         "anatomy_lookups": 1
       }

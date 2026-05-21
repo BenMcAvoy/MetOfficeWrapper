@@ -4,7 +4,7 @@ interface CacheEntry<T> {
 }
 
 const STORAGE_VERSION_KEY = 'wx_storage_version';
-const STORAGE_VERSION = '1';
+const STORAGE_VERSION = '2';
 
 let hasCheckedStorageVersion = false;
 
@@ -64,6 +64,7 @@ export function clearCache(): void {
 export const TTL = {
   FORECAST: 30 * 60 * 1000,
   TIDES:    4  * 60 * 60 * 1000,
+  MARINE:   2  * 60 * 60 * 1000,
   SUN:      24 * 60 * 60 * 1000,
   LIVE_WIND: 15 * 1000,
   LIVE_WIND_HISTORY: 60 * 1000,

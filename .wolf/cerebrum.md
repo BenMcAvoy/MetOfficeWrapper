@@ -24,3 +24,5 @@
 ## Decision Log
 
 <!-- Significant technical decisions with rationale. Why X was chosen over Y. -->
+
+[2026-05-21] Tide flow data: chose Open-Meteo Marine API (`/api/marine` proxy) for ocean current velocity/direction + sea_level_height_msl because it is free, keyless, returns hourly grids, and complements the existing UKHO Admiralty HW/LW + interpolated heights. `ocean_current_velocity` is in km/h — convert with KMH_TO_KNOTS=0.539957 for display. Open-Meteo currents may return null in sheltered inland water (Poole Harbour); UI degrades to `—` and the flow card hides when no marine data is available.

@@ -1,14 +1,19 @@
-import type { TideData } from '@/lib/api';
+import type { TideData, MarineData, MarinePoint } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Waves, Anchor } from 'lucide-react';
+import { Waves, Anchor, ArrowUp } from 'lucide-react';
 import { TideChartInner } from '@/components/charts';
 import { isAfter, isBefore, addHours, startOfDay, endOfDay, isSameDay, format } from 'date-fns';
+import { degreesToCardinal } from '@/lib/units';
 
 interface TideChartProps {
   tideData: TideData;
+  marineData: MarineData | null;
   selectedDay: Date;
 }
+
+// Open-Meteo ocean_current_velocity is in km/h. 1 km/h = 0.539957 knots.
+const KMH_TO_KNOTS = 0.539957;
 
 function TideExtremeRow({ time, height, type }: { time: Date; height: number; type: 'High' | 'Low' }) {
   const isPast = isBefore(time, new Date());
@@ -92,7 +97,56 @@ function getTidalCharacter(extremes: import('@/lib/api').TideExtreme[], forDay: 
   return { label, range, className };
 }
 
-export default function TideChart({ tideData, selectedDay }: TideChartProps) {
+function HourlyTideRow({ time, height, flow, isPast, isNow }: {
+  time: Date;
+  height: number;
+  flow: MarinePoint | null;
+  isPast: boolean;
+  isNow: boolean;
+}) {
+  const knots = flow?.currentVelocity != null ? flow.currentVelocity * KMH_TO_KNOTS : null;
+  const dir = flow?.currentDirection ?? null;
+  return (
+    <div className={`flex items-center justify-between py-1.5 px-3 rounded-md text-sm ${
+      isNow ? 'bg-primary/10 ring-1 ring-primary/30' : isPast ? 'opacity-40' : ''
+    }`}>
+      <span className="tabular-nums text-foreground font-medium w-12">{format(time, 'HH:mm')}</span>
+      <span className="tabular-nums text-foreground w-16 text-right">{height.toFixed(2)}m</span>
+      <span className="flex items-center gap-1.5 text-muted-foreground text-xs tabular-nums w-24 justify-end">
+        {knots != null && dir != null ? (
+          <>
+            <ArrowUp className="h-3 w-3" style={{ transform: `rotate(${dir}deg)` }} />
+            <span>{knots.toFixed(1)}kt {degreesToCardinal(dir)}</span>
+          </>
+        ) : <span className="opacity-50">—</span>}
+      </span>
+    </div>
+  );
+}
+
+function interpolateHeight(heights: { time: Date; height: number }[], at: Date): number | null {
+  if (heights.length < 2) return null;
+  const t = at.getTime();
+  const before = [...heights].reverse().find(h => h.time.getTime() <= t);
+  const after = heights.find(h => h.time.getTime() >= t);
+  if (!before || !after) return null;
+  if (before === after) return before.height;
+  const ratio = (t - before.time.getTime()) / (after.time.getTime() - before.time.getTime());
+  return before.height + ratio * (after.height - before.height);
+}
+
+function findMarinePoint(points: MarinePoint[], at: Date): MarinePoint | null {
+  if (!points.length) return null;
+  let nearest = points[0];
+  let nearestDiff = Math.abs(points[0].time.getTime() - at.getTime());
+  for (const p of points) {
+    const d = Math.abs(p.time.getTime() - at.getTime());
+    if (d < nearestDiff) { nearest = p; nearestDiff = d; }
+  }
+  return nearestDiff <= 90 * 60 * 1000 ? nearest : null;
+}
+
+export default function TideChart({ tideData, marineData, selectedDay }: TideChartProps) {
   const now = new Date();
   const isToday = isSameDay(selectedDay, now);
 
@@ -121,6 +175,25 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
   const minutesUntilNext = nextExtreme
     ? Math.round((nextExtreme.time.getTime() - now.getTime()) / 60000)
     : null;
+
+  // Build hourly list for the selected day (or "rolling 24h" if today).
+  const hourlyStart = isToday ? new Date(now.getTime() - 60 * 60 * 1000) : startOfDay(selectedDay);
+  const hourlyEnd = isToday ? addHours(now, 23) : endOfDay(selectedDay);
+  const hourlyRows: { time: Date; height: number; flow: MarinePoint | null }[] = [];
+  const firstHour = new Date(hourlyStart);
+  firstHour.setMinutes(0, 0, 0);
+  if (firstHour.getTime() < hourlyStart.getTime()) firstHour.setHours(firstHour.getHours() + 1);
+  for (let t = firstHour.getTime(); t <= hourlyEnd.getTime(); t += 60 * 60 * 1000) {
+    const ht = new Date(t);
+    const h = interpolateHeight(tideData.heights, ht);
+    if (h == null) continue;
+    const flow = marineData ? findMarinePoint(marineData.points, ht) : null;
+    hourlyRows.push({ time: ht, height: h, flow });
+  }
+
+  const currentFlow = marineData ? findMarinePoint(marineData.points, now) : null;
+  const currentKnots = currentFlow?.currentVelocity != null ? currentFlow.currentVelocity * KMH_TO_KNOTS : null;
+  const currentDir = currentFlow?.currentDirection ?? null;
 
   return (
     <div className="space-y-4">
@@ -175,6 +248,38 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
         </CardContent>
       </Card>
 
+      {currentFlow && (
+        <Card>
+          <CardContent className="pt-4 pb-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-muted-foreground text-xs uppercase tracking-wide mb-1">Tidal Flow</p>
+                {currentKnots != null && currentDir != null ? (
+                  <>
+                    <p className="text-2xl font-bold tabular-nums">
+                      {currentKnots.toFixed(1)}<span className="text-base font-medium text-muted-foreground ml-1">kt</span>
+                    </p>
+                    <p className="text-muted-foreground text-xs mt-0.5">
+                      flowing {degreesToCardinal(currentDir)} ({Math.round(currentDir)}°)
+                    </p>
+                  </>
+                ) : <p className="text-muted-foreground">—</p>}
+              </div>
+              {currentDir != null && (
+                <div className="relative h-16 w-16 rounded-full border border-border bg-muted/30 flex items-center justify-center">
+                  <ArrowUp
+                    className="h-9 w-9 text-primary"
+                    style={{ transform: `rotate(${currentDir}deg)` }}
+                    strokeWidth={2.4}
+                  />
+                  <span className="absolute top-0.5 text-[8px] text-muted-foreground">N</span>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Tide Times</CardTitle>
@@ -187,6 +292,35 @@ export default function TideChart({ tideData, selectedDay }: TideChartProps) {
           </div>
         </CardContent>
       </Card>
+
+      {hourlyRows.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center justify-between">
+              <span>Hourly Tide</span>
+              <span className="text-xs font-normal text-muted-foreground">height · flow</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-0.5 max-h-96 overflow-y-auto">
+              {hourlyRows.map((r, i) => {
+                const isPast = isBefore(r.time, addHours(now, -0.5));
+                const isNow = isToday && Math.abs(r.time.getTime() - now.getTime()) < 30 * 60 * 1000;
+                return (
+                  <HourlyTideRow
+                    key={i}
+                    time={r.time}
+                    height={r.height}
+                    flow={r.flow}
+                    isPast={isPast}
+                    isNow={isNow}
+                  />
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

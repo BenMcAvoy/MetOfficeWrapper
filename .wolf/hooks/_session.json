@@ -1,51 +1,139 @@
 {
-  "session_id": "session-2026-05-20-2342",
-  "started": "2026-05-20T22:42:28.392Z",
+  "session_id": "session-2026-05-21-0821",
+  "started": "2026-05-21T07:21:26.758Z",
   "files_read": {
-    "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts": {
+    "C:/Users/Ben/metofficewrapper/api/tides.ts": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-21T07:24:04.295Z"
+    },
+    "C:/Users/Ben/metofficewrapper/src/lib/api.ts": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-21T07:24:08.422Z"
+    },
+    "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx": {
       "count": 2,
-      "tokens": 11419,
-      "first_read": "2026-05-20T22:43:00.595Z"
+      "tokens": 2801,
+      "first_read": "2026-05-21T07:24:13.565Z"
+    },
+    "C:/Users/Ben/metofficewrapper/src/components/charts.tsx": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-21T07:24:21.215Z"
+    },
+    "C:/Users/Ben/metofficewrapper/src/lib/cache.ts": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-21T07:24:42.570Z"
+    },
+    "C:/Users/Ben/metofficewrapper/src/App.tsx": {
+      "count": 1,
+      "tokens": 4892,
+      "first_read": "2026-05-21T07:24:45.757Z"
+    },
+    "C:/Users/Ben/metofficewrapper/src/lib/units.ts": {
+      "count": 1,
+      "tokens": 0,
+      "first_read": "2026-05-21T07:26:17.114Z"
     }
   },
   "files_written": [
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
-      "action": "edit",
-      "tokens": 101,
-      "at": "2026-05-20T22:43:17.260Z"
+      "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+      "action": "create",
+      "tokens": 464,
+      "at": "2026-05-21T07:25:06.497Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
       "action": "edit",
-      "tokens": 12,
-      "at": "2026-05-20T22:43:57.632Z"
+      "tokens": 89,
+      "at": "2026-05-21T07:25:11.775Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
       "action": "edit",
-      "tokens": 26,
-      "at": "2026-05-20T22:44:05.834Z"
+      "tokens": 324,
+      "at": "2026-05-21T07:25:21.452Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
       "action": "edit",
-      "tokens": 36,
-      "at": "2026-05-20T22:46:21.938Z"
+      "tokens": 8,
+      "at": "2026-05-21T07:25:25.302Z"
     },
     {
-      "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+      "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
       "action": "edit",
-      "tokens": 43,
-      "at": "2026-05-20T22:46:44.530Z"
+      "tokens": 19,
+      "at": "2026-05-21T07:25:30.152Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 80,
+      "at": "2026-05-21T07:25:36.822Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 40,
+      "at": "2026-05-21T07:25:41.414Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 61,
+      "at": "2026-05-21T07:25:46.811Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 82,
+      "at": "2026-05-21T07:25:52.279Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+      "action": "edit",
+      "tokens": 29,
+      "at": "2026-05-21T07:26:10.902Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 190,
+      "at": "2026-05-21T07:26:34.402Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 619,
+      "at": "2026-05-21T07:29:13.245Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 380,
+      "at": "2026-05-21T07:29:28.385Z"
+    },
+    {
+      "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+      "action": "edit",
+      "tokens": 836,
+      "at": "2026-05-21T07:29:45.236Z"
     }
   ],
   "edit_counts": {
-    "src/lib/calendar.ts": 5
+    "api/marine.ts": 1,
+    "src/lib/api.ts": 2,
+    "src/lib/cache.ts": 2,
+    "src/App.tsx": 5,
+    "src/components/TideChart.tsx": 4
   },
   "anatomy_hits": 1,
-  "anatomy_misses": 0,
+  "anatomy_misses": 6,
   "repeated_reads_warned": 1,
   "cerebrum_warnings": 0,
-  "stop_count": 3
+  "stop_count": 1
 }

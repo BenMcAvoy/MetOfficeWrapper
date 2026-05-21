@@ -39,6 +39,17 @@ export interface TideData {
   stationName: string;
 }
 
+export interface MarinePoint {
+  time: Date;
+  seaLevelMsl: number | null;
+  currentVelocity: number | null;
+  currentDirection: number | null;
+}
+
+export interface MarineData {
+  points: MarinePoint[];
+}
+
 export interface SunInfo {
   sunrise: Date;
   sunset: Date;
@@ -177,6 +188,36 @@ export async function fetchTides(lat: number, lon: number): Promise<TideData> {
 
   setCached(cacheKey, { extremes, heights, stationName: data.stationName }, TTL.TIDES);
   return { extremes, heights, stationName: data.stationName };
+}
+
+type SerialisedMarinePoint = Omit<MarinePoint, 'time'> & { time: string };
+
+export async function fetchMarine(lat: number, lon: number): Promise<MarineData> {
+  const cacheKey = `marine_${lat.toFixed(3)}_${lon.toFixed(3)}`;
+  const cached = getCached<{ points: SerialisedMarinePoint[] }>(cacheKey);
+  if (cached) {
+    return { points: cached.points.map(p => ({ ...p, time: new Date(p.time) })) };
+  }
+
+  const res = await fetch(`/api/marine?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}`);
+  if (!res.ok) throw new Error(`Marine API error: ${res.status}`);
+  const data = await res.json() as { points: SerialisedMarinePoint[] };
+
+  const points = (data.points ?? [])
+    .map(p => ({
+      time: parseForecastTimestamp(p.time),
+      seaLevelMsl: p.seaLevelMsl,
+      currentVelocity: p.currentVelocity,
+      currentDirection: p.currentDirection,
+    }))
+    .filter(p => !Number.isNaN(p.time.getTime()));
+
+  setCached(
+    cacheKey,
+    { points: points.map(p => ({ ...p, time: p.time.toISOString() })) },
+    TTL.MARINE,
+  );
+  return { points };
 }
 
 type SerialisedLiveWind = Omit<LiveWind, 'observedAt'> & { observedAt: string };
