@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-05-17T07:44:52.450Z",
   "lifetime": {
-    "total_tokens_estimated": 1346441,
-    "total_reads": 557,
-    "total_writes": 3280,
-    "total_sessions": 12,
-    "anatomy_hits": 55,
-    "anatomy_misses": 502,
-    "repeated_reads_blocked": 304,
-    "estimated_savings_vs_bare_cli": 1351707
+    "total_tokens_estimated": 1640870,
+    "total_reads": 641,
+    "total_writes": 3703,
+    "total_sessions": 13,
+    "anatomy_hits": 87,
+    "anatomy_misses": 554,
+    "repeated_reads_blocked": 352,
+    "estimated_savings_vs_bare_cli": 1584502
   },
   "sessions": [
     {
@@ -20873,6 +20873,2808 @@
         "writes_count": 120,
         "repeated_reads_blocked": 9,
         "anatomy_lookups": 3
+      }
+    },
+    {
+      "id": "session-2026-05-21-0821",
+      "started": "2026-05-21T07:21:26.758Z",
+      "ended": "2026-05-21T12:25:26.849Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 2801,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5100,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 762,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 5312,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/elevation.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tileColorMask.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tideMapMask.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tileColorMask.test.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 464,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 89,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 324,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 19,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 40,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 82,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 29,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 190,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 619,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 380,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 836,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 42,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 1123,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 89,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 729,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 477,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 1503,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 46,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 44,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 33,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 269,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 83,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 214,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 611,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 60,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 320,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 460,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 223,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 693,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 152,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 24,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 31,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 332,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 60,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 247,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 354,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 448,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 84,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 365,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 410,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 171,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 29,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 236,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 639,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 373,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 62,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 82,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 179,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 964,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 18,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 153,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 40,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 104,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 743,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 200,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 110,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 92,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 71,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 126,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 70,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 792,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 247,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 79,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 78,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 78,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 303,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 55,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 239,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 151,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 71,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 75,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 70,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 121,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 139,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 20,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 130,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 101,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 249,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 625,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 285,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 472,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 421,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 406,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 134,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 24,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 894,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 541,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 130,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 104,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 13975,
+        "output_tokens_estimated": 25852,
+        "reads_count": 15,
+        "writes_count": 120,
+        "repeated_reads_blocked": 12,
+        "anatomy_lookups": 3
+      }
+    },
+    {
+      "id": "session-2026-05-21-0821",
+      "started": "2026-05-21T07:21:26.758Z",
+      "ended": "2026-05-21T12:26:52.361Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 2801,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5100,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 762,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 5312,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/elevation.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tileColorMask.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tideMapMask.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tileColorMask.test.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 464,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 89,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 324,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 19,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 40,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 82,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 29,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 190,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 619,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 380,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 836,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 42,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 1123,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 89,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 729,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 477,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 1503,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 46,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 44,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 33,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 269,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 83,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 214,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 611,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 60,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 320,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 460,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 223,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 693,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 152,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 24,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 31,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 332,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 60,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 247,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 354,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 448,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 84,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 365,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 410,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 171,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 29,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 236,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 639,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 373,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 62,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 82,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 179,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 964,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 18,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 153,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 40,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 104,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 743,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 200,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 110,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 92,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 71,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 126,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 70,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 792,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 247,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 79,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 78,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 78,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 303,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 55,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 239,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 151,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 71,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 75,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 70,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 121,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 139,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 20,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 130,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 101,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 249,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 625,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 285,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 472,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 421,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 406,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 134,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 24,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 894,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 541,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 130,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 104,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 13975,
+        "output_tokens_estimated": 25852,
+        "reads_count": 15,
+        "writes_count": 120,
+        "repeated_reads_blocked": 12,
+        "anatomy_lookups": 3
+      }
+    },
+    {
+      "id": "session-2026-05-21-0821",
+      "started": "2026-05-21T07:21:26.758Z",
+      "ended": "2026-05-21T12:27:57.592Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/tides.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 2801,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5100,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/index.css",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 762,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 5312,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/elevation.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tileColorMask.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tideMapMask.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tileColorMask.test.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 464,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 89,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 324,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 19,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 40,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 82,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 29,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 190,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 619,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 380,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 836,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 42,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 1123,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 89,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 729,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 477,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 1503,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 46,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 44,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 33,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 269,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 83,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 214,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 611,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 60,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 320,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 460,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 223,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 693,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 152,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 24,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 31,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 332,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 7,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 26,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 60,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 247,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 354,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 448,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 84,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 166,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 365,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 34,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 410,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 171,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 29,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 236,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 639,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 373,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 62,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 82,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 179,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 964,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 18,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 153,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 40,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 104,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 743,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 200,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 110,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 92,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 71,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 126,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 70,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 792,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 247,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 79,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 78,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 78,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 303,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 55,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 239,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 61,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 151,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 71,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 75,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 70,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 121,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 256,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 139,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 20,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 76,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 130,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 101,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 249,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 625,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 285,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 213,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/api/marine.ts",
+          "tokens_estimated": 472,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/vite.config.ts",
+          "tokens_estimated": 421,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/cache.ts",
+          "tokens_estimated": 8,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 406,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 0,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 134,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 24,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 894,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 541,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 130,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideMap.tsx",
+          "tokens_estimated": 104,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tileColorMask.ts",
+          "tokens_estimated": 190,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/tileColorMask.ts",
+          "tokens_estimated": 332,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 13975,
+        "output_tokens_estimated": 26374,
+        "reads_count": 15,
+        "writes_count": 122,
+        "repeated_reads_blocked": 12,
+        "anatomy_lookups": 3
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T12:29:18.155Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [],
+      "totals": {
+        "input_tokens_estimated": 5218,
+        "output_tokens_estimated": 0,
+        "reads_count": 1,
+        "writes_count": 0,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T12:31:09.142Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [],
+      "totals": {
+        "input_tokens_estimated": 5218,
+        "output_tokens_estimated": 0,
+        "reads_count": 1,
+        "writes_count": 0,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T12:31:51.638Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [],
+      "totals": {
+        "input_tokens_estimated": 5218,
+        "output_tokens_estimated": 0,
+        "reads_count": 1,
+        "writes_count": 0,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T12:35:34.646Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [],
+      "totals": {
+        "input_tokens_estimated": 5218,
+        "output_tokens_estimated": 0,
+        "reads_count": 1,
+        "writes_count": 0,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 1
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T12:39:29.691Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 20648,
+        "output_tokens_estimated": 4591,
+        "reads_count": 6,
+        "writes_count": 9,
+        "repeated_reads_blocked": 1,
+        "anatomy_lookups": 3
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T13:46:17.457Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 26374,
+        "output_tokens_estimated": 9783,
+        "reads_count": 8,
+        "writes_count": 12,
+        "repeated_reads_blocked": 3,
+        "anatomy_lookups": 4
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T13:50:10.593Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5063,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 35315,
+        "output_tokens_estimated": 10378,
+        "reads_count": 10,
+        "writes_count": 18,
+        "repeated_reads_blocked": 3,
+        "anatomy_lookups": 6
+      }
+    },
+    {
+      "id": "session-2026-05-21-1328",
+      "started": "2026-05-21T12:28:41.929Z",
+      "ended": "2026-05-21T13:57:17.154Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 5218,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/ConditionsHeader.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/api.ts",
+          "tokens_estimated": 3992,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/units.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/calendar.ts",
+          "tokens_estimated": 11438,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/weatherCodes.ts",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/charts.tsx",
+          "tokens_estimated": 5726,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/lib/windChartData.ts",
+          "tokens_estimated": 0,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/TideChart.tsx",
+          "tokens_estimated": 3878,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 4994,
+          "was_repeated": true,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3976,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 56,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 80,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 39,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 165,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 97,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 21,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 125,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/App.tsx",
+          "tokens_estimated": 109,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 5051,
+          "action": "create"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 32,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 30,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 441,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 69,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 36,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 16,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 41,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 3,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 330,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/metofficewrapper/src/components/HomePage.tsx",
+          "tokens_estimated": 467,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 35246,
+        "output_tokens_estimated": 11219,
+        "reads_count": 11,
+        "writes_count": 22,
+        "repeated_reads_blocked": 5,
+        "anatomy_lookups": 6
       }
     }
   ],

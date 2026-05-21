@@ -13,18 +13,18 @@ const TideMap = lazy(() => import('@/components/TideMap'));
 import ForecastStrip from '@/components/ForecastStrip';
 import RaceCalendar, { type RaceCalendarHandle } from '@/components/RaceCalendar';
 import InstallButton from '@/components/InstallButton';
-import ConditionsHeader from '@/components/ConditionsHeader';
 import SettingsPage from '@/components/SettingsPage';
+import HomePage from '@/components/HomePage';
 import { useSettings } from '@/lib/settings';
 import {
-  MapPin, AlertTriangle, Waves, Loader2,
+  MapPin, AlertTriangle, Waves, Loader2, Home,
   Wind, CalendarDays, Anchor, Settings as SettingsIcon,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay } from 'date-fns';
 import { Analytics } from '@vercel/analytics/react';
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
-type Tab = 'wind' | 'tides' | 'forecast' | 'events' | 'settings';
+export type Tab = 'home' | 'wind' | 'tides' | 'forecast' | 'events' | 'settings';
 
 function useThemeMode(theme: 'auto' | 'light' | 'dark') {
   useEffect(() => {
@@ -73,11 +73,17 @@ function DateSelector({ selected, onChange, availableDays }: {
 }
 
 const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
+  { id: 'home',     label: 'Home',     Icon: Home },
   { id: 'wind',     label: 'Wind',     Icon: Wind },
   { id: 'tides',    label: 'Tides',    Icon: Waves },
   { id: 'forecast', label: '7-Day',    Icon: CalendarDays },
   { id: 'events',   label: 'Events',   Icon: Anchor },
 ];
+
+const TAB_IDS: readonly Tab[] = ['home', 'wind', 'tides', 'forecast', 'events', 'settings'];
+function isTab(value: string | null): value is Tab {
+  return value !== null && (TAB_IDS as readonly string[]).includes(value);
+}
 
 function formatRelativeTime(date: Date, nowMs: number): string {
   const seconds = Math.max(0, Math.round((nowMs - date.getTime()) / 1000));
@@ -123,11 +129,11 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>(() => {
     try {
       const urlTab = new URLSearchParams(window.location.search).get('tab');
-      if (urlTab === 'wind' || urlTab === 'tides' || urlTab === 'forecast' || urlTab === 'events' || urlTab === 'settings') return urlTab;
+      if (isTab(urlTab)) return urlTab;
       const saved = sessionStorage.getItem('wx-active-tab');
-      if (saved === 'wind' || saved === 'tides' || saved === 'forecast' || saved === 'events' || saved === 'settings') return saved;
+      if (isTab(saved)) return saved;
     } catch { /* ignore */ }
-    return 'wind';
+    return 'home';
   });
   const [selectedDay, setSelectedDay] = useState<Date>(() => {
     try {
@@ -274,7 +280,7 @@ export default function App() {
     ? forecasts.filter(f => f.time.getTime() <= Date.now() + 12 * 60 * 60 * 1000)
     : forecasts.filter(f => isSameDay(f.time, selectedDay));
   const isLoading = loadState === 'loading';
-  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'events' && activeTab !== 'settings';
+  const showDateSelector = activeTab === 'wind' || activeTab === 'tides';
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -297,7 +303,7 @@ export default function App() {
               </span>
             )}
             <button
-              onClick={() => { haptic('light'); setActiveTab(t => t === 'settings' ? 'wind' : 'settings'); }}
+              onClick={() => { haptic('light'); setActiveTab(t => t === 'settings' ? 'home' : 'settings'); }}
               aria-label="Settings"
               aria-pressed={activeTab === 'settings'}
               className={`p-2 -mr-2 rounded-full transition-colors active:opacity-60 ${
@@ -333,9 +339,19 @@ export default function App() {
               <DateSelector selected={selectedDay} onChange={setSelectedDay} availableDays={availableDays} />
             )}
 
+            {activeTab === 'home' && (
+              <HomePage
+                forecasts={forecasts}
+                forecastHistory={forecastHistory}
+                liveWind={liveWind}
+                liveWindHistory={liveWindHistory}
+                tideData={tideData}
+                sunInfo={sunInfo}
+                onNavigate={setActiveTab}
+              />
+            )}
             {activeTab === 'wind' && (
               <div key={`wind-${selectedDay.getTime()}`} className="space-y-3 page-enter">
-                <ConditionsHeader forecasts={forecasts} selectedDay={selectedDay} sunInfo={sunInfo} />
                 <WindCard
                   forecasts={dayForecasts}
                   chartForecasts={chartForecastsForWind}

@@ -11,7 +11,21 @@ export interface Rgba {
 
 const TILE_SIZE = 256;
 const COLOR_MASK_ZOOM = 14;
+// Each cached ImageData is ~256 KB. Cap at 64 tiles → ~16 MB ceiling. Map
+// preserves insertion order so the oldest entry is always at the front, which
+// makes LRU-by-set + LRU-on-hit trivial without an external dep.
+const TILE_CACHE_MAX = 64;
 const tileCache = new Map<string, Promise<ImageData | null>>();
+
+function touchCache(key: string, promise: Promise<ImageData | null>): void {
+  tileCache.delete(key);
+  tileCache.set(key, promise);
+  while (tileCache.size > TILE_CACHE_MAX) {
+    const oldest = tileCache.keys().next().value;
+    if (oldest === undefined) break;
+    tileCache.delete(oldest);
+  }
+}
 
 export function classifyMapColor({ r, g, b, a = 255 }: Rgba): ColorMaskVerdict {
   if (a < 32) return 'unknown';
@@ -127,7 +141,11 @@ function latLonToTilePixel(lat: number, lon: number, zoom: number) {
 function loadTileImageData(x: number, y: number, z: number): Promise<ImageData | null> {
   const key = `${z}/${x}/${y}`;
   const cached = tileCache.get(key);
-  if (cached) return cached;
+  if (cached) {
+    // Mark as recently used so the LRU doesn't evict tiles being actively read.
+    touchCache(key, cached);
+    return cached;
+  }
 
   const promise = fetch(`https://a.basemaps.cartocdn.com/rastertiles/voyager/${z}/${x}/${y}.png`, {
     mode: 'cors',
@@ -152,7 +170,7 @@ function loadTileImageData(x: number, y: number, z: number): Promise<ImageData |
     })
     .catch(() => null);
 
-  tileCache.set(key, promise);
+  touchCache(key, promise);
   return promise;
 }
 

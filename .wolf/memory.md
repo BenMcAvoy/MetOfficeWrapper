@@ -620,3 +620,43 @@
 | 10:35 | Edited src/components/TideMap.tsx | modified if() | ~130 |
 | 10:35 | Edited src/components/TideMap.tsx | CSS: margin | ~104 |
 | 10:36 | Session end: 120 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 11 reads | ~39341 tok |
+| 13:25 | Session end: 120 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 15 reads | ~39827 tok |
+| 13:26 | Session end: 120 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 15 reads | ~39827 tok |
+| 13:27 | Edited src/lib/tileColorMask.ts | added 1 condition(s) | ~190 |
+| 13:27 | Edited src/lib/tileColorMask.ts | set() → touchCache() | ~332 |
+| 13:27 | Session end: 122 writes across 9 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 15 reads | ~40349 tok |
+
+## Session: 2026-05-21 13:28
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 13:37 | Created src/components/HomePage.tsx | — | ~3976 |
+| 13:38 | Edited src/components/HomePage.tsx | 3→3 lines | ~56 |
+| 13:38 | Edited src/App.tsx | 7→7 lines | ~80 |
+| 13:38 | Edited src/App.tsx | 2→2 lines | ~39 |
+| 13:38 | Edited src/App.tsx | CSS: TAB_IDS, value | ~165 |
+| 13:38 | Edited src/App.tsx | 9→9 lines | ~97 |
+| 13:38 | Edited src/App.tsx | "forecast" → "wind" | ~21 |
+| 13:38 | Edited src/App.tsx | inline fix | ~32 |
+| 13:38 | Edited src/App.tsx | expanded (+8 lines) | ~125 |
+| 12:45 | add HomePage + Home tab; lift ConditionsHeader off Wind tab | src/components/HomePage.tsx, src/App.tsx | ok, tsc clean | ~2k |
+| 13:39 | Session end: 9 writes across 2 files (HomePage.tsx, App.tsx) | 6 reads | ~25239 tok |
+| 14:44 | Edited src/App.tsx | 9→11 lines | ~109 |
+| 14:45 | Created src/components/HomePage.tsx | — | ~5051 |
+| 14:45 | Edited src/components/HomePage.tsx | 3→3 lines | ~32 |
+| 12:55 | rebuild HomePage cards as charts (forecast-vs-live wind, 24h tide curve); drop Today card | src/components/HomePage.tsx, src/App.tsx | ok, tsc clean | ~3k |
+| 14:46 | Session end: 12 writes across 2 files (HomePage.tsx, App.tsx) | 8 reads | ~36157 tok |
+| 14:48 | Edited src/components/HomePage.tsx | 2→3 lines | ~30 |
+| 14:49 | Edited src/components/HomePage.tsx | inline fix | ~3 |
+| 14:49 | Edited src/components/HomePage.tsx | 40→40 lines | ~441 |
+| 14:49 | Edited src/components/HomePage.tsx | 5→5 lines | ~69 |
+| 14:49 | Edited src/components/HomePage.tsx | removed 16 lines | ~36 |
+| 14:49 | Edited src/components/HomePage.tsx | removed 7 lines | ~16 |
+| 13:05 | colour fixes: tide curve uses --primary; remove broken --warn fallback; drop noisy axis legend/chips | src/components/HomePage.tsx | ok | ~0.5k |
+| 14:50 | Session end: 18 writes across 2 files (HomePage.tsx, App.tsx) | 10 reads | ~45693 tok |
+| 14:56 | Edited src/components/HomePage.tsx | 3→4 lines | ~41 |
+| 14:56 | Edited src/components/HomePage.tsx | inline fix | ~3 |
+| 14:56 | Edited src/components/HomePage.tsx | expanded (+21 lines) | ~330 |
+| 14:56 | Edited src/components/HomePage.tsx | modified convertWind() | ~467 |
+| 13:12 | add gust line (both forecast dashed and live solid) to home wind mini chart; show avg/gust split in header | src/components/HomePage.tsx | ok | ~0.5k |
+| 14:57 | Session end: 22 writes across 2 files (HomePage.tsx, App.tsx) | 11 reads | ~46465 tok |
