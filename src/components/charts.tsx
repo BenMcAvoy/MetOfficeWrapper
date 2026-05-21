@@ -526,7 +526,15 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
           {startRefLine !== undefined && (
             <ReferenceLine x={startRefLine} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
           )}
-          <Area type="monotone" dataKey="height" stroke="var(--primary)" fill="url(#tideAreaGrad)" strokeWidth={2} dot={false} />
+          <Area
+            type="monotone"
+            dataKey="height"
+            stroke="var(--primary)"
+            fill="url(#tideAreaGrad)"
+            strokeWidth={2}
+            dot={{ r: 1.6, strokeWidth: 0, fill: 'var(--primary)', fillOpacity: 0.55 }}
+            activeDot={{ r: 4, strokeWidth: 0, fill: 'var(--primary)' }}
+          />
           {flowInWindow.length > 0 && (
             <Customized
               component={(ctx: unknown) => (

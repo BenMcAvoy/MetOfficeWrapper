@@ -1,3 +1,5 @@
+import { fetchElevations, parseCoordinateLists } from './elevation';
+
 export const config = { runtime: 'edge' };
 
 interface MarineLocationResponse {
@@ -28,9 +30,7 @@ export default async function handler(req: Request): Promise<Response> {
   const { searchParams } = new URL(req.url);
   const latParam = searchParams.get('lat') ?? '';
   const lonParam = searchParams.get('lon') ?? '';
-
-  const lats = latParam.split(',').map(s => parseFloat(s.trim())).filter(n => !Number.isNaN(n));
-  const lons = lonParam.split(',').map(s => parseFloat(s.trim())).filter(n => !Number.isNaN(n));
+  const { lats, lons } = parseCoordinateLists(latParam, lonParam);
 
   if (!lats.length || lats.length !== lons.length) {
     return new Response(JSON.stringify({ error: 'lat and lon required, equal length' }), { status: 400 });
@@ -38,18 +38,20 @@ export default async function handler(req: Request): Promise<Response> {
 
   const latStr = lats.map(n => n.toFixed(4)).join(',');
   const lonStr = lons.map(n => n.toFixed(4)).join(',');
-  const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${latStr}&longitude=${lonStr}&hourly=sea_level_height_msl,ocean_current_velocity,ocean_current_direction&forecast_days=5&timezone=UTC`;
-
-  const res = await fetch(url);
-  if (!res.ok) {
-    return new Response(JSON.stringify({ error: 'Open-Meteo marine error' }), { status: res.status });
+  const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${latStr}&longitude=${lonStr}&hourly=sea_level_height_msl,ocean_current_velocity,ocean_current_direction&forecast_days=5&timezone=UTC`;
+  const [marineRes, topoElevations] = await Promise.all([fetch(marineUrl), fetchElevations(lats, lons)]);
+  if (!marineRes.ok) {
+    return new Response(JSON.stringify({ error: 'Open-Meteo marine error' }), { status: marineRes.status });
   }
-  const raw = await res.json() as MarineLocationResponse | MarineLocationResponse[];
+  const raw = await marineRes.json() as MarineLocationResponse | MarineLocationResponse[];
+
+  const pickElevation = (i: number, marineElev: number | undefined): number | null =>
+    topoElevations[i] != null ? topoElevations[i] : (marineElev ?? null);
 
   if (lats.length === 1) {
     const single = Array.isArray(raw) ? raw[0] : raw;
     return new Response(JSON.stringify({
-      elevation: single.elevation ?? null,
+      elevation: pickElevation(0, single.elevation),
       points: buildPoints(single),
     }), {
       headers: {
@@ -63,7 +65,7 @@ export default async function handler(req: Request): Promise<Response> {
   const locationsOut = locations.map((loc, i) => ({
     lat: lats[i],
     lon: lons[i],
-    elevation: loc.elevation ?? null,
+    elevation: pickElevation(i, loc.elevation),
     points: buildPoints(loc),
   }));
 

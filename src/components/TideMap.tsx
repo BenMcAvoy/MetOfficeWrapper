@@ -1,10 +1,39 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import type { MarineGrid, MarineLocation, MarinePoint } from '@/lib/api';
-import { fetchMarineGrid } from '@/lib/api';
+import type { ElevationGrid, MarineGrid, MarineLocation, MarinePoint } from '@/lib/api';
+import { fetchElevationGrid, fetchMarineGrid } from '@/lib/api';
+import {
+  buildGridPoints,
+  buildLandMaskPoints,
+  cellDegForZoom,
+  isLikelyLand,
+  localDistanceSq,
+} from '@/lib/tideMapMask';
+import { classifyBasemapPoint } from '@/lib/tileColorMask';
 import { degreesToCardinal } from '@/lib/units';
+import { Plus, Minus, Clock } from 'lucide-react';
+import { format, isSameDay } from 'date-fns';
+
+// Watches the app's `.dark` class so map elements (arrows, popover) can
+// re-theme themselves alongside everything else. The BASEMAP itself stays the
+// same (CARTO Voyager) in both modes — its cream-land / soft-blue-water style
+// reads like a paper nautical chart and feels warmer than a fully dark tile.
+function useIsDarkMode(): boolean {
+  const [isDark, setIsDark] = useState(() =>
+    typeof document !== 'undefined' && document.documentElement.classList.contains('dark'),
+  );
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const obs = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => obs.disconnect();
+  }, []);
+  return isDark;
+}
 
 const KMH_TO_KNOTS = 0.539957;
 
@@ -15,69 +44,17 @@ interface TideMapProps {
   at: Date;
 }
 
-// Input sampling grid cell (~1.6 km). This is the finest resolution we can
-// show arrows at; the displayed bucket cell scales up from here at low zoom.
-const ARROW_CELL_DEG = 0.015;
-
-// Target on-screen spacing between arrows in pixels. Display cell width is
-// derived from this and the current map zoom.
-const TARGET_ARROW_PX = 46;
-
-function cellDegForZoom(zoom: number, lat: number): { lat: number; lon: number } {
-  // 1 deg lon at given lat → pixels: 256 * 2^zoom * cos(lat) / 360
-  const lonPxPerDeg = (256 * Math.pow(2, zoom) * Math.cos((lat * Math.PI) / 180)) / 360;
-  const latPxPerDeg = (256 * Math.pow(2, zoom)) / 360;
-  // No floor: at high zoom the bucket can go finer than the input sample step.
-  // We compensate by snapping to the nearest input sample's flow values, so
-  // adjacent cells happily share values (the ocean model is ~9 km anyway).
-  return {
-    lat: TARGET_ARROW_PX / latPxPerDeg,
-    lon: TARGET_ARROW_PX / lonPxPerDeg,
-  };
-}
-
-function buildGridPoints(centerLat: number, centerLon: number): { lat: number; lon: number }[] {
-  // Dense sample over a wide area so we get good coverage of harbour, channels, and open sea.
-  // 1 deg lat ≈ 111 km. Step ~0.015 deg ≈ 1.65 km; 17x17 = 289 candidates spanning ~26 km.
-  // Open-Meteo accepts up to 1000 points per multi-location request, so 289 is one request.
-  const step = ARROW_CELL_DEG;
-  const half = 8;
-  const lonScale = 1 / Math.cos((centerLat * Math.PI) / 180);
-  const points: { lat: number; lon: number }[] = [];
-  for (let dy = -half; dy <= half; dy++) {
-    for (let dx = -half; dx <= half; dx++) {
-      points.push({
-        lat: centerLat + dy * step,
-        lon: centerLon + dx * step * lonScale,
-      });
-    }
-  }
-  return points;
-}
-
-// FitBounds: fits the camera to the supplied bounds exactly ONCE, the first
-// time non-null bounds arrive. Subsequent re-renders (e.g. when `at` ticks
-// with `useNow`) must not override the user's zoom/pan.
-function FitBounds({ bounds }: { bounds: L.LatLngBoundsExpression | null }) {
-  const map = useMap();
-  const didFit = useRef(false);
-  useEffect(() => {
-    if (didFit.current || !bounds) return;
-    didFit.current = true;
-    map.fitBounds(bounds, { padding: [24, 24], maxZoom: 13 });
-  }, [bounds, map]);
-  return null;
-}
-
 // Subscribes to map zoom changes and re-renders the arrow layer with a bucket
 // cell that scales with current zoom — sparser when zoomed out, denser in.
 function FlowArrowLayer({
-  grid, at, centerLat, centerLon,
+  grid, landMask, at, centerLat, centerLon, onArrowClick,
 }: {
   grid: MarineGrid;
+  landMask: ElevationGrid | null;
   at: Date;
   centerLat: number;
   centerLon: number;
+  onArrowClick: (info: { knots: number; dir: number; lat: number; lon: number }) => void;
 }) {
   const map = useMap();
   const [view, setView] = useState(() => ({ zoom: map.getZoom(), bounds: map.getBounds() }));
@@ -85,78 +62,103 @@ function FlowArrowLayer({
     moveend: () => setView({ zoom: map.getZoom(), bounds: map.getBounds() }),
   });
 
-  const arrows = useMemo(() => {
-    // 1. Build the list of usable input samples (water + valid flow).
-    const samples: { lat: number; lon: number; flow: MarinePoint }[] = [];
+  const [arrows, setArrows] = useState<{ key: string; lat: number; lon: number; flow: MarinePoint }[]>([]);
+
+  const arrowCandidates = useMemo(() => {
+    // 1. Use all valid-current samples as flow sources. Land/water is decided
+    // separately by the denser elevation mask below, because marine cells can
+    // snap inland points back to nearby ocean current data.
+    const waterSamples: { lat: number; lon: number; flow: MarinePoint }[] = [];
+    let sMinLat = Infinity, sMaxLat = -Infinity, sMinLon = Infinity, sMaxLon = -Infinity;
     for (const loc of grid.locations) {
-      if (loc.elevation != null && loc.elevation > 1) continue;
+      if (loc.lat < sMinLat) sMinLat = loc.lat;
+      if (loc.lat > sMaxLat) sMaxLat = loc.lat;
+      if (loc.lon < sMinLon) sMinLon = loc.lon;
+      if (loc.lon > sMaxLon) sMaxLon = loc.lon;
       const flow = nearestFlow(loc.points, at);
       if (!flow || flow.currentDirection == null || flow.currentVelocity == null) continue;
-      samples.push({ lat: loc.lat, lon: loc.lon, flow });
+      waterSamples.push({ lat: loc.lat, lon: loc.lon, flow });
     }
-    if (!samples.length) return [];
+    if (!waterSamples.length) return [];
 
-    // 2. Build display grid aligned to (centerLat, centerLon). Clip to the
-    // intersection of (visible viewport) ∩ (input-sample bounding box) so we
-    // don't render arrows outside the sampled region.
+    // 2. Build display grid clipped to (visible viewport) ∩ (sample box).
     const cell = cellDegForZoom(view.zoom, centerLat);
-    let minLat = Infinity, maxLat = -Infinity, minLon = Infinity, maxLon = -Infinity;
-    for (const s of samples) {
-      if (s.lat < minLat) minLat = s.lat;
-      if (s.lat > maxLat) maxLat = s.lat;
-      if (s.lon < minLon) minLon = s.lon;
-      if (s.lon > maxLon) maxLon = s.lon;
-    }
     const vb = view.bounds;
     const lo = vb.getSouthWest(), hi = vb.getNorthEast();
-    minLat = Math.max(minLat, lo.lat);
-    maxLat = Math.min(maxLat, hi.lat);
-    minLon = Math.max(minLon, lo.lng);
-    maxLon = Math.min(maxLon, hi.lng);
+    const minLat = Math.max(sMinLat, lo.lat);
+    const maxLat = Math.min(sMaxLat, hi.lat);
+    const minLon = Math.max(sMinLon, lo.lng);
+    const maxLon = Math.min(sMaxLon, hi.lng);
     if (minLat > maxLat || minLon > maxLon) return [];
 
-    // 3. For each display cell in range, find the nearest water sample. If
-    // it's within ~one input-grid step, render an arrow at the cell centre
-    // with the sample's flow values. Otherwise skip (treats it as land/gap).
-    const maxDistSq = (ARROW_CELL_DEG * 1.2) ** 2;
     const yStart = Math.floor((minLat - centerLat) / cell.lat);
     const yEnd = Math.ceil((maxLat - centerLat) / cell.lat);
     const xStart = Math.floor((minLon - centerLon) / cell.lon);
     const xEnd = Math.ceil((maxLon - centerLon) / cell.lon);
 
-    const out: { key: string; lat: number; lon: number; flow: MarinePoint }[] = [];
+    // 3. For each display cell, use the dense elevation mask to skip likely
+    // land and the nearest valid marine source for the flow value.
+    const maskSamples = landMask?.locations ?? grid.locations;
+    const out: { key: string; lat: number; lon: number; flow: MarinePoint; elevationSaysLand: boolean }[] = [];
     for (let dy = yStart; dy <= yEnd; dy++) {
       for (let dx = xStart; dx <= xEnd; dx++) {
         const lat = centerLat + dy * cell.lat;
         const lon = centerLon + dx * cell.lon;
-        let nearest = samples[0];
-        let nearestDistSq = Infinity;
-        for (const s of samples) {
-          const dLat = s.lat - lat;
-          const dLon = s.lon - lon;
-          const dSq = dLat * dLat + dLon * dLon;
-          if (dSq < nearestDistSq) {
-            nearestDistSq = dSq;
-            nearest = s;
-          }
+        const elevationSaysLand = maskSamples.length > 0 && isLikelyLand({ lat, lon }, maskSamples, centerLat);
+
+        let nearestWater = waterSamples[0];
+        let nearestWaterDistSq = Infinity;
+        for (const s of waterSamples) {
+          const dSq = localDistanceSq({ lat, lon }, s, centerLat);
+          if (dSq < nearestWaterDistSq) { nearestWaterDistSq = dSq; nearestWater = s; }
         }
-        if (nearestDistSq > maxDistSq) continue;
-        out.push({ key: `${dy}|${dx}`, lat, lon, flow: nearest.flow });
+
+        out.push({ key: `${dy}|${dx}`, lat, lon, flow: nearestWater.flow, elevationSaysLand });
       }
     }
     return out;
-  }, [grid, at, view, centerLat, centerLon]);
+  }, [grid, landMask, at, view, centerLat, centerLon]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    Promise.all(arrowCandidates.map(async candidate => {
+      const verdict = await classifyBasemapPoint(candidate);
+      if (verdict === 'land') return null;
+      if (verdict === 'water' || !candidate.elevationSaysLand) {
+        return {
+          key: candidate.key,
+          lat: candidate.lat,
+          lon: candidate.lon,
+          flow: candidate.flow,
+        };
+      }
+      return null;
+    })).then(next => {
+      if (!cancelled) {
+        setArrows(next.filter((arrow): arrow is { key: string; lat: number; lon: number; flow: MarinePoint } => arrow !== null));
+      }
+    });
+
+    return () => { cancelled = true; };
+  }, [arrowCandidates]);
 
   return (
     <>
-      {arrows.map(a => (
-        <Marker
-          key={a.key}
-          position={[a.lat, a.lon]}
-          icon={flowArrowIcon(a.flow.currentDirection!, (a.flow.currentVelocity ?? 0) * KMH_TO_KNOTS)}
-          interactive={false}
-        />
-      ))}
+      {arrows.map(a => {
+        const knots = (a.flow.currentVelocity ?? 0) * KMH_TO_KNOTS;
+        const dir = a.flow.currentDirection!;
+        return (
+          <Marker
+            key={a.key}
+            position={[a.lat, a.lon]}
+            icon={flowArrowIcon(dir, knots)}
+            eventHandlers={{
+              click: () => onArrowClick({ knots, dir, lat: a.lat, lon: a.lon }),
+            }}
+          />
+        );
+      })}
     </>
   );
 }
@@ -172,17 +174,20 @@ function nearestFlow(points: MarinePoint[], at: Date): MarinePoint | null {
   return bestDiff <= 90 * 60 * 1000 ? nearest : null;
 }
 
-// Flow-field arrow: small, unlabelled, dense. Colour and length encode magnitude
-// so a regular grid of arrows reads as a tidal stream pattern (chart-plotter style).
+// Flow-field arrow. Length, stroke weight, AND opacity all scale smoothly
+// with knots so weak flows whisper and strong flows pop — the eye instantly
+// finds the hot spots without colour-jumps between tiers.
 function flowArrowIcon(directionDeg: number, knots: number): L.DivIcon {
-  const len = Math.min(22, 10 + Math.min(knots, 2) * 6);
-  const stroke = knots >= 1.5 ? '#1e3a8a'
-    : knots >= 0.8 ? '#1d4ed8'
-    : knots >= 0.3 ? '#2563eb'
-    : '#64748b';
-  const halo = 'rgba(255,255,255,0.85)';
-  const sw = 1.5;
-  const haloSw = 3.5;
+  const t = Math.min(1, knots / 2); // 0 → weak, 1 → ≥2 kt
+  const len = 9 + t * 16;            // 9 .. 25 px
+  const sw = 1.0 + t * 1.4;          // 1.0 .. 2.4 px stroke
+  const alpha = (0.35 + t * 0.5).toFixed(2); // 0.35 .. 0.85
+  // Deep navy — calm and chart-like; pairs with CARTO Voyager's cream basemap.
+  const stroke = `rgba(30, 58, 138, ${alpha})`;
+  // Soft cream halo to lift the arrow off the basemap without that "default
+  // Leaflet white sticker" feel.
+  const halo = 'rgba(254, 250, 240, 0.55)';
+  const haloSw = sw + 2.2;
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="-14 -14 28 28" style="overflow:visible">
       <g transform="rotate(${directionDeg})">
@@ -209,23 +214,41 @@ function flowArrowIcon(directionDeg: number, knots: number): L.DivIcon {
 
 export default function TideMap({ centerLat, centerLon, locationName, at }: TideMapProps) {
   const gridPoints = useMemo(() => buildGridPoints(centerLat, centerLon), [centerLat, centerLon]);
+  const landMaskPoints = useMemo(() => buildLandMaskPoints(centerLat, centerLon), [centerLat, centerLon]);
   const [grid, setGrid] = useState<MarineGrid | null>(null);
+  const [landMask, setLandMask] = useState<ElevationGrid | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [map, setMap] = useState<L.Map | null>(null);
+  const [selectedArrow, setSelectedArrow] = useState<{ knots: number; dir: number; lat: number; lon: number } | null>(null);
+  const isDark = useIsDarkMode();
+  // CARTO Voyager: cream/parchment land, soft blue water — nautical-chart feel.
+  const baseTileUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
   useEffect(() => {
     let cancelled = false;
     fetchMarineGrid(gridPoints)
-      .then(g => { if (!cancelled) setGrid(g); })
+      .then(g => {
+        if (!cancelled) {
+          setGrid(g);
+          setError(null);
+        }
+      })
       .catch(e => { if (!cancelled) setError((e as Error).message); });
+
+    fetchElevationGrid(landMaskPoints)
+      .then(mask => { if (!cancelled) setLandMask(mask); })
+      .catch(() => { if (!cancelled) setLandMask(null); });
+
     return () => { cancelled = true; };
-  }, [gridPoints]);
+  }, [gridPoints, landMaskPoints]);
 
   // Water-only locations for fit-bounds + peak-knots summary.
   // Filter once here (not per zoom) since the bounds shouldn't shift on zoom.
   const waterLocations: { loc: MarineLocation; flow: MarinePoint }[] = [];
   if (grid) {
+    const maskLocations = landMask?.locations ?? [];
     for (const loc of grid.locations) {
-      if (loc.elevation != null && loc.elevation > 1) continue;
+      if (maskLocations.length > 0 && isLikelyLand(loc, maskLocations, centerLat)) continue;
       const flow = nearestFlow(loc.points, at);
       if (!flow || flow.currentDirection == null || flow.currentVelocity == null) continue;
       waterLocations.push({ loc, flow });
@@ -241,38 +264,127 @@ export default function TideMap({ centerLat, centerLon, locationName, at }: Tide
     null,
   );
 
-  // Auto-fit bounds: include all water positions + the centre dot so the
-  // camera frames water (not a random patch including dry land).
-  const bounds = useMemo<L.LatLngBoundsExpression | null>(() => {
-    if (!waterLocations.length) return null;
-    const pts: [number, number][] = waterLocations.map(a => [a.loc.lat, a.loc.lon]);
-    pts.push([centerLat, centerLon]);
-    return pts;
-  }, [waterLocations, centerLat, centerLon]);
 
   return (
     <div className="space-y-2">
       <div className="relative rounded-lg overflow-hidden border border-border" style={{ height: 380 }}>
         <MapContainer
+          ref={setMap as unknown as React.Ref<L.Map>}
           center={[centerLat, centerLon]}
           zoom={11}
           scrollWheelZoom={false}
+          zoomControl={false}
+          attributionControl={false}
           style={{ height: '100%', width: '100%', background: 'var(--muted)' }}
         >
           <TileLayer
-            attribution='&copy; OpenStreetMap'
-            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            key={baseTileUrl}
+            url={baseTileUrl}
+            subdomains="abcd"
             maxZoom={19}
           />
           <TileLayer
-            attribution='&copy; OpenSeaMap'
             url="https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png"
             maxZoom={18}
-            opacity={0.9}
+            opacity={isDark ? 0.6 : 0.9}
           />
-          {grid && <FlowArrowLayer grid={grid} at={at} centerLat={centerLat} centerLon={centerLon} />}
-          <FitBounds bounds={bounds} />
+          {grid && (
+            <FlowArrowLayer
+              grid={grid}
+              landMask={landMask}
+              at={at}
+              centerLat={centerLat}
+              centerLon={centerLon}
+              onArrowClick={setSelectedArrow}
+            />
+          )}
         </MapContainer>
+
+        {/* Custom zoom controls — replaces Leaflet's default white +/− stack. */}
+        <div className="absolute top-2 left-2 z-[400] flex flex-col rounded-lg overflow-hidden shadow-md border border-border bg-background/95 backdrop-blur-sm">
+          <button
+            type="button"
+            aria-label="Zoom in"
+            onClick={() => map?.zoomIn()}
+            className="h-8 w-8 flex items-center justify-center text-foreground hover:bg-muted active:bg-muted/80 transition-colors border-b border-border"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2.4} />
+          </button>
+          <button
+            type="button"
+            aria-label="Zoom out"
+            onClick={() => map?.zoomOut()}
+            className="h-8 w-8 flex items-center justify-center text-foreground hover:bg-muted active:bg-muted/80 transition-colors"
+          >
+            <Minus className="h-4 w-4" strokeWidth={2.4} />
+          </button>
+        </div>
+
+        {/* Time-of-flow badge — top right. Tells the user which moment the
+            arrow field represents. */}
+        <div className="absolute top-0 right-0 z-[400] inline-flex items-center gap-1.5 text-[9.5px] font-medium leading-none text-foreground bg-background/85 backdrop-blur-sm px-1.5 py-1 rounded-bl">
+          <Clock className="h-3 w-3 text-primary" strokeWidth={2.4} />
+          {isSameDay(at, new Date())
+            ? <>Now · {format(at, 'HH:mm')}</>
+            : <>{format(at, 'EEE d · HH:mm')}</>}
+        </div>
+
+        {/* Selected-arrow popover. */}
+        {selectedArrow && (
+          <div className="absolute bottom-2 right-2 z-[401] bg-background/95 backdrop-blur-sm border border-border rounded-lg shadow-md px-3 py-2 text-xs flex items-start gap-2 max-w-[220px]">
+            <div className="flex-1 space-y-0.5">
+              <p className="font-semibold text-foreground tabular-nums">
+                {selectedArrow.knots.toFixed(2)} kt
+              </p>
+              <p className="text-muted-foreground tabular-nums">
+                Flowing {degreesToCardinal(selectedArrow.dir)} ({Math.round(selectedArrow.dir)}°)
+              </p>
+              <p className="text-[10px] text-muted-foreground/70 tabular-nums">
+                {selectedArrow.lat.toFixed(3)}, {selectedArrow.lon.toFixed(3)}
+              </p>
+            </div>
+            <button
+              type="button"
+              aria-label="Close"
+              onClick={() => setSelectedArrow(null)}
+              className="text-muted-foreground hover:text-foreground -mt-0.5 -mr-0.5 text-base leading-none"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {/* Attribution — flush to the bottom-left corner of the chart. */}
+        <div className="absolute bottom-0 left-0 z-[400] text-[9.5px] leading-none text-muted-foreground bg-background/85 backdrop-blur-sm px-1.5 py-1 rounded-tr">
+          ©{' '}
+          <a
+            href="https://www.carto.com/attributions"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-foreground underline-offset-2 hover:underline"
+          >
+            CARTO
+          </a>
+          {' · '}
+          <a
+            href="https://www.openstreetmap.org/copyright"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-foreground underline-offset-2 hover:underline"
+          >
+            OSM
+          </a>
+          {' · '}
+          <a
+            href="https://www.openseamap.org/"
+            target="_blank"
+            rel="noreferrer"
+            className="hover:text-foreground underline-offset-2 hover:underline"
+          >
+            OpenSeaMap
+          </a>
+        </div>
+
         {grid && waterLocations.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/70 backdrop-blur-sm pointer-events-none">
             <p className="text-sm text-muted-foreground px-3 py-1.5 rounded-md bg-background/80 border border-border">

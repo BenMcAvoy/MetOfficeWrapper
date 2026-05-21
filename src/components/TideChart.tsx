@@ -1,7 +1,6 @@
 import type { TideData, MarineData, MarinePoint } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Waves, Anchor, ArrowUp } from 'lucide-react';
+import { Waves, ArrowUp } from 'lucide-react';
 import { TideChartInner } from '@/components/charts';
 import { isAfter, isBefore, addHours, startOfDay, endOfDay, isSameDay, format } from 'date-fns';
 import { degreesToCardinal } from '@/lib/units';
@@ -17,18 +16,22 @@ const KMH_TO_KNOTS = 0.539957;
 
 function TideExtremeRow({ time, height, type }: { time: Date; height: number; type: 'High' | 'Low' }) {
   const isPast = isBefore(time, new Date());
+  const isHigh = type === 'High';
   return (
-    <div className={`flex items-center justify-between py-2 px-3 rounded-lg ${isPast ? 'opacity-40' : 'bg-muted/50'}`}>
-      <div className="flex items-center gap-2">
-        {type === 'High'
-          ? <Waves className="h-4 w-4 text-primary" />
-          : <Anchor className="h-4 w-4 text-muted-foreground" />}
-        <div>
-          <p className="text-foreground font-medium text-sm">{type} Water</p>
-          <p className="text-muted-foreground text-xs">{format(time, 'EEE d MMM, HH:mm')}</p>
-        </div>
+    <div className={`grid grid-cols-[3rem_1fr_auto] items-center gap-3 py-1.5 px-3 rounded-md text-sm ${
+      isPast ? 'opacity-40' : 'bg-muted/30'
+    }`}>
+      <span className="tabular-nums text-foreground font-medium">{format(time, 'HH:mm')}</span>
+      <div className="flex items-center gap-2 min-w-0">
+        <span className={`h-1.5 w-1.5 rounded-full ${isHigh ? 'bg-primary' : 'bg-muted-foreground/60'}`} />
+        <span className="font-medium text-foreground truncate">{isHigh ? 'High water' : 'Low water'}</span>
+        <span className="text-muted-foreground text-xs hidden min-[380px]:inline">
+          {format(time, 'EEE d MMM')}
+        </span>
       </div>
-      <Badge variant="outline">{height.toFixed(2)}m</Badge>
+      <span className={`tabular-nums font-semibold ${isHigh ? 'text-primary' : 'text-muted-foreground'}`}>
+        {height.toFixed(2)}m
+      </span>
     </div>
   );
 }
@@ -124,6 +127,36 @@ function HourlyTideRow({ time, height, flow, isPast, isNow }: {
   );
 }
 
+function TideTimelineRow({ row, now, isToday }: {
+  row:
+    | { kind: 'hourly'; time: Date; height: number; flow: MarinePoint | null }
+    | { kind: 'extreme'; time: Date; height: number; type: 'High' | 'Low' };
+  now: Date;
+  isToday: boolean;
+}) {
+  if (row.kind === 'extreme') {
+    return (
+      <TideExtremeRow
+        time={row.time}
+        height={row.height}
+        type={row.type}
+      />
+    );
+  }
+
+  const isPast = isBefore(row.time, addHours(now, -0.5));
+  const isNow = isToday && Math.abs(row.time.getTime() - now.getTime()) < 30 * 60 * 1000;
+  return (
+    <HourlyTideRow
+      time={row.time}
+      height={row.height}
+      flow={row.flow}
+      isPast={isPast}
+      isNow={isNow}
+    />
+  );
+}
+
 function interpolateHeight(heights: { time: Date; height: number }[], at: Date): number | null {
   if (heights.length < 2) return null;
   const t = at.getTime();
@@ -151,7 +184,7 @@ export default function TideChart({ tideData, marineData, selectedDay }: TideCha
   const isToday = isSameDay(selectedDay, now);
 
   const chartStart = isToday ? addHours(now, -1) : startOfDay(selectedDay);
-  const chartEnd = isToday ? addHours(now, 48) : endOfDay(selectedDay);
+  const chartEnd = isToday ? addHours(now, 23) : endOfDay(selectedDay);
 
 
   const currentHeight = (() => {
@@ -190,6 +223,11 @@ export default function TideChart({ tideData, marineData, selectedDay }: TideCha
     const flow = marineData ? findMarinePoint(marineData.points, ht) : null;
     hourlyRows.push({ time: ht, height: h, flow });
   }
+
+  const tideTimelineRows = [
+    ...hourlyRows.map(row => ({ kind: 'hourly' as const, ...row })),
+    ...upcomingExtremes.map(row => ({ kind: 'extreme' as const, ...row })),
+  ].sort((a, b) => a.time.getTime() - b.time.getTime());
 
   const currentFlow = marineData ? findMarinePoint(marineData.points, now) : null;
   const currentKnots = currentFlow?.currentVelocity != null ? currentFlow.currentVelocity * KMH_TO_KNOTS : null;
@@ -246,6 +284,7 @@ export default function TideChart({ tideData, marineData, selectedDay }: TideCha
             height={240}
             flowPoints={marineData?.points}
             arrowIntervalHours={isToday ? 3 : 2}
+            tickIntervalHours={isToday ? 2 : 3}
           />
         </CardContent>
       </Card>
@@ -282,43 +321,24 @@ export default function TideChart({ tideData, marineData, selectedDay }: TideCha
         </Card>
       )}
 
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">Tide Times</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-1.5">
-            {upcomingExtremes.map((e, i) => (
-              <TideExtremeRow key={i} time={e.time} height={e.height} type={e.type} />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {hourlyRows.length > 0 && (
+      {tideTimelineRows.length > 0 && (
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center justify-between">
-              <span>Hourly Tide</span>
-              <span className="text-xs font-normal text-muted-foreground">height · flow</span>
+              <span>Tide Timeline</span>
+              <span className="text-xs font-normal text-muted-foreground">hourly · highs/lows · flow</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-0.5 max-h-96 overflow-y-auto">
-              {hourlyRows.map((r, i) => {
-                const isPast = isBefore(r.time, addHours(now, -0.5));
-                const isNow = isToday && Math.abs(r.time.getTime() - now.getTime()) < 30 * 60 * 1000;
-                return (
-                  <HourlyTideRow
-                    key={i}
-                    time={r.time}
-                    height={r.height}
-                    flow={r.flow}
-                    isPast={isPast}
-                    isNow={isNow}
-                  />
-                );
-              })}
+            <div className="space-y-1 max-h-96 overflow-y-auto">
+              {tideTimelineRows.map((row, i) => (
+                <TideTimelineRow
+                  key={`${row.kind}-${row.time.getTime()}-${i}`}
+                  row={row}
+                  now={now}
+                  isToday={isToday}
+                />
+              ))}
             </div>
           </CardContent>
         </Card>

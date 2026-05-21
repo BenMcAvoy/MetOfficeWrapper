@@ -61,6 +61,16 @@ export interface MarineGrid {
   locations: MarineLocation[];
 }
 
+export interface ElevationLocation {
+  lat: number;
+  lon: number;
+  elevation: number | null;
+}
+
+export interface ElevationGrid {
+  locations: ElevationLocation[];
+}
+
 export interface SunInfo {
   sunrise: Date;
   sunset: Date;
@@ -278,6 +288,28 @@ export async function fetchMarineGrid(points: { lat: number; lon: number }[]): P
     },
     TTL.MARINE,
   );
+  return { locations };
+}
+
+export async function fetchElevationGrid(points: { lat: number; lon: number }[]): Promise<ElevationGrid> {
+  if (!points.length) return { locations: [] };
+  const lats = points.map(p => p.lat.toFixed(4)).join(',');
+  const lons = points.map(p => p.lon.toFixed(4)).join(',');
+  const cacheKey = `elevation_grid_${lats}_${lons}`;
+  type CachedLoc = { lat: number; lon: number; elevation: number | null };
+  const cached = getCached<{ locations: CachedLoc[] }>(cacheKey);
+  if (cached) return { locations: cached.locations };
+
+  const res = await fetch(`/api/elevation?lat=${encodeURIComponent(lats)}&lon=${encodeURIComponent(lons)}`);
+  if (!res.ok) throw new Error(`Elevation grid API error: ${res.status}`);
+  const data = await res.json() as { locations?: CachedLoc[] };
+  const locations = (data.locations ?? []).map(loc => ({
+    lat: loc.lat,
+    lon: loc.lon,
+    elevation: loc.elevation ?? null,
+  }));
+
+  setCached(cacheKey, { locations }, TTL.MARINE);
   return { locations };
 }
 

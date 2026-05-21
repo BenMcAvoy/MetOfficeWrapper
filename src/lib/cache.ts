@@ -4,7 +4,7 @@ interface CacheEntry<T> {
 }
 
 const STORAGE_VERSION_KEY = 'wx_storage_version';
-const STORAGE_VERSION = '3';
+const STORAGE_VERSION = '5';
 
 let hasCheckedStorageVersion = false;
 

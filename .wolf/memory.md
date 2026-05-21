@@ -552,3 +552,71 @@
 | 09:43 | Edited src/components/TideMap.tsx | inline fix | ~18 |
 | 09:43 | Edited src/components/TideMap.tsx | modified FitBounds() | ~153 |
 | 09:43 | Session end: 70 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 10 reads | ~25053 tok |
+| 09:50 | Edited src/components/TideMap.tsx | added 1 import(s) | ~40 |
+| 09:50 | Edited src/components/TideMap.tsx | modified TideMap() | ~104 |
+| 09:51 | Edited src/components/TideMap.tsx | added optional chaining | ~743 |
+| 09:51 | designqc: captured 2 screenshots (90KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:51 | Session end: 73 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 11 reads | ~29372 tok |
+| 09:56 | Edited src/components/TideMap.tsx | CSS: attributes, attributeFilter | ~200 |
+| 09:56 | Edited src/components/TideMap.tsx | 1→6 lines | ~110 |
+| 09:56 | Edited src/components/TideMap.tsx | CSS: 6 | ~92 |
+| 09:56 | Edited src/components/TideMap.tsx | modified FlowArrowLayer() | ~71 |
+| 09:56 | Edited src/components/TideMap.tsx | CSS: click, lat, lon | ~126 |
+| 09:56 | Edited src/components/TideMap.tsx | expanded (+8 lines) | ~70 |
+| 09:57 | Edited src/components/TideMap.tsx | CSS: HH, HH | ~792 |
+| 09:57 | designqc: captured 2 screenshots (54KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:58 | Edited src/components/TideMap.tsx | modified flowArrowIcon() | ~247 |
+| 09:58 | Edited src/components/TideMap.tsx | CSS: isDark | ~79 |
+| 09:58 | Edited src/components/TideMap.tsx | 8→8 lines | ~78 |
+| 09:58 | Edited src/components/TideMap.tsx | 9→10 lines | ~78 |
+| 09:58 | Edited src/components/TideMap.tsx | 30→30 lines | ~303 |
+| 09:58 | Edited src/components/TideMap.tsx | "absolute bottom-7 right-1" → "absolute bottom-2 right-2" | ~55 |
+| 09:59 | designqc: captured 2 screenshots (51KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 09:59 | Session end: 86 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 11 reads | ~32216 tok |
+| 10:02 | Edited src/components/TideMap.tsx | modified useIsDarkMode() | ~239 |
+| 10:02 | Edited src/components/TideMap.tsx | CSS: Voyager | ~61 |
+| 10:02 | Edited src/components/TideMap.tsx | modified flowArrowIcon() | ~151 |
+| 10:03 | Edited src/components/TideMap.tsx | modified FlowArrowLayer() | ~71 |
+| 10:03 | Edited src/components/TideMap.tsx | 8→8 lines | ~75 |
+| 10:03 | Edited src/components/TideMap.tsx | 10→9 lines | ~70 |
+| 10:03 | Edited src/components/TideMap.tsx | CSS: filter, coast | ~121 |
+| 10:05 | Edited src/components/TideMap.tsx | CSS: Half-count | ~125 |
+| 10:05 | Edited src/components/TideMap.tsx | modified cellDegForZoom() | ~256 |
+| 10:05 | Edited src/components/TideMap.tsx | modified buildGridPoints() | ~139 |
+| 10:05 | Edited src/components/TideMap.tsx | inline fix | ~20 |
+| 10:05 | Edited src/components/TideMap.tsx | — | ~0 |
+| 10:06 | Edited src/components/TideMap.tsx | 11→10 lines | ~76 |
+| 10:06 | Edited src/components/TideMap.tsx | — | ~0 |
+| 10:06 | Edited src/components/TideMap.tsx | inline fix | ~16 |
+| 10:06 | designqc: captured 2 screenshots (65KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:08 | Edited src/components/TideMap.tsx | CSS: sampling | ~76 |
+| 10:08 | designqc: captured 2 screenshots (66KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:09 | Session end: 102 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 11 reads | ~33712 tok |
+| 10:12 | Edited src/components/TideMap.tsx | resolution() → request() | ~130 |
+| 10:12 | Edited src/components/TideMap.tsx | 4→5 lines | ~101 |
+| 10:12 | Edited src/components/TideMap.tsx | added 1 condition(s) | ~249 |
+| 10:12 | designqc: captured 2 screenshots (71KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:15 | Edited api/marine.ts | added 1 condition(s) | ~625 |
+| 10:15 | Edited vite.config.ts | added nullish coalescing | ~285 |
+| 10:15 | Edited vite.config.ts | modified if() | ~213 |
+| 10:15 | Edited src/lib/cache.ts | "3" → "4" | ~8 |
+| 10:16 | designqc: captured 2 screenshots (71KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:16 | Edited api/marine.ts | modified for() | ~472 |
+| 10:16 | Edited vite.config.ts | modified for() | ~421 |
+| 10:17 | designqc: captured 2 screenshots (71KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:18 | designqc: captured 2 screenshots (71KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:19 | Edited src/lib/cache.ts | "4" → "5" | ~8 |
+| 10:20 | designqc: captured 2 screenshots (65KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:20 | designqc: captured 2 screenshots (65KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:22 | Edited src/components/TideMap.tsx | modified for() | ~406 |
+| 10:22 | Edited src/components/TideMap.tsx | — | ~0 |
+| 10:23 | Edited src/components/TideMap.tsx | 7→7 lines | ~134 |
+| 10:24 | designqc: captured 2 screenshots (67KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:24 | Session end: 115 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 11 reads | ~37992 tok |
+| 10:30 | Edited src/components/TideMap.tsx | 3→2 lines | ~24 |
+| 10:31 | Edited src/components/TideMap.tsx | added 6 condition(s) | ~894 |
+| 10:32 | Edited src/components/TideMap.tsx | pattern() → toFixed() | ~541 |
+| 10:32 | designqc: captured 2 screenshots (66KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
+| 10:35 | Edited src/components/TideMap.tsx | modified if() | ~130 |
+| 10:35 | Edited src/components/TideMap.tsx | CSS: margin | ~104 |
+| 10:36 | Session end: 120 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 11 reads | ~39341 tok |

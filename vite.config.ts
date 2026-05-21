@@ -6,6 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import type { ViteDevServer } from 'vite'
 import type { IncomingMessage, ServerResponse } from 'http'
 import { scrapeMetOfficeForecast, clearMetOfficeScrapeCache } from './src/lib/metofficeScrape'
+import { fetchElevations, parseCoordinateLists } from './api/elevation'
 
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371;
@@ -113,8 +114,7 @@ async function handleApiRequest(req: IncomingMessage, res: ServerResponse, env: 
     if (url.pathname === '/api/marine') {
       const latParam = url.searchParams.get('lat') ?? '';
       const lonParam = url.searchParams.get('lon') ?? '';
-      const lats = latParam.split(',').map(s => parseFloat(s.trim())).filter(n => !Number.isNaN(n));
-      const lons = lonParam.split(',').map(s => parseFloat(s.trim())).filter(n => !Number.isNaN(n));
+      const { lats, lons } = parseCoordinateLists(latParam, lonParam);
       if (!lats.length || lats.length !== lons.length) {
         res.statusCode = 400;
         res.end(JSON.stringify({ error: 'lat and lon required, equal length' }));
@@ -122,15 +122,16 @@ async function handleApiRequest(req: IncomingMessage, res: ServerResponse, env: 
       }
       const latStr = lats.map(n => n.toFixed(4)).join(',');
       const lonStr = lons.map(n => n.toFixed(4)).join(',');
-      const r = await fetch(
-        `https://marine-api.open-meteo.com/v1/marine?latitude=${latStr}&longitude=${lonStr}&hourly=sea_level_height_msl,ocean_current_velocity,ocean_current_direction&forecast_days=5&timezone=UTC`
-      );
-      if (!r.ok) {
-        res.statusCode = r.status;
+      const [marineRes, topoElevations] = await Promise.all([
+        fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${latStr}&longitude=${lonStr}&hourly=sea_level_height_msl,ocean_current_velocity,ocean_current_direction&forecast_days=5&timezone=UTC`),
+        fetchElevations(lats, lons),
+      ]);
+      if (!marineRes.ok) {
+        res.statusCode = marineRes.status;
         res.end(JSON.stringify({ error: 'Open-Meteo marine error' }));
         return true;
       }
-      const raw = await r.json() as { hourly?: Record<string, unknown> } | { hourly?: Record<string, unknown> }[];
+      const raw = await marineRes.json() as { hourly?: Record<string, unknown> } | { hourly?: Record<string, unknown> }[];
       const buildPoints = (loc: { hourly?: Record<string, unknown> }) => {
         const h = (loc.hourly ?? {}) as {
           time?: string[];
@@ -150,11 +151,13 @@ async function handleApiRequest(req: IncomingMessage, res: ServerResponse, env: 
         }));
       };
       const rawArr = (Array.isArray(raw) ? raw : [raw]) as { elevation?: number; hourly?: Record<string, unknown> }[];
+      const pickElevation = (i: number, marineElev: number | undefined): number | null =>
+        topoElevations[i] != null ? topoElevations[i] : (marineElev ?? null);
       if (lats.length === 1) {
         const single = rawArr[0];
         res.statusCode = 200;
         res.end(JSON.stringify({
-          elevation: single.elevation ?? null,
+          elevation: pickElevation(0, single.elevation),
           points: buildPoints(single),
         }));
         return true;
@@ -162,11 +165,32 @@ async function handleApiRequest(req: IncomingMessage, res: ServerResponse, env: 
       const locations = rawArr.map((loc, i) => ({
         lat: lats[i],
         lon: lons[i],
-        elevation: loc.elevation ?? null,
+        elevation: pickElevation(i, loc.elevation),
         points: buildPoints(loc),
       }));
       res.statusCode = 200;
       res.end(JSON.stringify({ locations }));
+      return true;
+    }
+
+    if (url.pathname === '/api/elevation') {
+      const latParam = url.searchParams.get('lat') ?? '';
+      const lonParam = url.searchParams.get('lon') ?? '';
+      const { lats, lons } = parseCoordinateLists(latParam, lonParam);
+      if (!lats.length || lats.length !== lons.length) {
+        res.statusCode = 400;
+        res.end(JSON.stringify({ error: 'lat and lon required, equal length' }));
+        return true;
+      }
+      const elevations = await fetchElevations(lats, lons);
+      res.statusCode = 200;
+      res.end(JSON.stringify({
+        locations: lats.map((lat, i) => ({
+          lat,
+          lon: lons[i],
+          elevation: elevations[i],
+        })),
+      }));
       return true;
     }
 

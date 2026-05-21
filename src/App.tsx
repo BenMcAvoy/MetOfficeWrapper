@@ -348,14 +348,6 @@ export default function App() {
             )}
             {activeTab === 'tides' && (
               <div key={`tides-${selectedDay.getTime()}`} className="page-enter space-y-3">
-                <Suspense fallback={<div className="h-[380px] rounded-lg bg-muted/40 animate-pulse" />}>
-                  <TideMap
-                    centerLat={lat}
-                    centerLon={lon}
-                    locationName={LOCATION_NAME}
-                    at={isSameDay(selectedDay, new Date()) ? new Date() : selectedDay}
-                  />
-                </Suspense>
                 {tideData ? (
                   <TideChart
                     tideData={tideData}
@@ -368,6 +360,14 @@ export default function App() {
                     Tide times unavailable — check UKHO API key
                   </div>
                 )}
+                <Suspense fallback={<div className="h-[380px] rounded-lg bg-muted/40 animate-pulse" />}>
+                  <TideMap
+                    centerLat={lat}
+                    centerLon={lon}
+                    locationName={LOCATION_NAME}
+                    at={isSameDay(selectedDay, new Date()) ? new Date() : selectedDay}
+                  />
+                </Suspense>
               </div>
             )}
             {activeTab === 'forecast' && (
