@@ -107,7 +107,7 @@ export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWi
                   <div className="flex items-center gap-1">
                     <ArrowUp
                       className="h-3 w-3 text-muted-foreground flex-shrink-0"
-                      style={{ transform: `rotate(${peakEntry.windDirectionFrom10m}deg)` }}
+                      style={{ transform: `rotate(${peakEntry.windDirectionFrom10m + 180}deg)` }}
                       strokeWidth={2.5}
                     />
                     <span className={`text-sm font-semibold tabular-nums ${beaufortColor(peakBf.force)}`}>

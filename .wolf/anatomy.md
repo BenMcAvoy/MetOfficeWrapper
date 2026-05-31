@@ -1,7 +1,7 @@
 # anatomy.md
 
-> Auto-maintained by OpenWolf. Last scanned: 2026-05-19T16:34:42.202Z
-> Files: 6 tracked | Anatomy hits: 0 | Misses: 0
+> Auto-maintained by OpenWolf. Last scanned: 2026-05-31T18:57:00.507Z
+> Files: 7 tracked | Anatomy hits: 0 | Misses: 0
 
 ## ./
 
@@ -18,10 +18,11 @@
 
 ## src/components/
 
-- `charts.tsx` — EVENT_PRE_MS (~5126 tok)
-- `EventsStrip.tsx` — dateKey (~2005 tok)
+- `charts.tsx` — EVENT_PRE_MS (~5112 tok)
+- `EventsStrip.tsx` — dateKey (~3691 tok)
+- `ForecastStrip.tsx` — ForecastStrip (~1803 tok)
 - `TideChart.tsx` — TideExtremeRow (~2161 tok)
-- `WindCard.tsx` — WindCard (~3364 tok)
+- `WindCard.tsx` — WindCard (~3368 tok)
 - `WindChartCard.tsx` — WindChartCard (~355 tok)
 
 ## src/lib/

@@ -576,6 +576,54 @@
       "related_bugs": [],
       "occurrences": 1,
       "last_seen": "2026-05-19T16:33:18.448Z"
+    },
+    {
+      "id": "bug-037",
+      "timestamp": "2026-05-31T18:56:49.991Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/WindCard.tsx",
+      "root_cause": "Had `rotate(${currentObservedDirection}deg)`",
+      "fix": "Changed to `rotate(${currentObservedDirection + 180}deg)`",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 2,
+      "last_seen": "2026-05-31T18:56:53.341Z"
+    },
+    {
+      "id": "bug-038",
+      "timestamp": "2026-05-31T18:56:56.846Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/ForecastStrip.tsx",
+      "root_cause": "Had `rotate(${peakEntry.windDirectionFrom10m}deg)`",
+      "fix": "Changed to `rotate(${peakEntry.windDirectionFrom10m + 180}deg",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-31T18:56:56.846Z"
+    },
+    {
+      "id": "bug-039",
+      "timestamp": "2026-05-31T18:57:00.526Z",
+      "error_message": "Incorrect value in code",
+      "file": "src/components/EventsStrip.tsx",
+      "root_cause": "Had `rotate(${forecast.windDirectionFrom10m}deg)`",
+      "fix": "Changed to `rotate(${forecast.windDirectionFrom10m + 180}deg)",
+      "tags": [
+        "auto-detected",
+        "wrong-value",
+        "tsx"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-05-31T18:57:00.526Z"
     }
   ]
 }

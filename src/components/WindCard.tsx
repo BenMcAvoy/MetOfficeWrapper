@@ -130,7 +130,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                     <>
                       <ArrowUp
                         className="h-4 w-4 text-primary"
-                        style={{ transform: `rotate(${currentObservedDirection}deg)` }}
+                        style={{ transform: `rotate(${currentObservedDirection + 180}deg)` }}
                         strokeWidth={2.5}
                       />
                       <span className="text-sm font-semibold">{degreesToCardinal(currentObservedDirection)}</span>
@@ -222,7 +222,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   </span>
                   <ArrowUp
                     className="h-4 w-4 text-primary"
-                    style={{ transform: `rotate(${f.windDirectionFrom10m}deg)` }}
+                    style={{ transform: `rotate(${f.windDirectionFrom10m + 180}deg)` }}
                     strokeWidth={2.5}
                   />
                   <span className="text-xs text-muted-foreground">{degreesToCardinal(f.windDirectionFrom10m)}</span>

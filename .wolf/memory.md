@@ -174,3 +174,15 @@
 | 17:34 | Edited src/App.tsx | — | ~0 |
 | 17:34 | Edited src/App.tsx | inline fix | ~17 |
 | 17:34 | Session end: 146 writes across 17 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 20 reads | ~55200 tok |
+| 18:20 | Edited src/components/charts.tsx | modified WindChart() | ~66 |
+
+## Session: 2026-05-31 19:55
+
+| Time | Action | File(s) | Outcome | ~Tokens |
+|------|--------|---------|---------|--------|
+| 19:56 | Edited src/components/WindCard.tsx | "rotate(${currentObservedD" → "rotate(${currentObservedD" | ~27 |
+| 19:56 | Edited src/components/WindCard.tsx | "rotate(${f.windDirectionF" → "rotate(${f.windDirectionF" | ~25 |
+| 19:56 | Edited src/components/ForecastStrip.tsx | "rotate(${peakEntry.windDi" → "rotate(${peakEntry.windDi" | ~28 |
+| 19:57 | Edited src/components/EventsStrip.tsx | "rotate(${forecast.windDir" → "rotate(${forecast.windDir" | ~27 |
+| 19:57 | flip wind vane arrows to point where wind goes (dir+180) | WindCard.tsx ForecastStrip.tsx EventsStrip.tsx | done, tsc clean | ~1500 |
+| 19:57 | Session end: 4 writes across 3 files (WindCard.tsx, ForecastStrip.tsx, EventsStrip.tsx) | 4 reads | ~10588 tok |

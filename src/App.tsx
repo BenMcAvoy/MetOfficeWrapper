@@ -8,9 +8,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
 import ForecastStrip from '@/components/ForecastStrip';
-import { CalendarButton } from '@/components/EventsStrip';
+import { CalendarButton, DayEventsCard, EventDetailsPage } from '@/components/EventsStrip';
 import type { ChartEvent } from '@/components/charts';
-import { getEventsForDay } from '@/lib/calendar';
+import { getEventsForDay, type RaceEvent } from '@/lib/calendar';
 import InstallButton from '@/components/InstallButton';
 import ConditionsHeader from '@/components/ConditionsHeader';
 import SettingsPage from '@/components/SettingsPage';
@@ -22,7 +22,8 @@ import {
 import { format, addDays, startOfDay, isSameDay } from 'date-fns';
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
-type Tab = 'wind' | 'tides' | 'forecast' | 'settings';
+type Tab = 'wind' | 'tides' | 'forecast' | 'settings' | 'event';
+type NavTab = Exclude<Tab, 'settings' | 'event'>;
 
 function useThemeMode(theme: 'auto' | 'light' | 'dark') {
   useEffect(() => {
@@ -67,7 +68,7 @@ function DateSelector({ selected, onChange, availableDays }: {
   );
 }
 
-const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
+const NAV_ITEMS: { id: NavTab; label: string; Icon: React.ElementType }[] = [
   { id: 'wind',     label: 'Wind',     Icon: Wind },
   { id: 'tides',    label: 'Tides',    Icon: Waves },
   { id: 'forecast', label: '7-Day',    Icon: CalendarDays },
@@ -104,9 +105,12 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>('wind');
+  const [selectedEvent, setSelectedEvent] = useState<RaceEvent | null>(null);
+  const [eventReturnTab, setEventReturnTab] = useState<NavTab>('wind');
   const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
 
-  const onNavTap = useCallback((id: Tab) => {
+  const onNavTap = useCallback((id: NavTab) => {
+    setSelectedEvent(null);
     setActiveTab(id);
   }, []);
 
@@ -207,7 +211,13 @@ export default function App() {
     ? forecasts.filter(f => f.time.getTime() <= Date.now() + 12 * 60 * 60 * 1000)
     : forecasts.filter(f => isSameDay(f.time, selectedDay));
   const isLoading = loadState === 'loading';
-  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'settings';
+  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'settings' && activeTab !== 'event';
+  const openEvent = useCallback((event: RaceEvent, returnTab: NavTab) => {
+    setSelectedEvent(event);
+    setEventReturnTab(returnTab);
+    setActiveTab('event');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   const chartEvents: ChartEvent[] = useMemo(() => {
     return getEventsForDay(selectedDay)
@@ -240,7 +250,10 @@ export default function App() {
               </span>
             )}
             <button
-              onClick={() => setActiveTab(t => t === 'settings' ? 'wind' : 'settings')}
+              onClick={() => {
+                setSelectedEvent(null);
+                setActiveTab(t => t === 'settings' ? 'wind' : 'settings');
+              }}
               aria-label="Settings"
               aria-pressed={activeTab === 'settings'}
               className={`p-1.5 -mr-1.5 rounded-lg transition-colors active:scale-95 ${
@@ -281,6 +294,17 @@ export default function App() {
               </div>
             )}
 
+            {activeTab === 'event' && selectedEvent && (
+              <EventDetailsPage
+                event={selectedEvent}
+                selectedDay={selectedDay}
+                hourlyForecasts={dayForecasts}
+                onBack={() => {
+                  setSelectedEvent(null);
+                  setActiveTab(eventReturnTab);
+                }}
+              />
+            )}
             {activeTab === 'wind' && (
               <div key={`wind-${selectedDay.getTime()}`} className="space-y-3 animate-in fade-in-50 duration-300">
                 <ConditionsHeader forecasts={forecasts} selectedDay={selectedDay} sunInfo={sunInfo} />
@@ -293,6 +317,7 @@ export default function App() {
                   liveWindHistory={liveWindHistory}
                   events={chartEvents}
                 />
+                <DayEventsCard selectedDay={selectedDay} onSelectEvent={event => openEvent(event, 'wind')} />
               </div>
             )}
             {activeTab === 'tides' && (
@@ -305,6 +330,7 @@ export default function App() {
                     Tide data unavailable — check UKHO API key
                   </div>
                 )}
+                <DayEventsCard selectedDay={selectedDay} onSelectEvent={event => openEvent(event, 'tides')} />
               </div>
             )}
             {activeTab === 'forecast' && (

@@ -12,6 +12,8 @@
 
 <!-- Project-specific conventions discovered during development. -->
 
+- Wind direction fields (`windDirectionFrom10m`, `currentObservedDirection`) are meteorological "from" bearings. Wind vane `<ArrowUp>` icons (WindCard, ForecastStrip, EventsStrip) point where the wind is GOING, so they rotate by `dir + 180`. `degreesToCardinal()` still uses the raw "from" bearing for text labels.
+
 ## Do-Not-Repeat
 
 <!-- Mistakes made and corrected. Each entry prevents the same mistake recurring. -->

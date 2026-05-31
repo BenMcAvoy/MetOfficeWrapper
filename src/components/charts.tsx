@@ -13,7 +13,7 @@ import {
 import type { SeriesPoint, WindChartRow } from '@/lib/windChartData';
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine, ReferenceArea
+  ResponsiveContainer, ReferenceLine
 } from 'recharts';
 import { format, subHours, startOfHour } from 'date-fns';
 
@@ -23,22 +23,79 @@ export interface ChartEvent {
   name: string;
 }
 
-interface InternalWindow { start: number; end: number; }
-
 const EVENT_PRE_MS = 30 * 60 * 1000;
 const EVENT_POST_MS = 150 * 60 * 1000;
 
-function buildMergedWindows(events: ChartEvent[]): InternalWindow[] {
+type EventWindow = {
+  start: number;
+  end: number;
+};
+
+function activeEventsAt(events: ChartEvent[], t: number | null): ChartEvent[] {
+  if (t === null) return [];
+  return events.filter(e => t >= e.start - EVENT_PRE_MS && t <= e.start + EVENT_POST_MS);
+}
+
+function buildEventWindows(events: ChartEvent[], xMin: number, xMax: number): EventWindow[] {
   const raw = events
-    .map(e => ({ start: e.start - EVENT_PRE_MS, end: e.start + EVENT_POST_MS }))
+    .map(e => ({
+      start: Math.max(e.start - EVENT_PRE_MS, xMin),
+      end: Math.min(e.start + EVENT_POST_MS, xMax),
+    }))
+    .filter(w => w.end > w.start)
     .sort((a, b) => a.start - b.start);
-  const merged: InternalWindow[] = [];
-  for (const w of raw) {
+
+  const merged: EventWindow[] = [];
+  for (const window of raw) {
     const last = merged[merged.length - 1];
-    if (last && w.start <= last.end) last.end = Math.max(last.end, w.end);
-    else merged.push({ ...w });
+    if (last && window.start <= last.end) {
+      last.end = Math.max(last.end, window.end);
+    } else {
+      merged.push({ ...window });
+    }
   }
+
   return merged;
+}
+
+function EventTopMarkers({
+  events,
+  xMin,
+  xMax,
+  plotLeft,
+  plotRight,
+}: {
+  events: ChartEvent[];
+  xMin: number;
+  xMax: number;
+  plotLeft: number;
+  plotRight: number;
+}) {
+  const windows = buildEventWindows(events, xMin, xMax);
+  if (!windows.length) return null;
+
+  const span = Math.max(1, xMax - xMin);
+
+  return (
+    <div
+      className="pointer-events-none absolute top-1 h-3"
+      style={{ left: plotLeft, right: plotRight }}
+      aria-hidden
+    >
+      {windows.map((window, i) => {
+        const leftPct = ((window.start - xMin) / span) * 100;
+        const widthPct = Math.max(0.5, ((window.end - window.start) / span) * 100);
+
+        return (
+          <span
+            key={`${window.start}-${i}`}
+            className="absolute top-0 h-0.5 rounded-full bg-primary/55"
+            style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
+          />
+        );
+      })}
+    </div>
+  );
 }
 
 interface WindChartProps {
@@ -144,24 +201,37 @@ function WindReadoutStrip({
   observedSeries,
   pinned,
   showLive,
+  activeEvents,
 }: {
   t: number | null;
   forecastSeries: SeriesPoint[];
   observedSeries: SeriesPoint[];
   pinned: boolean;
   showLive: boolean;
+  activeEvents: ChartEvent[];
 }) {
   const time = t !== null ? format(new Date(t), 'HH:mm') : '—';
   const f = t !== null ? interp(forecastSeries, t) : null;
   const o = t !== null ? nearestWithin(observedSeries, t, READOUT_OBSERVED_TOLERANCE_MS) : null;
 
   return (
-    <div className="flex items-center justify-between gap-3 px-1 pb-2 text-xs">
+    <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-1 pb-2 text-xs">
       <div className="flex flex-col">
         <span className="text-muted-foreground text-[10px] uppercase tracking-wide">
           {pinned ? 'Hovered' : 'Latest'}
         </span>
         <span className="font-semibold tabular-nums">{time}</span>
+      </div>
+      <div className="min-w-0 text-center">
+        {activeEvents.length > 0 && (
+          <div className="truncate text-[11px] leading-tight">
+            <span className="font-semibold tabular-nums text-primary">{activeEvents[0].timeLabel}</span>
+            <span className="ml-1 text-muted-foreground">{activeEvents[0].name}</span>
+            {activeEvents.length > 1 && (
+              <span className="ml-1 text-[10px] text-muted-foreground/80">+{activeEvents.length - 1}</span>
+            )}
+          </div>
+        )}
       </div>
       <div className="flex flex-col gap-0.5">
         {showLive && (
@@ -181,8 +251,6 @@ export function WindChart({
   includePastHours = 0,
   events = [],
 }: WindChartProps) {
-  const eventWindows = buildMergedWindows(events);
-  const sortedEvents = [...events].sort((a, b) => a.start - b.start);
   const [activeRow, setActiveRow] = useState<WindChartRow | null>(null);
   const now = Date.now();
   const nowHour = startOfHour(new Date(now)).getTime();
@@ -219,6 +287,7 @@ export function WindChart({
   const showNow = now >= xMin && now <= xMax;
 
   const displayRow: WindChartRow | null = activeRow ?? rows[rows.length - 1] ?? null;
+  const activeEvents = activeRow ? activeEventsAt(events, activeRow.t) : [];
 
   const handleActive = (state: unknown) => {
     const s = state as {
@@ -253,8 +322,10 @@ export function WindChart({
         observedSeries={observedSeries}
         pinned={!!activeRow}
         showLive={hasObserved}
+        activeEvents={activeEvents}
       />
-      <div className="h-44">
+      <div className="relative h-44">
+      <EventTopMarkers events={events} xMin={xMin} xMax={xMax} plotLeft={52} plotRight={4} />
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ComposedChart
           data={rows}
@@ -298,40 +369,6 @@ export function WindChart({
             content={() => null}
             cursor={{ stroke: 'var(--muted-foreground)', strokeOpacity: 0.5, strokeWidth: 1 }}
           />
-          {eventWindows.map((w, i) => {
-            const x1 = Math.max(w.start, xMin);
-            const x2 = Math.min(w.end, xMax);
-            if (x2 <= x1) return null;
-            return (
-              <ReferenceArea
-                key={`evt-${i}`}
-                x1={x1}
-                x2={x2}
-                fill="var(--primary)"
-                fillOpacity={0.08}
-                stroke="var(--primary)"
-                strokeOpacity={0.25}
-                strokeDasharray="3 3"
-                ifOverflow="hidden"
-              />
-            );
-          })}
-          {sortedEvents.map((e, i) => {
-            if (e.start < xMin || e.start > xMax) return null;
-            const yOffset = (i % 2) * 11;
-            return (
-              <ReferenceLine
-                key={`mk-${i}`}
-                x={e.start}
-                stroke="var(--primary)"
-                strokeOpacity={0.35}
-                strokeWidth={1}
-                strokeDasharray="2 3"
-                label={{ value: e.timeLabel, fill: 'var(--primary)', fillOpacity: 0.7, fontSize: 9, position: 'insideTop', dy: yOffset }}
-                ifOverflow="hidden"
-              />
-            );
-          })}
           {startRefLine && (
             <ReferenceLine
               x={startRefLine}
@@ -417,11 +454,11 @@ interface TideChartInnerProps {
 }
 
 export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalHours = 3, startRefLine, nowRefLine, height = 176, events = [] }: TideChartInnerProps) {
-  const eventWindows = buildMergedWindows(events);
-  const sortedEvents = [...events].sort((a, b) => a.start - b.start);
   const data = tideData.heights
     .filter(h => h.time >= windowStart && h.time <= windowEnd)
     .map(h => ({ t: h.time.getTime(), height: Math.round(h.height * 100) / 100 }));
+  const xMin = data[0]?.t ?? windowStart.getTime();
+  const xMax = data[data.length - 1]?.t ?? windowEnd.getTime();
 
   const ticks = (() => {
     const result: number[] = [];
@@ -436,9 +473,11 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
   })();
 
   return (
-    <div style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-        <ComposedChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+    <>
+      <div className="relative" style={{ height }}>
+        <EventTopMarkers events={events} xMin={xMin} xMax={xMax} plotLeft={40} plotRight={4} />
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+          <ComposedChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="tideAreaGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.25} />
@@ -449,47 +488,6 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
           <XAxis dataKey="t" type="number" scale="time" domain={['dataMin', 'dataMax']} ticks={ticks} tickFormatter={t => format(new Date(t), 'HH:mm')} tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }} />
           <YAxis tick={<YAxisTick unit="m" />} width={40} domain={['auto', 'auto']} />
           <Tooltip {...tooltipStyle} labelFormatter={t => format(new Date(t), 'HH:mm')} formatter={v => [`${Number(v).toFixed(2)}m`, 'Height']} />
-          {(() => {
-            const xMin = data[0]?.t ?? windowStart.getTime();
-            const xMax = data[data.length - 1]?.t ?? windowEnd.getTime();
-            return (
-              <>
-                {eventWindows.map((w, i) => {
-                  const x1 = Math.max(w.start, xMin);
-                  const x2 = Math.min(w.end, xMax);
-                  if (x2 <= x1) return null;
-                  return (
-                    <ReferenceArea
-                      key={`evt-${i}`}
-                      x1={x1}
-                      x2={x2}
-                      fill="var(--primary)"
-                      fillOpacity={0.08}
-                      stroke="var(--primary)"
-                      strokeOpacity={0.25}
-                      strokeDasharray="3 3"
-                      ifOverflow="hidden"
-                    />
-                  );
-                })}
-                {sortedEvents.map((e, i) => {
-                  if (e.start < xMin || e.start > xMax) return null;
-                  const yOffset = (i % 2) * 12;
-                  return (
-                    <ReferenceLine
-                      key={`mk-${i}`}
-                      x={e.start}
-                      stroke="var(--primary)"
-                      strokeOpacity={0.55}
-                      strokeWidth={1}
-                      label={{ value: e.timeLabel, fill: 'var(--primary)', fontSize: 10, position: 'insideTop', dy: yOffset }}
-                      ifOverflow="hidden"
-                    />
-                  );
-                })}
-              </>
-            );
-          })()}
           {nowRefLine !== undefined && (
             <ReferenceLine y={nowRefLine} stroke="var(--primary)" strokeDasharray="4 4" label={(props: { viewBox?: { x?: number; y?: number } }) => (
               <text x={props.viewBox?.x} y={(props.viewBox?.y ?? 0) - 4} style={{ fill: 'var(--primary)' }} fontSize={10} textAnchor="middle">Now</text>
@@ -499,8 +497,9 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
             <ReferenceLine x={startRefLine} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
           )}
           <Area type="monotone" dataKey="height" stroke="var(--primary)" fill="url(#tideAreaGrad)" strokeWidth={2} dot={false} />
-        </ComposedChart>
-      </ResponsiveContainer>
-    </div>
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+    </>
   );
 }

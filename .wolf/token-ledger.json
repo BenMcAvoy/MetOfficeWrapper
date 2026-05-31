@@ -2,14 +2,14 @@
   "version": 1,
   "created_at": "2026-05-17T07:44:52.450Z",
   "lifetime": {
-    "total_tokens_estimated": 769997,
-    "total_reads": 333,
-    "total_writes": 1736,
-    "total_sessions": 1,
-    "anatomy_hits": 0,
-    "anatomy_misses": 333,
+    "total_tokens_estimated": 780585,
+    "total_reads": 337,
+    "total_writes": 1740,
+    "total_sessions": 2,
+    "anatomy_hits": 3,
+    "anatomy_misses": 334,
     "repeated_reads_blocked": 189,
-    "estimated_savings_vs_bare_cli": 903377
+    "estimated_savings_vs_bare_cli": 903977
   },
   "sessions": [
     {
@@ -11045,6 +11045,67 @@
         "writes_count": 146,
         "repeated_reads_blocked": 14,
         "anatomy_lookups": 0
+      }
+    },
+    {
+      "id": "session-2026-05-31-1955",
+      "started": "2026-05-31T18:55:44.123Z",
+      "ended": "2026-05-31T18:57:40.163Z",
+      "reads": [
+        {
+          "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 3364,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/MetOfficeWrapper/src/components/ForecastStrip.tsx",
+          "tokens_estimated": 0,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/MetOfficeWrapper/src/components/EventsStrip.tsx",
+          "tokens_estimated": 2005,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        },
+        {
+          "file": "C:/Users/Ben/MetOfficeWrapper/src/components/charts.tsx",
+          "tokens_estimated": 5112,
+          "was_repeated": false,
+          "anatomy_had_description": false
+        }
+      ],
+      "writes": [
+        {
+          "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 27,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/MetOfficeWrapper/src/components/WindCard.tsx",
+          "tokens_estimated": 25,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/MetOfficeWrapper/src/components/ForecastStrip.tsx",
+          "tokens_estimated": 28,
+          "action": "edit"
+        },
+        {
+          "file": "C:/Users/Ben/MetOfficeWrapper/src/components/EventsStrip.tsx",
+          "tokens_estimated": 27,
+          "action": "edit"
+        }
+      ],
+      "totals": {
+        "input_tokens_estimated": 10481,
+        "output_tokens_estimated": 107,
+        "reads_count": 4,
+        "writes_count": 4,
+        "repeated_reads_blocked": 0,
+        "anatomy_lookups": 3
       }
     }
   ],
