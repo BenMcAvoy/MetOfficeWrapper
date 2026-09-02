@@ -307,7 +307,7 @@ export default function App() {
   const comparisonForecasts = settings.compareForecasts
     ? [
         { id: 'metoffice', label: 'Met Office', series: buildForecastSeries(forecastHistory, metOfficeForecasts), color: 'var(--chart-avg)' },
-        { id: 'deepmind', label: 'Google DeepMind', series: buildForecastSeries([], weatherNextForecasts), color: 'var(--accent-gold)' },
+        { id: 'deepmind', label: 'Google DeepMind', series: buildForecastSeries([], weatherNextForecasts), color: 'var(--accent-gold)', gustLabel: 'ensemble max' },
       ]
     : undefined;
   const isLoading = loadState === 'loading';

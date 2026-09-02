@@ -17,6 +17,7 @@ export interface ForecastChartInput {
   label: string;
   series: SeriesPoint[];
   color: string;
+  gustLabel?: string;
 }
 
 export const TEN_MIN = 10 * 60 * 1000;

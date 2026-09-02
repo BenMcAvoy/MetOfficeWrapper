@@ -197,7 +197,15 @@ export function WindChart({
 
   const forecastSeries = buildForecastSeries(historyForecasts, forecasts);
   const observedSeries = buildObservedSeries(liveHistory);
-  const comparison = comparisonForecasts?.filter(source => source.series.length > 0) ?? [];
+  // The parent may hold seven days for the source comparison, while this chart
+  // can be scoped to today or a single selected day. Keep the comparison lines
+  // inside the same forward horizon as the primary forecast passed to the chart.
+  const forecastEnd = forecasts.length
+    ? Math.max(...forecasts.map(forecast => forecast.time.getTime()))
+    : Number.POSITIVE_INFINITY;
+  const comparison = comparisonForecasts
+    ?.map(source => ({ ...source, series: source.series.filter(point => point.t <= forecastEnd) }))
+    .filter(source => source.series.length > 0) ?? [];
   const isComparing = comparison.length > 1;
   const forecastInputs: ForecastChartInput[] = isComparing
     ? comparison
@@ -243,7 +251,7 @@ export function WindChart({
     ...(isComparing
       ? forecastInputs.flatMap(source => [
           { label: `${source.label} avg`, color: source.color, dashed: false },
-          { label: `${source.label} gust`, color: source.color, dashed: true },
+          { label: `${source.label} ${source.gustLabel ?? 'gust'}`, color: source.color, dashed: true },
         ])
       : []),
     ...(hasObserved

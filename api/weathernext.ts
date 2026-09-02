@@ -14,6 +14,7 @@ export default async function handler(req: Request): Promise<Response> {
     hourly: 'temperature_2m,pressure_msl,precipitation,wind_speed_10m,wind_direction_10m,weather_code',
     models: 'google_weathernext2_ensemble',
     forecast_days: '7',
+    past_days: '1',
     timezone: 'UTC',
     wind_speed_unit: 'kmh',
   });

@@ -9,6 +9,7 @@ export interface WeatherNextResponse {
     wind_speed_10m?: number[];
     wind_direction_10m?: number[];
     weather_code?: number[];
+    [key: string]: string[] | number[] | undefined;
   };
 }
 
@@ -24,13 +25,18 @@ export function parseWeatherNextResponse(payload: WeatherNextResponse): HourlyFo
   return hourly.time.map((time, index) => {
     const temperature = value(hourly.temperature_2m, index, 0);
     const windSpeed = value(hourly.wind_speed_10m, index, 0) / 3.6;
+    const ensembleMaxKmh = Array.from({ length: 63 }, (_, member) =>
+      value(hourly[`wind_speed_10m_member${String(member + 1).padStart(2, '0')}`] as number[] | undefined, index, NaN)
+    ).filter(Number.isFinite).reduce((max, speed) => Math.max(max, speed), -Infinity);
+    const upperWindSpeed = Number.isFinite(ensembleMaxKmh) ? ensembleMaxKmh / 3.6 : windSpeed;
     return {
       time: new Date(/(?:Z|[+-]\d{2}:?\d{2})$/i.test(time) ? time : `${time}Z`),
       screenTemperature: temperature,
       feelsLikeTemp: temperature,
       windSpeed10m: windSpeed,
-      // WeatherNext does not publish a 10m gust field; retain a truthful, stable baseline.
-      windGustSpeed10m: windSpeed,
+      // WeatherNext has no true gust field; use the upper ensemble member as
+      // an uncertainty ceiling. The chart labels this as "ensemble max".
+      windGustSpeed10m: upperWindSpeed,
       windDirectionFrom10m: value(hourly.wind_direction_10m, index, 0),
       precipitationRate: value(hourly.precipitation, index, 0),
       probOfPrecipitation: 0,

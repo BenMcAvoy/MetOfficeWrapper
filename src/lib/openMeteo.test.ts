@@ -12,12 +12,14 @@ describe('parseWeatherNextResponse', () => {
         wind_speed_10m: [18],
         wind_direction_10m: [225],
         weather_code: [63],
+        wind_speed_10m_member01: [25],
+        wind_speed_10m_member02: [30],
       },
     });
     expect(result[0]).toMatchObject({
       screenTemperature: 18.5,
       windSpeed10m: 5,
-      windGustSpeed10m: 5,
+      windGustSpeed10m: expect.closeTo(30 / 3.6, 5),
       precipitationRate: 0.4,
       significantWeatherCode: 63,
       mslp: 1018,
