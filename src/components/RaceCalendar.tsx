@@ -150,7 +150,7 @@ function AllDayEventView({ event, selectedDay, forecasts, tideData, liveWindHist
           <CardContent className="py-6 text-center text-muted-foreground text-sm">
             Forecast not yet available for {format(selectedDay, 'd MMMM')}.
             <br />
-            <span className="text-xs">Met Office provides up to 7 days ahead.</span>
+            <span className="text-xs">The selected forecast source provides up to 7 days ahead.</span>
           </CardContent>
         </Card>
       )}
@@ -332,7 +332,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
           <CardContent className="py-6 text-center text-muted-foreground text-sm">
             Forecast not yet available for {format(selectedDay, 'd MMMM')}.
             <br />
-            <span className="text-xs">Met Office provides up to 7 days ahead.</span>
+            <span className="text-xs">The selected forecast source provides up to 7 days ahead.</span>
           </CardContent>
         </Card>
       )}
@@ -390,7 +390,7 @@ function EventWeatherView({ event, selectedDay, forecasts, tideData, liveWindHis
                       <span className={`text-xs font-medium px-1 py-0.5 rounded leading-none ${beaufortBg(bf.force)}`}>F{bf.force}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <ArrowUp className="h-3 w-3 text-muted-foreground shrink-0" style={{ transform: `rotate(${fc.windDirectionFrom10m}deg)` }} strokeWidth={2.5} />
+                      <ArrowUp className="h-3 w-3 text-muted-foreground shrink-0" style={{ transform: `rotate(${fc.windDirectionFrom10m + 180}deg)` }} strokeWidth={2.5} />
                       <span className={`text-xs font-semibold tabular-nums ${beaufortColor(gustBf.force)}`}>{Math.round(convertWind(fc.windGustSpeed10m, windUnit))}{unitLabel}</span>
                     </div>
                     <span className={`text-xs font-medium tabular-nums text-right ${fc.probOfPrecipitation > 60 ? 'text-primary' : 'text-muted-foreground'}`}>

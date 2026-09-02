@@ -41,6 +41,31 @@ const WEATHER_CODES: Record<number, WeatherInfo> = {
   28: { description: 'Thunderstorm',         Icon: CloudLightning, isRainy: true  },
   29: { description: 'Thunderstorm',         Icon: CloudLightning, isRainy: true  },
   30: { description: 'Thunder',              Icon: CloudLightning, isRainy: true  },
+  // WMO codes returned by Open-Meteo WeatherNext.
+  45: { description: 'Fog',                 Icon: CloudFog,       isRainy: false },
+  48: { description: 'Rime fog',             Icon: CloudFog,       isRainy: false },
+  51: { description: 'Light drizzle',       Icon: CloudDrizzle,   isRainy: true  },
+  53: { description: 'Drizzle',             Icon: CloudDrizzle,   isRainy: true  },
+  55: { description: 'Heavy drizzle',       Icon: CloudDrizzle,   isRainy: true  },
+  56: { description: 'Freezing drizzle',    Icon: CloudSnow,      isRainy: true  },
+  57: { description: 'Freezing drizzle',    Icon: CloudSnow,      isRainy: true  },
+  61: { description: 'Light rain',          Icon: CloudRain,      isRainy: true  },
+  63: { description: 'Rain',                Icon: CloudRain,      isRainy: true  },
+  65: { description: 'Heavy rain',          Icon: CloudRain,      isRainy: true  },
+  66: { description: 'Freezing rain',       Icon: CloudSnow,      isRainy: true  },
+  67: { description: 'Heavy freezing rain', Icon: CloudSnow,      isRainy: true  },
+  71: { description: 'Light snow',          Icon: CloudSnow,      isRainy: false },
+  73: { description: 'Snow',                Icon: CloudSnow,      isRainy: false },
+  75: { description: 'Heavy snow',          Icon: Snowflake,      isRainy: false },
+  77: { description: 'Snow grains',         Icon: Snowflake,      isRainy: false },
+  80: { description: 'Light rain shower',   Icon: CloudRain,      isRainy: true  },
+  81: { description: 'Rain showers',        Icon: CloudRain,      isRainy: true  },
+  82: { description: 'Heavy rain showers',  Icon: CloudRain,      isRainy: true  },
+  85: { description: 'Light snow shower',   Icon: CloudSnow,      isRainy: false },
+  86: { description: 'Heavy snow shower',   Icon: CloudSnow,      isRainy: false },
+  95: { description: 'Thunderstorm',        Icon: CloudLightning, isRainy: true  },
+  96: { description: 'Thunderstorm with hail', Icon: CloudHail,   isRainy: true  },
+  99: { description: 'Thunderstorm with hail', Icon: CloudHail,   isRainy: true  },
 };
 
 const FALLBACK: WeatherInfo = { description: 'Unknown', Icon: Cloud, isRainy: false };
@@ -54,7 +79,7 @@ export function getWeatherInfo(code: number): WeatherInfo {
 export function getWeatherIconColor(code: number): string {
   if (code === 0 || code === 1) return 'var(--accent-gold)';        // clear / sunny
   if (code === 2 || code === 3) return 'var(--warn)';               // partly cloudy
-  if (code === 5 || code === 6) return 'var(--muted-foreground)';   // mist / fog
+  if (code === 5 || code === 6 || code === 45 || code === 48) return 'var(--muted-foreground)';   // mist / fog
   if (code === 7 || code === 8) return 'var(--muted-foreground)';   // cloudy / overcast
   if (code >= 9 && code <= 18) return 'var(--primary)';             // rain / sleet
   if (code >= 19 && code <= 21) return 'var(--destructive)';        // hail

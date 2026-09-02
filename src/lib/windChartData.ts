@@ -9,7 +9,15 @@ export type WindChartRow = {
   fGust: number | null;
   oAvg: number | null;
   oGust: number | null;
+  [key: string]: number | null;
 };
+
+export interface ForecastChartInput {
+  id: string;
+  label: string;
+  series: SeriesPoint[];
+  color: string;
+}
 
 export const TEN_MIN = 10 * 60 * 1000;
 export const HOUR = 60 * 60 * 1000;
@@ -121,6 +129,34 @@ export function buildWindChartRows(
       oAvg: o?.avg ?? null,
       oGust: o?.gust ?? null,
     });
+  }
+  return rows;
+}
+
+export function buildMultiWindChartRows(
+  forecasts: ForecastChartInput[],
+  observedSeries: SeriesPoint[],
+  xMin: number,
+  xMax: number,
+): WindChartRow[] {
+  const rows: WindChartRow[] = [];
+  for (let t = xMin; t <= xMax; t += TEN_MIN) {
+    const row: WindChartRow = {
+      t,
+      fAvg: null,
+      fGust: null,
+      oAvg: null,
+      oGust: null,
+    };
+    for (const forecast of forecasts) {
+      const point = interp(forecast.series, t);
+      row[`${forecast.id}Avg`] = point?.avg ?? null;
+      row[`${forecast.id}Gust`] = point?.gust ?? null;
+    }
+    const observed = interp(observedSeries, t);
+    row.oAvg = observed?.avg ?? null;
+    row.oGust = observed?.gust ?? null;
+    rows.push(row);
   }
   return rows;
 }

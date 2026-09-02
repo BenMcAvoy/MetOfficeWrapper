@@ -6,15 +6,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, CalendarDays } from 'lucide-react';
 import { format, startOfDay, addDays, isSameDay } from 'date-fns';
 import { WindChart } from '@/components/charts';
+import type { ForecastChartInput } from '@/lib/windChartData';
 
 interface ForecastStripProps {
   forecasts: HourlyForecast[];
   chartHistoryForecasts: WindForecastPoint[];
+  comparisonForecasts?: ForecastChartInput[];
   liveWindHistory: LiveWindHistoryPoint[];
 }
 
 
-export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWindHistory }: ForecastStripProps) {
+export default function ForecastStrip({ forecasts, chartHistoryForecasts, comparisonForecasts, liveWindHistory }: ForecastStripProps) {
   const { windUnit } = useSettings();
   const unitLabel = windUnitLabel(windUnit);
   const days = Array.from({ length: 7 }, (_, i) => startOfDay(addDays(new Date(), i)));
@@ -28,7 +30,7 @@ export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWi
             <CardTitle className="text-sm">Observed vs Forecast Wind (Today)</CardTitle>
           </CardHeader>
           <CardContent>
-            <WindChart forecasts={todayForecasts} historyForecasts={chartHistoryForecasts} liveHistory={liveWindHistory} includePastHours={3} />
+            <WindChart forecasts={todayForecasts} historyForecasts={chartHistoryForecasts} comparisonForecasts={comparisonForecasts} liveHistory={liveWindHistory} includePastHours={3} />
           </CardContent>
         </Card>
       )}

@@ -1,4 +1,5 @@
 import { getCached, setCached, TTL } from './cache';
+import { parseWeatherNextResponse, type WeatherNextResponse } from './openMeteo';
 
 export interface HourlyForecast {
   time: Date;
@@ -166,6 +167,24 @@ export async function fetchMetOfficeHourly(geohash: string): Promise<HourlyForec
   }));
 
   setCached(cacheKey, data.forecasts, TTL.FORECAST);
+  return forecasts;
+}
+
+export async function fetchWeatherNextHourly(lat: number, lon: number): Promise<HourlyForecast[]> {
+  const cacheKey = `weathernext_${lat.toFixed(3)}_${lon.toFixed(3)}`;
+  const cached = getCached<ReturnType<typeof parseWeatherNextResponse>>(cacheKey);
+  if (cached) return cached.map(f => ({ ...f, time: new Date(f.time) }));
+
+  const res = await fetch(`/api/weathernext?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}`);
+  if (!res.ok) {
+    let detail = res.statusText;
+    try { detail = ((await res.json()) as { error?: string }).error ?? detail; } catch { /* ignore */ }
+    throw new Error(`WeatherNext error: ${res.status} ${detail}`);
+  }
+  const forecasts = parseWeatherNextResponse(await res.json() as WeatherNextResponse);
+  if (!forecasts.length) throw new Error('No WeatherNext forecast data returned');
+
+  setCached(cacheKey, forecasts.map(f => ({ ...f, time: f.time.toISOString() })), TTL.FORECAST);
   return forecasts;
 }
 

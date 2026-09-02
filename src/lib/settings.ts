@@ -2,6 +2,7 @@ import { useSyncExternalStore } from 'react';
 
 export type Theme = 'auto' | 'light' | 'dark';
 export type WindUnit = 'kn' | 'mph' | 'kmh' | 'ms';
+export type ForecastProvider = 'metoffice' | 'weathernext';
 
 export interface Location {
   geohash: string;
@@ -18,12 +19,16 @@ export const DEFAULT_LOCATION: Location = {
 export interface Settings {
   theme: Theme;
   windUnit: WindUnit;
+  forecastProvider: ForecastProvider;
+  compareForecasts: boolean;
   location: Location;
 }
 
 const DEFAULTS: Settings = {
   theme: 'auto',
   windUnit: 'kn',
+  forecastProvider: 'metoffice',
+  compareForecasts: false,
   location: DEFAULT_LOCATION,
 };
 
@@ -37,6 +42,8 @@ function read(): Settings {
     return {
       theme: parsed.theme ?? DEFAULTS.theme,
       windUnit: parsed.windUnit ?? DEFAULTS.windUnit,
+      forecastProvider: parsed.forecastProvider === 'weathernext' ? 'weathernext' : DEFAULTS.forecastProvider,
+      compareForecasts: parsed.compareForecasts === true,
       location: { ...DEFAULTS.location, ...(parsed.location ?? {}) },
     };
   } catch {

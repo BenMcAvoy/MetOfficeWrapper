@@ -5,6 +5,8 @@ import {
   buildForecastSeries,
   buildObservedSeries,
   buildWindChartRows,
+  buildMultiWindChartRows,
+  type ForecastChartInput,
   bucket10,
   interp,
   nearestWithin,
@@ -20,6 +22,7 @@ import { format, subHours, startOfHour } from 'date-fns';
 interface WindChartProps {
   forecasts: HourlyForecast[];
   historyForecasts?: WindForecastPoint[];
+  comparisonForecasts?: ForecastChartInput[];
   startRefLine?: number;
   liveHistory?: LiveWindHistoryPoint[];
   includePastHours?: number;
@@ -136,6 +139,7 @@ function WindReadoutStrip({
 export function WindChart({
   forecasts,
   historyForecasts = [],
+  comparisonForecasts,
   startRefLine,
   liveHistory = [],
   includePastHours = 0,
@@ -193,22 +197,29 @@ export function WindChart({
 
   const forecastSeries = buildForecastSeries(historyForecasts, forecasts);
   const observedSeries = buildObservedSeries(liveHistory);
+  const comparison = comparisonForecasts?.filter(source => source.series.length > 0) ?? [];
+  const isComparing = comparison.length > 1;
+  const forecastInputs: ForecastChartInput[] = isComparing
+    ? comparison
+    : [{ id: 'f', label: 'Forecast', series: forecastSeries, color: COLORS.avg }];
 
   if (!forecastSeries.length && !observedSeries.length) return null;
 
   const firstT = Math.min(
-    forecastSeries[0]?.t ?? Number.POSITIVE_INFINITY,
+    ...forecastInputs.map(source => source.series[0]?.t ?? Number.POSITIVE_INFINITY),
     observedSeries[0]?.t ?? Number.POSITIVE_INFINITY,
   );
   const lastT = Math.max(
-    forecastSeries[forecastSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
+    ...forecastInputs.map(source => source.series[source.series.length - 1]?.t ?? Number.NEGATIVE_INFINITY),
     observedSeries[observedSeries.length - 1]?.t ?? Number.NEGATIVE_INFINITY,
   );
 
   const xMin = bucket10(forcedMin ?? firstT);
   const xMax = bucket10(Math.max(lastT, xMin + HOUR));
 
-  const rows = buildWindChartRows(forecastSeries, observedSeries, xMin, xMax);
+  const rows = isComparing
+    ? buildMultiWindChartRows(forecastInputs, observedSeries, xMin, xMax)
+    : buildWindChartRows(forecastSeries, observedSeries, xMin, xMax);
   rowsRef.current = rows;
   if (!rows.length) return null;
 
@@ -229,14 +240,24 @@ export function WindChart({
   const readoutRow: WindChartRow | null = activeRow ?? (interacted ? null : latestRow);
 
   const legendEntries: LegendEntry[] = [
+    ...(isComparing
+      ? forecastInputs.flatMap(source => [
+          { label: `${source.label} avg`, color: source.color, dashed: false },
+          { label: `${source.label} gust`, color: source.color, dashed: true },
+        ])
+      : []),
     ...(hasObserved
       ? [
           { label: 'Live avg', color: COLORS.avg, dashed: false },
           { label: 'Live gust', color: COLORS.gust, dashed: false },
         ]
       : []),
-    { label: 'Forecast avg', color: COLORS.avg, dashed: true },
-    { label: 'Forecast gust', color: COLORS.gust, dashed: true },
+    ...(!isComparing
+      ? [
+          { label: 'Forecast avg', color: COLORS.avg, dashed: true },
+          { label: 'Forecast gust', color: COLORS.gust, dashed: true },
+        ]
+      : []),
   ];
 
   return (
@@ -333,7 +354,7 @@ export function WindChart({
             />
           )}
 
-          <Line
+          {!isComparing && <Line
             type="monotone"
             dataKey="fAvg"
             name="Forecast avg"
@@ -343,8 +364,8 @@ export function WindChart({
             dot={false}
             isAnimationActive={false}
             connectNulls
-          />
-          <Line
+          />}
+          {!isComparing && <Line
             type="monotone"
             dataKey="fGust"
             name="Forecast gust"
@@ -354,7 +375,33 @@ export function WindChart({
             dot={false}
             isAnimationActive={false}
             connectNulls
-          />
+          />}
+          {isComparing && forecastInputs.flatMap(source => [
+            <Line
+              key={`${source.id}-avg`}
+              type="monotone"
+              dataKey={`${source.id}Avg`}
+              name={`${source.label} avg`}
+              stroke={source.color}
+              strokeWidth={2}
+              dot={false}
+              isAnimationActive={false}
+              connectNulls
+            />,
+            <Line
+              key={`${source.id}-gust`}
+              type="monotone"
+              dataKey={`${source.id}Gust`}
+              name={`${source.label} gust`}
+              stroke={source.color}
+              strokeOpacity={0.55}
+              strokeWidth={1.5}
+              strokeDasharray={FORECAST_DASH}
+              dot={false}
+              isAnimationActive={false}
+              connectNulls
+            />,
+          ])}
           {hasObserved && (
             <>
               <Area

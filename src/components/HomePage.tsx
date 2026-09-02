@@ -7,8 +7,9 @@ import type { Tab } from '@/App';
 import { RACE_CALENDAR, getEventCategory, type RaceEvent } from '@/lib/calendar';
 import { convertWind, windUnitLabel, degreesToCardinal, beaufortScale, beaufortColor, msToKnots, MS_TO_KNOTS } from '@/lib/units';
 import {
-  buildForecastSeries, buildObservedSeries, buildWindChartRows, bucket10,
+  buildForecastSeries, buildObservedSeries, buildWindChartRows, buildMultiWindChartRows, bucket10,
   type WindChartRow,
+  type ForecastChartInput,
 } from '@/lib/windChartData';
 import { getWeatherInfo, getWeatherIconColor } from '@/lib/weatherCodes';
 import { haptic } from '@/lib/haptics';
@@ -23,6 +24,7 @@ import {
 interface HomePageProps {
   forecasts: HourlyForecast[];
   forecastHistory: WindForecastPoint[];
+  comparisonForecasts?: ForecastChartInput[];
   liveWind: LiveWind | null;
   liveWindHistory: LiveWindHistoryPoint[];
   tideData: TideData | null;
@@ -106,10 +108,11 @@ function SunSummary({ forecasts, sunInfo }: { forecasts: HourlyForecast[]; sunIn
 // --- Wind: forecast vs observed mini chart ----------------------------------
 
 function WindMiniChart({
-  forecasts, forecastHistory, liveWindHistory, onActiveRow,
+  forecasts, forecastHistory, comparisonForecasts, liveWindHistory, onActiveRow,
 }: {
   forecasts: HourlyForecast[];
   forecastHistory: WindForecastPoint[];
+  comparisonForecasts?: ForecastChartInput[];
   liveWindHistory: LiveWindHistoryPoint[];
   onActiveRow?: (row: WindChartRow | null) => void;
 }) {
@@ -119,10 +122,13 @@ function WindMiniChart({
     const xMax = bucket10(addHours(now, 6).getTime());
     const fSeries = buildForecastSeries(forecastHistory, forecasts);
     const oSeries = buildObservedSeries(liveWindHistory);
-    const rows = buildWindChartRows(fSeries, oSeries, xMin, xMax);
+    const comparison = comparisonForecasts?.filter(source => source.series.length > 0) ?? [];
+    const rows = comparison.length > 1
+      ? buildMultiWindChartRows(comparison, oSeries, xMin, xMax)
+      : buildWindChartRows(fSeries, oSeries, xMin, xMax);
     const latestObs = [...rows].reverse().find(r => r.oAvg != null);
     return { rows, xMin, xMax, hasObs: oSeries.length > 0, nowAvg: latestObs ?? null };
-  }, [forecasts, forecastHistory, liveWindHistory]);
+  }, [forecasts, forecastHistory, comparisonForecasts, liveWindHistory]);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const rowsRef = useRef<WindChartRow[]>(rows);
@@ -194,6 +200,12 @@ function WindMiniChart({
           {now >= xMin && now <= xMax && (
             <ReferenceLine x={now} stroke="var(--primary)" strokeOpacity={0.4} strokeDasharray="3 3" strokeWidth={1} />
           )}
+          {comparisonForecasts && comparisonForecasts.filter(source => source.series.length > 0).length > 1
+            ? comparisonForecasts.flatMap(source => [
+                <Line key={`${source.id}-gust`} type="monotone" dataKey={`${source.id}Gust`} stroke={source.color} strokeOpacity={0.55} strokeWidth={1.25} strokeDasharray={FORECAST_DASH} dot={false} isAnimationActive={false} connectNulls />,
+                <Line key={`${source.id}-avg`} type="monotone" dataKey={`${source.id}Avg`} stroke={source.color} strokeWidth={1.75} dot={false} isAnimationActive={false} connectNulls />,
+              ])
+            : <>
           <Line
             type="monotone"
             dataKey="fGust"
@@ -214,6 +226,7 @@ function WindMiniChart({
             isAnimationActive={false}
             connectNulls
           />
+          </>}
           {hasObs && (
             <>
               <Line
@@ -249,10 +262,11 @@ function WindMiniChart({
 }
 
 function WindCardHome({
-  forecasts, forecastHistory, liveWind, liveWindHistory, onNavigate,
+  forecasts, forecastHistory, comparisonForecasts, liveWind, liveWindHistory, onNavigate,
 }: {
   forecasts: HourlyForecast[];
   forecastHistory: WindForecastPoint[];
+  comparisonForecasts?: ForecastChartInput[];
   liveWind: LiveWind | null;
   liveWindHistory: LiveWindHistoryPoint[];
   onNavigate: (tab: Tab) => void;
@@ -350,6 +364,7 @@ function WindCardHome({
         <WindMiniChart
           forecasts={forecasts}
           forecastHistory={forecastHistory}
+          comparisonForecasts={comparisonForecasts}
           liveWindHistory={liveWindHistory}
           onActiveRow={setActiveRow}
         />
@@ -808,7 +823,7 @@ function WeekCardHome({ forecasts, onNavigate }: { forecasts: HourlyForecast[]; 
 }
 
 export default function HomePage({
-  forecasts, forecastHistory, liveWind, liveWindHistory, tideData, sunInfo, onNavigate,
+  forecasts, forecastHistory, comparisonForecasts, liveWind, liveWindHistory, tideData, sunInfo, onNavigate,
 }: HomePageProps) {
   return (
     <div className="space-y-3 page-enter">
@@ -816,6 +831,7 @@ export default function HomePage({
       <WindCardHome
         forecasts={forecasts}
         forecastHistory={forecastHistory}
+        comparisonForecasts={comparisonForecasts}
         liveWind={liveWind}
         liveWindHistory={liveWindHistory}
         onNavigate={onNavigate}

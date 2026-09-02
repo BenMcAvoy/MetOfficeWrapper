@@ -6,11 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wind, ArrowUp } from 'lucide-react';
 import { format, isSameDay } from 'date-fns';
 import WindChartCard from '@/components/WindChartCard';
+import type { ForecastChartInput } from '@/lib/windChartData';
 
 interface WindCardProps {
   forecasts: HourlyForecast[];
   chartForecasts: HourlyForecast[];
   chartHistoryForecasts: WindForecastPoint[];
+  comparisonForecasts?: ForecastChartInput[];
   selectedDay: Date;
   liveWind: LiveWind | null;
   liveWindHistory: LiveWindHistoryPoint[];
@@ -18,7 +20,7 @@ interface WindCardProps {
 
 
 
-export default function WindCard({ forecasts, chartForecasts, chartHistoryForecasts, selectedDay, liveWind, liveWindHistory }: WindCardProps) {
+export default function WindCard({ forecasts, chartForecasts, chartHistoryForecasts, comparisonForecasts, selectedDay, liveWind, liveWindHistory }: WindCardProps) {
   const nowMs = useNow(1000);
   const { windUnit } = useSettings();
   const unitLabel = windUnitLabel(windUnit);
@@ -134,7 +136,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                     <>
                       <ArrowUp
                         className="h-4 w-4 text-primary"
-                        style={{ transform: `rotate(${currentObservedDirection}deg)`, transition: 'transform 240ms cubic-bezier(0.32, 0.72, 0, 1)' }}
+                        style={{ transform: `rotate(${currentObservedDirection + 180}deg)`, transition: 'transform 240ms cubic-bezier(0.32, 0.72, 0, 1)' }}
                         strokeWidth={2.5}
                       />
                       <span className="text-sm font-semibold">{degreesToCardinal(currentObservedDirection)}</span>
@@ -186,6 +188,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
         title="Wind Chart"
         forecasts={chartForecasts}
         historyForecasts={isToday ? chartHistoryForecasts : []}
+        comparisonForecasts={isToday ? comparisonForecasts : undefined}
         liveWindHistory={isToday ? liveWindHistory : []}
         includePastHours={isToday ? 3 : 0}
       />
@@ -225,7 +228,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   <div className="flex items-center gap-1.5">
                     <ArrowUp
                       className="h-4 w-4 text-primary shrink-0"
-                      style={{ transform: `rotate(${f.windDirectionFrom10m}deg)` }}
+                      style={{ transform: `rotate(${f.windDirectionFrom10m + 180}deg)` }}
                       strokeWidth={2.5}
                     />
                     <span className="text-xs text-muted-foreground">{degreesToCardinal(f.windDirectionFrom10m)}</span>

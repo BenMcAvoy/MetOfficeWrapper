@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Check, RotateCcw, Trash2, ExternalLink } from 'lucide-react';
-import { useSettings, setSettings, resetSettings, DEFAULT_LOCATION, type Theme, type WindUnit } from '@/lib/settings';
+import { useSettings, setSettings, resetSettings, DEFAULT_LOCATION, type Theme, type WindUnit, type ForecastProvider } from '@/lib/settings';
 import { clearCache } from '@/lib/cache';
 import { decodeGeohash } from '@/lib/geohash';
 import { haptic } from '@/lib/haptics';
@@ -17,6 +17,11 @@ const WIND_UNITS: { id: WindUnit; label: string }[] = [
   { id: 'mph', label: 'mph' },
   { id: 'kmh', label: 'km/h' },
   { id: 'ms',  label: 'm/s' },
+];
+
+const FORECAST_PROVIDERS: { id: ForecastProvider; label: string }[] = [
+  { id: 'metoffice', label: 'Met Office' },
+  { id: 'weathernext', label: 'WeatherNext' },
 ];
 
 function Section({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
@@ -138,7 +143,7 @@ export default function SettingsPage({ onRefresh }: { onRefresh: () => void }) {
         </div>
       </Section>
 
-      <Section title="Location" description="Geohash + Met Office area + weatherfile.com live station.">
+      <Section title="Location" description="Geohash + weatherfile.com live station.">
         <div className="divide-y divide-border/60">
           <label className="px-3 py-2.5 flex items-center gap-3">
             <span className="text-sm font-medium w-20 shrink-0">Name</span>
@@ -196,6 +201,34 @@ export default function SettingsPage({ onRefresh }: { onRefresh: () => void }) {
         <div className="divide-y divide-border/60">
           <div className="px-3 py-2.5 flex items-center justify-between gap-3">
             <div>
+              <div className="text-sm font-medium">Forecast source</div>
+              <div className="text-xs text-muted-foreground">Choose which forecast powers the app.</div>
+            </div>
+            <div className="w-[220px] max-w-[55%]">
+              <SegmentedRow
+                options={FORECAST_PROVIDERS}
+                value={settings.forecastProvider}
+                onChange={(forecastProvider) => { setSettings({ forecastProvider }); clearCache(); onRefresh(); }}
+              />
+            </div>
+          </div>
+          <div className="px-3 py-2.5 flex items-center justify-between gap-3">
+            <div>
+              <div className="text-sm font-medium">Compare forecast sources</div>
+              <div className="text-xs text-muted-foreground">Show Google DeepMind, Met Office and live wind together.</div>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={settings.compareForecasts}
+              onClick={() => { haptic('light'); setSettings({ compareForecasts: !settings.compareForecasts }); clearCache(); onRefresh(); }}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${settings.compareForecasts ? 'bg-primary' : 'bg-muted'}`}
+            >
+              <span className={`absolute top-1 h-4 w-4 rounded-full bg-background shadow-sm transition-transform ${settings.compareForecasts ? 'translate-x-6' : 'translate-x-1'}`} />
+            </button>
+          </div>
+          <div className="px-3 py-2.5 flex items-center justify-between gap-3">
+            <div>
               <div className="text-sm font-medium">Refresh now</div>
               <div className="text-xs text-muted-foreground">Re-fetch forecast, tides and sun.</div>
             </div>
@@ -213,7 +246,7 @@ export default function SettingsPage({ onRefresh }: { onRefresh: () => void }) {
           <div className="px-3 py-2.5 flex items-center justify-between gap-3">
             <div>
               <div className="text-sm font-medium">Reset all settings</div>
-              <div className="text-xs text-muted-foreground">Restore theme, units and location to defaults.</div>
+              <div className="text-xs text-muted-foreground">Restore theme, units, forecast source and location to defaults.</div>
             </div>
             <Button
               variant="ghost"
@@ -249,6 +282,10 @@ export default function SettingsPage({ onRefresh }: { onRefresh: () => void }) {
               <li className="flex items-center gap-1.5">
                 <ExternalLink className="h-3 w-3 text-muted-foreground" />
                 <a href="https://www.metoffice.gov.uk/services/data" target="_blank" rel="noreferrer" className="hover:underline">Met Office DataHub — forecast</a>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                <a href="https://open-meteo.com/en/docs/google-weathernext-api" target="_blank" rel="noreferrer" className="hover:underline">Open-Meteo / Google WeatherNext — forecast</a>
               </li>
               <li className="flex items-center gap-1.5">
                 <ExternalLink className="h-3 w-3 text-muted-foreground" />

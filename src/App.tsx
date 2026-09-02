@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react'
 import { useNow } from '@/lib/useNow';
 import { haptic } from '@/lib/haptics';
 import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint, MarineData } from '@/lib/api';
-import { fetchMetOfficeHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory, fetchMarine } from '@/lib/api';
+import { fetchMetOfficeHourly, fetchWeatherNextHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory, fetchMarine } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
 import { filterForDay } from '@/lib/forecastUtils';
 import { useSkyTint } from '@/lib/useSkyTint';
@@ -16,6 +16,7 @@ import InstallButton from '@/components/InstallButton';
 import SettingsPage from '@/components/SettingsPage';
 import HomePage from '@/components/HomePage';
 import { useSettings } from '@/lib/settings';
+import { buildForecastSeries } from '@/lib/windChartData';
 import {
   MapPin, AlertTriangle, Waves, Loader2, Home,
   Wind, CalendarDays, Anchor, Settings as SettingsIcon,
@@ -117,6 +118,8 @@ export default function App() {
   const { lat, lon } = decodeGeohash(LOCATION_GEOHASH);
 
   const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
+  const [metOfficeForecasts, setMetOfficeForecasts] = useState<HourlyForecast[]>([]);
+  const [weatherNextForecasts, setWeatherNextForecasts] = useState<HourlyForecast[]>([]);
   const [forecastHistory, setForecastHistory] = useState<WindForecastPoint[]>([]);
   const [tideData, setTideData] = useState<TideData | null>(null);
   const [marineData, setMarineData] = useState<MarineData | null>(null);
@@ -185,20 +188,42 @@ export default function App() {
     setLoadState('loading');
     setError(null);
     try {
-      const [fc, td, sun, marine] = await Promise.allSettled([
-        fetchMetOfficeHourly(LOCATION_GEOHASH),
+      const [met, weatherNext, td, sun, marine] = await Promise.allSettled([
+        settings.compareForecasts || settings.forecastProvider === 'metoffice'
+          ? fetchMetOfficeHourly(LOCATION_GEOHASH)
+          : Promise.resolve([]),
+        settings.compareForecasts || settings.forecastProvider === 'weathernext'
+          ? fetchWeatherNextHourly(lat, lon)
+          : Promise.resolve([]),
         fetchTides(lat, lon),
         fetchSunInfo(lat, lon),
         fetchMarine(lat, lon),
       ]);
 
-      if (fc.status === 'fulfilled') setForecasts(fc.value);
-      else throw new Error(`Weather: ${(fc.reason as Error).message}`);
+      if (met.status === 'fulfilled') setMetOfficeForecasts(met.value);
+      if (weatherNext.status === 'fulfilled') setWeatherNextForecasts(weatherNext.value);
+      const primary = settings.forecastProvider === 'weathernext' ? weatherNext : met;
+      if (primary.status === 'fulfilled' && primary.value.length) {
+        setForecasts(primary.value);
+      } else if (primary.status === 'rejected') {
+        throw new Error(`Weather: ${(primary.reason as Error).message}`);
+      } else {
+        throw new Error('Weather: no forecast data returned');
+      }
 
-      try {
-        setForecastHistory(await fetchForecastHistory(lat, lon, 6));
-      } catch (e) {
-        console.warn('Forecast history failed:', (e as Error).message);
+      if (settings.compareForecasts) {
+        if (met.status === 'rejected') console.warn('Met Office comparison failed:', (met.reason as Error).message);
+        if (weatherNext.status === 'rejected') console.warn('WeatherNext comparison failed:', (weatherNext.reason as Error).message);
+      }
+
+      if (settings.compareForecasts || settings.forecastProvider === 'metoffice') {
+        try {
+          setForecastHistory(await fetchForecastHistory(lat, lon, 6));
+        } catch (e) {
+          console.warn('Forecast history failed:', (e as Error).message);
+        }
+      } else {
+        setForecastHistory([]);
       }
 
       if (td.status === 'fulfilled') setTideData(td.value);
@@ -216,7 +241,7 @@ export default function App() {
       setError((e as Error).message);
       setLoadState('error');
     }
-  }, [lat, lon, LOCATION_GEOHASH]);
+  }, [lat, lon, LOCATION_GEOHASH, settings.forecastProvider, settings.compareForecasts]);
 
   useEffect(() => {
     loadData();
@@ -279,6 +304,12 @@ export default function App() {
   const chartForecastsForWind = isTodaySelected
     ? forecasts.filter(f => f.time.getTime() <= Date.now() + 12 * 60 * 60 * 1000)
     : forecasts.filter(f => isSameDay(f.time, selectedDay));
+  const comparisonForecasts = settings.compareForecasts
+    ? [
+        { id: 'metoffice', label: 'Met Office', series: buildForecastSeries(forecastHistory, metOfficeForecasts), color: 'var(--chart-avg)' },
+        { id: 'deepmind', label: 'Google DeepMind', series: buildForecastSeries([], weatherNextForecasts), color: 'var(--accent-gold)' },
+      ]
+    : undefined;
   const isLoading = loadState === 'loading';
   const showDateSelector = activeTab === 'wind' || activeTab === 'tides';
 
@@ -343,6 +374,7 @@ export default function App() {
               <HomePage
                 forecasts={forecasts}
                 forecastHistory={forecastHistory}
+                comparisonForecasts={comparisonForecasts}
                 liveWind={liveWind}
                 liveWindHistory={liveWindHistory}
                 tideData={tideData}
@@ -356,6 +388,7 @@ export default function App() {
                   forecasts={dayForecasts}
                   chartForecasts={chartForecastsForWind}
                   chartHistoryForecasts={forecastHistory}
+                  comparisonForecasts={comparisonForecasts}
                   selectedDay={selectedDay}
                   liveWind={liveWind}
                   liveWindHistory={liveWindHistory}
@@ -388,7 +421,7 @@ export default function App() {
             )}
             {activeTab === 'forecast' && (
               <div className="page-enter">
-                <ForecastStrip forecasts={forecasts} chartHistoryForecasts={forecastHistory} liveWindHistory={liveWindHistory} />
+                <ForecastStrip forecasts={forecasts} chartHistoryForecasts={forecastHistory} comparisonForecasts={comparisonForecasts} liveWindHistory={liveWindHistory} />
               </div>
             )}
             {activeTab === 'events' && (
