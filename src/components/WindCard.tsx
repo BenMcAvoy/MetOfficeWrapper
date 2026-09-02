@@ -1,5 +1,4 @@
 import type { HourlyForecast, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
-import type { ChartEvent } from '@/components/charts';
 import { msToKnots, convertWind, windUnitLabel, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { useSettings } from '@/lib/settings';
 import { useNow } from '@/lib/useNow';
@@ -15,12 +14,11 @@ interface WindCardProps {
   selectedDay: Date;
   liveWind: LiveWind | null;
   liveWindHistory: LiveWindHistoryPoint[];
-  events?: ChartEvent[];
 }
 
 
 
-export default function WindCard({ forecasts, chartForecasts, chartHistoryForecasts, selectedDay, liveWind, liveWindHistory, events = [] }: WindCardProps) {
+export default function WindCard({ forecasts, chartForecasts, chartHistoryForecasts, selectedDay, liveWind, liveWindHistory }: WindCardProps) {
   const nowMs = useNow(1000);
   const { windUnit } = useSettings();
   const unitLabel = windUnitLabel(windUnit);
@@ -98,7 +96,10 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                 <div className="py-1">
                   <p className="text-muted-foreground text-xs mb-1">Current speed</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className={`font-display text-5xl font-semibold tabular-nums tracking-tight ${currentObservedBf ? beaufortColor(currentObservedBf.force) : 'text-foreground'}`}>
+                    <span
+                      key={hasLiveReading && liveWind ? disp(liveWind.windSpeedMs) : '—'}
+                      className={`value-swap font-display text-5xl font-semibold tabular-nums tracking-tight ${currentObservedBf ? beaufortColor(currentObservedBf.force) : 'text-foreground'}`}
+                    >
                       {hasLiveReading && liveWind ? disp(liveWind.windSpeedMs) : '—'}
                     </span>
                     {hasLiveReading && liveWind && <span className="text-muted-foreground text-sm">{unitLabel}</span>}
@@ -111,7 +112,10 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                 <div className="py-1">
                   <p className="text-muted-foreground text-xs mb-1">Max gust (1h)</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="font-display text-5xl font-semibold tabular-nums tracking-tight text-[var(--chart-gust)]">
+                    <span
+                      key={maxObservedGustPoint ? disp(maxObservedGustPoint.gustWindMs) : '—'}
+                      className="value-swap font-display text-5xl font-semibold tabular-nums tracking-tight text-[var(--chart-gust)]"
+                    >
                       {maxObservedGustPoint ? disp(maxObservedGustPoint.gustWindMs) : '—'}
                     </span>
                     {maxObservedGustPoint && <span className="text-muted-foreground text-sm">{unitLabel}</span>}
@@ -130,7 +134,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                     <>
                       <ArrowUp
                         className="h-4 w-4 text-primary"
-                        style={{ transform: `rotate(${currentObservedDirection + 180}deg)` }}
+                        style={{ transform: `rotate(${currentObservedDirection}deg)`, transition: 'transform 240ms cubic-bezier(0.32, 0.72, 0, 1)' }}
                         strokeWidth={2.5}
                       />
                       <span className="text-sm font-semibold">{degreesToCardinal(currentObservedDirection)}</span>
@@ -184,7 +188,6 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
         historyForecasts={isToday ? chartHistoryForecasts : []}
         liveWindHistory={isToday ? liveWindHistory : []}
         includePastHours={isToday ? 3 : 0}
-        events={events}
       />
 
       {/* Hourly breakdown table */}
@@ -195,9 +198,8 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
         <CardContent className="p-0">
           <div className="divide-y divide-border">
             {/* Header */}
-            <div className="grid grid-cols-[3rem_2rem_3.5rem_1fr_1fr_3rem] gap-2 px-4 py-2 text-xs text-muted-foreground uppercase tracking-wide">
+            <div className="grid grid-cols-[3rem_5.5rem_1fr_1fr_3rem] gap-2 px-4 py-2 text-xs text-muted-foreground uppercase tracking-wide">
               <span>Time</span>
-              <span></span>
               <span>Dir</span>
               <span>Avg</span>
               <span className="text-[var(--chart-gust)]">Gust</span>
@@ -210,7 +212,7 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
               return (
                 <div
                   key={i}
-                  className={`relative grid grid-cols-[3rem_2rem_3.5rem_1fr_1fr_3rem] gap-2 px-4 py-2.5 items-center text-sm ${
+                  className={`relative grid grid-cols-[3rem_5.5rem_1fr_1fr_3rem] gap-2 px-4 py-2.5 items-center text-sm ${
                     isCurrentHour ? 'bg-primary/5' : ''
                   }`}
                 >
@@ -220,12 +222,14 @@ export default function WindCard({ forecasts, chartForecasts, chartHistoryForeca
                   <span className={`text-xs tabular-nums ${isCurrentHour ? 'font-semibold text-primary' : 'text-muted-foreground'}`}>
                     {isCurrentHour ? 'Now' : format(f.time, 'HH:mm')}
                   </span>
-                  <ArrowUp
-                    className="h-4 w-4 text-primary"
-                    style={{ transform: `rotate(${f.windDirectionFrom10m + 180}deg)` }}
-                    strokeWidth={2.5}
-                  />
-                  <span className="text-xs text-muted-foreground">{degreesToCardinal(f.windDirectionFrom10m)}</span>
+                  <div className="flex items-center gap-1.5">
+                    <ArrowUp
+                      className="h-4 w-4 text-primary shrink-0"
+                      style={{ transform: `rotate(${f.windDirectionFrom10m}deg)` }}
+                      strokeWidth={2.5}
+                    />
+                    <span className="text-xs text-muted-foreground">{degreesToCardinal(f.windDirectionFrom10m)}</span>
+                  </div>
                   <span className={`font-semibold tabular-nums ${beaufortColor(bf.force)}`}>
                     {disp(f.windSpeed10m)} {unitLabel}
                   </span>

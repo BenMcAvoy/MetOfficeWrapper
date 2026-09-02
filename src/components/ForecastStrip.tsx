@@ -1,7 +1,7 @@
 import type { HourlyForecast, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
 import { msToKnots, convertWind, windUnitLabel, beaufortScale, beaufortColor, beaufortBg, degreesToCardinal } from '@/lib/units';
 import { useSettings } from '@/lib/settings';
-import { getWeatherInfo } from '@/lib/weatherCodes';
+import { getWeatherInfo, getWeatherIconColor } from '@/lib/weatherCodes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowUp, CalendarDays } from 'lucide-react';
 import { format, startOfDay, addDays, isSameDay } from 'date-fns';
@@ -85,7 +85,11 @@ export default function ForecastStrip({ forecasts, chartHistoryForecasts, liveWi
                   </div>
 
                   {/* Icon */}
-                  <WeatherIcon className="h-5 w-5 text-primary" strokeWidth={1.5} />
+                  <WeatherIcon
+                    className="h-5 w-5"
+                    strokeWidth={1.5}
+                    style={{ color: getWeatherIconColor(dominant.significantWeatherCode) }}
+                  />
 
                   {/* Temp */}
                   <div className="text-xs leading-tight">

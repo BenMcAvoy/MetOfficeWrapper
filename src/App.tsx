@@ -1,29 +1,30 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
-import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
-import { fetchMetOfficeHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory } from '@/lib/api';
+import { useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react';
+import { useNow } from '@/lib/useNow';
+import { haptic } from '@/lib/haptics';
+import type { HourlyForecast, SunInfo, TideData, LiveWind, LiveWindHistoryPoint, WindForecastPoint, MarineData } from '@/lib/api';
+import { fetchMetOfficeHourly, fetchSunInfo, fetchTides, fetchLiveWind, fetchLiveWindHistory, fetchForecastHistory, fetchMarine } from '@/lib/api';
 import { decodeGeohash } from '@/lib/geohash';
 import { filterForDay } from '@/lib/forecastUtils';
 import { useSkyTint } from '@/lib/useSkyTint';
 import { Skeleton } from '@/components/ui/skeleton';
 import WindCard from '@/components/WindCard';
 import TideChart from '@/components/TideChart';
+const TideMap = lazy(() => import('@/components/TideMap'));
 import ForecastStrip from '@/components/ForecastStrip';
-import { CalendarButton, DayEventsCard, EventDetailsPage } from '@/components/EventsStrip';
-import type { ChartEvent } from '@/components/charts';
-import { getEventsForDay, type RaceEvent } from '@/lib/calendar';
+import RaceCalendar, { type RaceCalendarHandle } from '@/components/RaceCalendar';
 import InstallButton from '@/components/InstallButton';
-import ConditionsHeader from '@/components/ConditionsHeader';
 import SettingsPage from '@/components/SettingsPage';
+import HomePage from '@/components/HomePage';
 import { useSettings } from '@/lib/settings';
 import {
-  MapPin, AlertTriangle, Waves, Loader2,
-  Wind, CalendarDays, Settings as SettingsIcon,
+  MapPin, AlertTriangle, Waves, Loader2, Home,
+  Wind, CalendarDays, Anchor, Settings as SettingsIcon,
 } from 'lucide-react';
 import { format, addDays, startOfDay, isSameDay } from 'date-fns';
+import { Analytics } from '@vercel/analytics/react';
 
 type LoadState = 'idle' | 'loading' | 'error' | 'ok';
-type Tab = 'wind' | 'tides' | 'forecast' | 'settings' | 'event';
-type NavTab = Exclude<Tab, 'settings' | 'event'>;
+export type Tab = 'home' | 'wind' | 'tides' | 'forecast' | 'events' | 'settings';
 
 function useThemeMode(theme: 'auto' | 'light' | 'dark') {
   useEffect(() => {
@@ -45,14 +46,17 @@ function DateSelector({ selected, onChange, availableDays }: {
   availableDays: Date[];
 }) {
   return (
-    <div className="flex gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollbar touch-pan-x">
+    <div
+      className="flex gap-1.5 overflow-x-auto pb-1 pt-1 no-scrollbar touch-pan-x -mx-4 px-4"
+      style={{ maskImage: 'linear-gradient(to right, black calc(100% - 32px), transparent)', WebkitMaskImage: 'linear-gradient(to right, black calc(100% - 32px), transparent)' }}
+    >
       {availableDays.map((day, i) => {
         const active = isSameDay(day, selected);
         const label = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : format(day, 'EEE d');
         return (
           <button
             key={i}
-            onClick={() => onChange(day)}
+            onClick={() => { haptic('light'); onChange(day); }}
             aria-pressed={active}
             className={`flex-shrink-0 min-h-10 px-4 rounded-full text-sm font-medium transition-colors active:scale-[0.97] ${
               active
@@ -68,11 +72,28 @@ function DateSelector({ selected, onChange, availableDays }: {
   );
 }
 
-const NAV_ITEMS: { id: NavTab; label: string; Icon: React.ElementType }[] = [
+const NAV_ITEMS: { id: Tab; label: string; Icon: React.ElementType }[] = [
+  { id: 'home',     label: 'Home',     Icon: Home },
   { id: 'wind',     label: 'Wind',     Icon: Wind },
   { id: 'tides',    label: 'Tides',    Icon: Waves },
   { id: 'forecast', label: '7-Day',    Icon: CalendarDays },
+  { id: 'events',   label: 'Events',   Icon: Anchor },
 ];
+
+const TAB_IDS: readonly Tab[] = ['home', 'wind', 'tides', 'forecast', 'events', 'settings'];
+function isTab(value: string | null): value is Tab {
+  return value !== null && (TAB_IDS as readonly string[]).includes(value);
+}
+
+function formatRelativeTime(date: Date, nowMs: number): string {
+  const seconds = Math.max(0, Math.round((nowMs - date.getTime()) / 1000));
+  if (seconds < 10) return 'just now';
+  if (seconds < 60) return `${seconds}s ago`;
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.round(minutes / 60);
+  return `${hours}h ago`;
+}
 
 function LoadingSkeleton() {
   return (
@@ -98,21 +119,65 @@ export default function App() {
   const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
   const [forecastHistory, setForecastHistory] = useState<WindForecastPoint[]>([]);
   const [tideData, setTideData] = useState<TideData | null>(null);
+  const [marineData, setMarineData] = useState<MarineData | null>(null);
   const [sunInfo, setSunInfo] = useState<SunInfo | null>(null);
   const [liveWind, setLiveWind] = useState<LiveWind | null>(null);
   const [liveWindHistory, setLiveWindHistory] = useState<LiveWindHistoryPoint[]>([]);
   const [loadState, setLoadState] = useState<LoadState>('idle');
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>('wind');
-  const [selectedEvent, setSelectedEvent] = useState<RaceEvent | null>(null);
-  const [eventReturnTab, setEventReturnTab] = useState<NavTab>('wind');
-  const [selectedDay, setSelectedDay] = useState<Date>(startOfDay(new Date()));
+  const [activeTab, setActiveTab] = useState<Tab>(() => {
+    try {
+      const urlTab = new URLSearchParams(window.location.search).get('tab');
+      if (isTab(urlTab)) return urlTab;
+      const saved = sessionStorage.getItem('wx-active-tab');
+      if (isTab(saved)) return saved;
+    } catch { /* ignore */ }
+    return 'home';
+  });
+  const [selectedDay, setSelectedDay] = useState<Date>(() => {
+    try {
+      const saved = sessionStorage.getItem('wx-selected-day');
+      if (saved) {
+        const d = startOfDay(new Date(Number(saved)));
+        // Only restore if it's still in the available 7-day window.
+        const todayMs = startOfDay(new Date()).getTime();
+        const diffDays = Math.round((d.getTime() - todayMs) / 86_400_000);
+        if (diffDays >= 0 && diffDays < 7) return d;
+      }
+    } catch { /* ignore */ }
+    return startOfDay(new Date());
+  });
+  const [showUpdatedToast, setShowUpdatedToast] = useState(false);
 
-  const onNavTap = useCallback((id: NavTab) => {
-    setSelectedEvent(null);
-    setActiveTab(id);
+  useEffect(() => {
+    try { sessionStorage.setItem('wx-active-tab', activeTab); } catch { /* ignore */ }
+  }, [activeTab]);
+  useEffect(() => {
+    try { sessionStorage.setItem('wx-selected-day', String(selectedDay.getTime())); } catch { /* ignore */ }
+  }, [selectedDay]);
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('wx-just-updated') === '1') {
+        sessionStorage.removeItem('wx-just-updated');
+        setShowUpdatedToast(true);
+        const t = window.setTimeout(() => setShowUpdatedToast(false), 3500);
+        return () => window.clearTimeout(t);
+      }
+    } catch { /* ignore */ }
   }, []);
+  const eventsRef = useRef<RaceCalendarHandle>(null);
+  const nowMs = useNow(15_000);
+
+  const onNavTap = useCallback((id: Tab) => {
+    haptic('light');
+    if (id === activeTab && id === 'events') {
+      eventsRef.current?.popToRoot();
+      return;
+    }
+    setActiveTab(id);
+  }, [activeTab]);
 
   useSkyTint(sunInfo);
 
@@ -120,10 +185,11 @@ export default function App() {
     setLoadState('loading');
     setError(null);
     try {
-      const [fc, td, sun] = await Promise.allSettled([
+      const [fc, td, sun, marine] = await Promise.allSettled([
         fetchMetOfficeHourly(LOCATION_GEOHASH),
         fetchTides(lat, lon),
         fetchSunInfo(lat, lon),
+        fetchMarine(lat, lon),
       ]);
 
       if (fc.status === 'fulfilled') setForecasts(fc.value);
@@ -140,6 +206,9 @@ export default function App() {
 
       if (sun.status === 'fulfilled') setSunInfo(sun.value);
       else console.warn('Sun info failed:', (sun.reason as Error).message);
+
+      if (marine.status === 'fulfilled') setMarineData(marine.value);
+      else console.warn('Marine failed:', (marine.reason as Error).message);
 
       setLoadState('ok');
       setLastUpdated(new Date());
@@ -211,27 +280,11 @@ export default function App() {
     ? forecasts.filter(f => f.time.getTime() <= Date.now() + 12 * 60 * 60 * 1000)
     : forecasts.filter(f => isSameDay(f.time, selectedDay));
   const isLoading = loadState === 'loading';
-  const showDateSelector = activeTab !== 'forecast' && activeTab !== 'settings' && activeTab !== 'event';
-  const openEvent = useCallback((event: RaceEvent, returnTab: NavTab) => {
-    setSelectedEvent(event);
-    setEventReturnTab(returnTab);
-    setActiveTab('event');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
-
-  const chartEvents: ChartEvent[] = useMemo(() => {
-    return getEventsForDay(selectedDay)
-      .filter(e => !!e.time)
-      .map(e => {
-        const [h, m] = e.time!.split(':').map(Number);
-        const start = new Date(selectedDay);
-        start.setHours(h, m, 0, 0);
-        return { start: start.getTime(), timeLabel: e.time!, name: e.name };
-      });
-  }, [selectedDay]);
+  const showDateSelector = activeTab === 'wind' || activeTab === 'tides';
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <Analytics />
       <header className="sticky top-0 z-10 bg-background/75 backdrop-blur-xl border-b border-border/60" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="max-w-2xl mx-auto px-4 pt-3 pb-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 min-w-0">
@@ -246,19 +299,16 @@ export default function App() {
               <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground/70" />
             ) : lastUpdated && (
               <span className="text-muted-foreground/60 text-[11px] tabular-nums" title={`Updated ${format(lastUpdated, 'HH:mm:ss')}`}>
-                {format(lastUpdated, 'HH:mm')}
+                {formatRelativeTime(lastUpdated, nowMs)}
               </span>
             )}
             <button
-              onClick={() => {
-                setSelectedEvent(null);
-                setActiveTab(t => t === 'settings' ? 'wind' : 'settings');
-              }}
+              onClick={() => { haptic('light'); setActiveTab(t => t === 'settings' ? 'home' : 'settings'); }}
               aria-label="Settings"
               aria-pressed={activeTab === 'settings'}
-              className={`p-1.5 -mr-1.5 rounded-lg transition-colors active:scale-95 ${
+              className={`p-2 -mr-2 rounded-full transition-colors active:opacity-60 ${
                 activeTab === 'settings'
-                  ? 'text-primary bg-primary/10'
+                  ? 'text-primary'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -269,7 +319,7 @@ export default function App() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 pt-3" style={{ paddingBottom: 'calc(6rem + env(safe-area-inset-bottom))' }}>
-        {isLoading && !forecasts.length ? (
+        {isLoading && !forecasts.length && activeTab !== 'tides' ? (
           <LoadingSkeleton />
         ) : loadState === 'error' ? (
           <div className="text-center py-12 space-y-3">
@@ -286,28 +336,22 @@ export default function App() {
         ) : (
           <div className="space-y-3">
             {showDateSelector && (
-              <div className="flex items-center gap-2">
-                <div className="flex-1 min-w-0">
-                  <DateSelector selected={selectedDay} onChange={setSelectedDay} availableDays={availableDays} />
-                </div>
-                <CalendarButton selectedDay={selectedDay} onSelectDay={setSelectedDay} />
-              </div>
+              <DateSelector selected={selectedDay} onChange={setSelectedDay} availableDays={availableDays} />
             )}
 
-            {activeTab === 'event' && selectedEvent && (
-              <EventDetailsPage
-                event={selectedEvent}
-                selectedDay={selectedDay}
-                hourlyForecasts={dayForecasts}
-                onBack={() => {
-                  setSelectedEvent(null);
-                  setActiveTab(eventReturnTab);
-                }}
+            {activeTab === 'home' && (
+              <HomePage
+                forecasts={forecasts}
+                forecastHistory={forecastHistory}
+                liveWind={liveWind}
+                liveWindHistory={liveWindHistory}
+                tideData={tideData}
+                sunInfo={sunInfo}
+                onNavigate={setActiveTab}
               />
             )}
             {activeTab === 'wind' && (
-              <div key={`wind-${selectedDay.getTime()}`} className="space-y-3 animate-in fade-in-50 duration-300">
-                <ConditionsHeader forecasts={forecasts} selectedDay={selectedDay} sunInfo={sunInfo} />
+              <div key={`wind-${selectedDay.getTime()}`} className="space-y-3 page-enter">
                 <WindCard
                   forecasts={dayForecasts}
                   chartForecasts={chartForecastsForWind}
@@ -315,35 +359,67 @@ export default function App() {
                   selectedDay={selectedDay}
                   liveWind={liveWind}
                   liveWindHistory={liveWindHistory}
-                  events={chartEvents}
                 />
-                <DayEventsCard selectedDay={selectedDay} onSelectEvent={event => openEvent(event, 'wind')} />
               </div>
             )}
             {activeTab === 'tides' && (
-              <div key={`tides-${selectedDay.getTime()}`} className="space-y-3 animate-in fade-in-50 duration-300">
+              <div key={`tides-${selectedDay.getTime()}`} className="page-enter space-y-3">
                 {tideData ? (
-                  <TideChart tideData={tideData} selectedDay={selectedDay} events={chartEvents} />
+                  <TideChart
+                    tideData={tideData}
+                    marineData={marineData}
+                    selectedDay={selectedDay}
+                  />
                 ) : (
-                  <div className="text-center py-12 text-muted-foreground">
-                    <Waves className="mx-auto h-10 w-10 mb-3" />
-                    Tide data unavailable — check UKHO API key
+                  <div className="text-center py-6 text-muted-foreground text-sm">
+                    <Waves className="mx-auto h-6 w-6 mb-2 opacity-60" />
+                    Tide times unavailable — check UKHO API key
                   </div>
                 )}
-                <DayEventsCard selectedDay={selectedDay} onSelectEvent={event => openEvent(event, 'tides')} />
+                <Suspense fallback={<div className="h-[380px] rounded-lg bg-muted/40 animate-pulse" />}>
+                  <TideMap
+                    centerLat={lat}
+                    centerLon={lon}
+                    locationName={LOCATION_NAME}
+                    at={isSameDay(selectedDay, new Date()) ? new Date() : selectedDay}
+                  />
+                </Suspense>
               </div>
             )}
             {activeTab === 'forecast' && (
-              <div className="animate-in fade-in-50 duration-300">
+              <div className="page-enter">
                 <ForecastStrip forecasts={forecasts} chartHistoryForecasts={forecastHistory} liveWindHistory={liveWindHistory} />
               </div>
             )}
+            {activeTab === 'events' && (
+              <div className="page-enter">
+                <RaceCalendar
+                  ref={eventsRef}
+                  forecasts={forecasts}
+                  tideData={tideData}
+                  liveWindHistory={liveWindHistory}
+                />
+              </div>
+            )}
             {activeTab === 'settings' && (
-              <SettingsPage onRefresh={loadData} />
+              <div key="settings" className="page-enter">
+                <SettingsPage onRefresh={loadData} />
+              </div>
             )}
           </div>
         )}
       </main>
+
+      {showUpdatedToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed left-1/2 -translate-x-1/2 z-30 px-3.5 py-2 rounded-full bg-primary text-primary-foreground text-xs font-medium shadow-lg backdrop-blur"
+          style={{ bottom: 'calc(5.5rem + env(safe-area-inset-bottom))' }}
+        >
+          Updated to latest version
+        </div>
+      )}
 
       <nav className="fixed bottom-0 inset-x-0 z-20 bg-background/95 backdrop-blur-lg border-t" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="max-w-2xl mx-auto flex px-2 pt-1.5 pb-1">
@@ -354,14 +430,16 @@ export default function App() {
                 key={id}
                 onClick={() => onNavTap(id)}
                 aria-current={active ? 'page' : undefined}
-                className={`flex-1 flex flex-col items-center gap-0.5 py-2 rounded-xl transition-all active:scale-95 ${
-                  active
-                    ? 'text-primary bg-primary/10'
-                    : 'text-muted-foreground hover:text-foreground'
+                className={`flex-1 flex flex-col items-center gap-1 py-1.5 rounded-xl transition-colors active:opacity-60 ${
+                  active ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.5 : 1.75} />
-                <span className={`text-[11px] tracking-wide ${active ? 'font-semibold' : 'font-normal'}`}>{label}</span>
+                <Icon
+                  key={`${id}-${active}`}
+                  className={`h-[22px] w-[22px] transition-transform ${active ? 'nav-pop' : ''}`}
+                  strokeWidth={active ? 2.4 : 1.9}
+                />
+                <span className={`text-[10.5px] tracking-tight ${active ? 'font-semibold' : 'font-medium'}`}>{label}</span>
               </button>
             );
           })}

@@ -3,6 +3,7 @@ import { Check, RotateCcw, Trash2, ExternalLink } from 'lucide-react';
 import { useSettings, setSettings, resetSettings, DEFAULT_LOCATION, type Theme, type WindUnit } from '@/lib/settings';
 import { clearCache } from '@/lib/cache';
 import { decodeGeohash } from '@/lib/geohash';
+import { haptic } from '@/lib/haptics';
 import { Button } from '@/components/ui/button';
 
 const THEMES: { id: Theme; label: string }[] = [
@@ -42,7 +43,7 @@ function SegmentedRow<T extends string>({ options, value, onChange }: {
         return (
           <button
             key={opt.id}
-            onClick={() => onChange(opt.id)}
+            onClick={() => { haptic('light'); onChange(opt.id); }}
             className={`flex-1 h-9 rounded-lg text-sm font-medium transition-all active:scale-[0.97] ${
               active ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
             }`}

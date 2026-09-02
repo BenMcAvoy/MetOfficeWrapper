@@ -72,6 +72,12 @@
     --chart-gust: oklch(0.65 0.16 40);
     --warn: oklch(0.65 0.16 70);
     --warn-bg: oklch(0.95 0.05 75);
+    --accent-gold: oklch(0.72 0.14 85);
+    --accent-gold-bg: oklch(0.96 0.05 85);
+    --accent-offshore: oklch(0.58 0.12 215);
+    --accent-offshore-bg: oklch(0.95 0.03 215);
+    --accent-fresh: oklch(0.58 0.12 165);
+    --accent-fresh-bg: oklch(0.95 0.03 165);
     --warn-fg: oklch(0.40 0.10 60);
     --radius: 0.625rem;
     --sidebar: oklch(0.985 0 0);
@@ -108,6 +114,12 @@
     --chart-gust: oklch(0.74 0.16 45);
     --warn: oklch(0.75 0.15 65);
     --warn-bg: oklch(0.30 0.08 60 / 0.30);
+    --accent-gold: oklch(0.78 0.13 85);
+    --accent-gold-bg: oklch(0.32 0.07 80 / 0.32);
+    --accent-offshore: oklch(0.72 0.12 215);
+    --accent-offshore-bg: oklch(0.28 0.06 215 / 0.32);
+    --accent-fresh: oklch(0.72 0.12 165);
+    --accent-fresh-bg: oklch(0.28 0.06 165 / 0.32);
     --warn-fg: oklch(0.85 0.12 70);
     --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
@@ -189,4 +201,65 @@ button, [role="button"] {
 
 html, body {
   overscroll-behavior-y: none;
+}
+
+/* iOS-style push transitions for drill-in views (event detail). */
+@keyframes ios-push-in {
+  from { transform: translate3d(20%, 0, 0); opacity: 0.4; }
+  to   { transform: translate3d(0,   0, 0); opacity: 1; }
+}
+@keyframes ios-push-out-back {
+  from { transform: translate3d(-12%, 0, 0); opacity: 0.5; }
+  to   { transform: translate3d(0,    0, 0); opacity: 1; }
+}
+.ios-push-in {
+  animation: ios-push-in 280ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform, opacity;
+}
+.ios-push-out-back {
+  animation: ios-push-out-back 260ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform, opacity;
+}
+
+/* Tab/page enter — small vertical drift + fade. Short (180ms) so it's felt,
+   not noticed. Used on every top-level tab view for consistency. */
+@keyframes page-enter {
+  from { transform: translate3d(0, 6px, 0); opacity: 0; }
+  to   { transform: translate3d(0, 0,   0); opacity: 1; }
+}
+.page-enter {
+  animation: page-enter 180ms cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform, opacity;
+}
+
+/* Pop — used on the active bottom-nav icon when it changes. Very subtle. */
+@keyframes nav-pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.nav-pop {
+  animation: nav-pop 200ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Numeric/value crossfade — tiny opacity+upward fade for value swaps. */
+@keyframes value-swap {
+  from { transform: translate3d(0, 2px, 0); opacity: 0; }
+  to   { transform: translate3d(0, 0,   0); opacity: 1; }
+}
+.value-swap {
+  animation: value-swap 160ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Generic press-state for tap surfaces — feels like an iOS row. */
+.press-row {
+  transition: background-color 120ms ease, transform 120ms ease;
+}
+.press-row:active {
+  transform: scale(0.985);
+}
+/* Leaflet flow arrows: strip default div-icon chrome */
+.tide-flow-arrow {
+  background: transparent !important;
+  border: 0 !important;
 }

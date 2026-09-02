@@ -39,6 +39,38 @@ export interface TideData {
   stationName: string;
 }
 
+export interface MarinePoint {
+  time: Date;
+  seaLevelMsl: number | null;
+  currentVelocity: number | null;
+  currentDirection: number | null;
+}
+
+export interface MarineData {
+  points: MarinePoint[];
+}
+
+export interface MarineLocation {
+  lat: number;
+  lon: number;
+  elevation: number | null;
+  points: MarinePoint[];
+}
+
+export interface MarineGrid {
+  locations: MarineLocation[];
+}
+
+export interface ElevationLocation {
+  lat: number;
+  lon: number;
+  elevation: number | null;
+}
+
+export interface ElevationGrid {
+  locations: ElevationLocation[];
+}
+
 export interface SunInfo {
   sunrise: Date;
   sunset: Date;
@@ -177,6 +209,108 @@ export async function fetchTides(lat: number, lon: number): Promise<TideData> {
 
   setCached(cacheKey, { extremes, heights, stationName: data.stationName }, TTL.TIDES);
   return { extremes, heights, stationName: data.stationName };
+}
+
+type SerialisedMarinePoint = Omit<MarinePoint, 'time'> & { time: string };
+
+export async function fetchMarine(lat: number, lon: number): Promise<MarineData> {
+  const cacheKey = `marine_${lat.toFixed(3)}_${lon.toFixed(3)}`;
+  const cached = getCached<{ points: SerialisedMarinePoint[] }>(cacheKey);
+  if (cached) {
+    return { points: cached.points.map(p => ({ ...p, time: new Date(p.time) })) };
+  }
+
+  const res = await fetch(`/api/marine?lat=${lat.toFixed(4)}&lon=${lon.toFixed(4)}`);
+  if (!res.ok) throw new Error(`Marine API error: ${res.status}`);
+  const data = await res.json() as { points: SerialisedMarinePoint[] };
+
+  const points = (data.points ?? [])
+    .map(p => ({
+      time: parseForecastTimestamp(p.time),
+      seaLevelMsl: p.seaLevelMsl,
+      currentVelocity: p.currentVelocity,
+      currentDirection: p.currentDirection,
+    }))
+    .filter(p => !Number.isNaN(p.time.getTime()));
+
+  setCached(
+    cacheKey,
+    { points: points.map(p => ({ ...p, time: p.time.toISOString() })) },
+    TTL.MARINE,
+  );
+  return { points };
+}
+
+export async function fetchMarineGrid(points: { lat: number; lon: number }[]): Promise<MarineGrid> {
+  if (!points.length) return { locations: [] };
+  const lats = points.map(p => p.lat.toFixed(4)).join(',');
+  const lons = points.map(p => p.lon.toFixed(4)).join(',');
+  const cacheKey = `marine_grid_${lats}_${lons}`;
+  type CachedLoc = { lat: number; lon: number; elevation: number | null; points: SerialisedMarinePoint[] };
+  const cached = getCached<{ locations: CachedLoc[] }>(cacheKey);
+  if (cached) {
+    return {
+      locations: cached.locations.map(loc => ({
+        lat: loc.lat,
+        lon: loc.lon,
+        elevation: loc.elevation ?? null,
+        points: loc.points.map(p => ({ ...p, time: new Date(p.time) })),
+      })),
+    };
+  }
+
+  const res = await fetch(`/api/marine?lat=${encodeURIComponent(lats)}&lon=${encodeURIComponent(lons)}`);
+  if (!res.ok) throw new Error(`Marine grid API error: ${res.status}`);
+  const data = await res.json() as { locations?: CachedLoc[] };
+  const locations = (data.locations ?? []).map(loc => ({
+    lat: loc.lat,
+    lon: loc.lon,
+    elevation: loc.elevation ?? null,
+    points: loc.points
+      .map(p => ({
+        time: parseForecastTimestamp(p.time),
+        seaLevelMsl: p.seaLevelMsl,
+        currentVelocity: p.currentVelocity,
+        currentDirection: p.currentDirection,
+      }))
+      .filter(p => !Number.isNaN(p.time.getTime())),
+  }));
+
+  setCached(
+    cacheKey,
+    {
+      locations: locations.map(loc => ({
+        lat: loc.lat,
+        lon: loc.lon,
+        elevation: loc.elevation,
+        points: loc.points.map(p => ({ ...p, time: p.time.toISOString() })),
+      })),
+    },
+    TTL.MARINE,
+  );
+  return { locations };
+}
+
+export async function fetchElevationGrid(points: { lat: number; lon: number }[]): Promise<ElevationGrid> {
+  if (!points.length) return { locations: [] };
+  const lats = points.map(p => p.lat.toFixed(4)).join(',');
+  const lons = points.map(p => p.lon.toFixed(4)).join(',');
+  const cacheKey = `elevation_grid_${lats}_${lons}`;
+  type CachedLoc = { lat: number; lon: number; elevation: number | null };
+  const cached = getCached<{ locations: CachedLoc[] }>(cacheKey);
+  if (cached) return { locations: cached.locations };
+
+  const res = await fetch(`/api/elevation?lat=${encodeURIComponent(lats)}&lon=${encodeURIComponent(lons)}`);
+  if (!res.ok) throw new Error(`Elevation grid API error: ${res.status}`);
+  const data = await res.json() as { locations?: CachedLoc[] };
+  const locations = (data.locations ?? []).map(loc => ({
+    lat: loc.lat,
+    lon: loc.lon,
+    elevation: loc.elevation ?? null,
+  }));
+
+  setCached(cacheKey, { locations }, TTL.MARINE);
+  return { locations };
 }
 
 type SerialisedLiveWind = Omit<LiveWind, 'observedAt'> & { observedAt: string };

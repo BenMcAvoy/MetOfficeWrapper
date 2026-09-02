@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint } from '@/lib/api';
+import { useState, useRef, useEffect } from 'react';
+import type { HourlyForecast, TideData, LiveWindHistoryPoint, WindForecastPoint, MarinePoint } from '@/lib/api';
 import { YAxisTick, tooltipStyle } from '@/lib/chartUtils';
 import {
   buildForecastSeries,
@@ -13,90 +13,9 @@ import {
 import type { SeriesPoint, WindChartRow } from '@/lib/windChartData';
 import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine
+  ResponsiveContainer, ReferenceLine, Customized,
 } from 'recharts';
 import { format, subHours, startOfHour } from 'date-fns';
-
-export interface ChartEvent {
-  start: number;
-  timeLabel: string;
-  name: string;
-}
-
-const EVENT_PRE_MS = 30 * 60 * 1000;
-const EVENT_POST_MS = 150 * 60 * 1000;
-
-type EventWindow = {
-  start: number;
-  end: number;
-};
-
-function activeEventsAt(events: ChartEvent[], t: number | null): ChartEvent[] {
-  if (t === null) return [];
-  return events.filter(e => t >= e.start - EVENT_PRE_MS && t <= e.start + EVENT_POST_MS);
-}
-
-function buildEventWindows(events: ChartEvent[], xMin: number, xMax: number): EventWindow[] {
-  const raw = events
-    .map(e => ({
-      start: Math.max(e.start - EVENT_PRE_MS, xMin),
-      end: Math.min(e.start + EVENT_POST_MS, xMax),
-    }))
-    .filter(w => w.end > w.start)
-    .sort((a, b) => a.start - b.start);
-
-  const merged: EventWindow[] = [];
-  for (const window of raw) {
-    const last = merged[merged.length - 1];
-    if (last && window.start <= last.end) {
-      last.end = Math.max(last.end, window.end);
-    } else {
-      merged.push({ ...window });
-    }
-  }
-
-  return merged;
-}
-
-function EventTopMarkers({
-  events,
-  xMin,
-  xMax,
-  plotLeft,
-  plotRight,
-}: {
-  events: ChartEvent[];
-  xMin: number;
-  xMax: number;
-  plotLeft: number;
-  plotRight: number;
-}) {
-  const windows = buildEventWindows(events, xMin, xMax);
-  if (!windows.length) return null;
-
-  const span = Math.max(1, xMax - xMin);
-
-  return (
-    <div
-      className="pointer-events-none absolute top-1 h-3"
-      style={{ left: plotLeft, right: plotRight }}
-      aria-hidden
-    >
-      {windows.map((window, i) => {
-        const leftPct = ((window.start - xMin) / span) * 100;
-        const widthPct = Math.max(0.5, ((window.end - window.start) / span) * 100);
-
-        return (
-          <span
-            key={`${window.start}-${i}`}
-            className="absolute top-0 h-0.5 rounded-full bg-primary/55"
-            style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
-          />
-        );
-      })}
-    </div>
-  );
-}
 
 interface WindChartProps {
   forecasts: HourlyForecast[];
@@ -104,7 +23,6 @@ interface WindChartProps {
   startRefLine?: number;
   liveHistory?: LiveWindHistoryPoint[];
   includePastHours?: number;
-  events?: ChartEvent[];
 }
 
 const COLORS = {
@@ -118,7 +36,6 @@ type LegendEntry = {
   label: string;
   color: string;
   dashed: boolean;
-  kind?: 'line' | 'band';
 };
 
 function WindLegend({ entries }: { entries: LegendEntry[] }) {
@@ -127,29 +44,15 @@ function WindLegend({ entries }: { entries: LegendEntry[] }) {
       {entries.map(e => (
         <div key={e.label} className="flex items-center gap-1.5">
           <svg width="26" height="10" aria-hidden>
-            {e.kind === 'band' ? (
-              <rect
-                x="0"
-                y="0"
-                width="26"
-                height="10"
-                fill={e.color}
-                fillOpacity={0.18}
-                stroke={e.color}
-                strokeOpacity={0.5}
-                strokeDasharray="3 3"
-              />
-            ) : (
-              <line
-                x1="0"
-                x2="26"
-                y1="5"
-                y2="5"
-                stroke={e.color}
-                strokeWidth={2}
-                strokeDasharray={e.dashed ? FORECAST_DASH : undefined}
-              />
-            )}
+            <line
+              x1="0"
+              x2="26"
+              y1="5"
+              y2="5"
+              stroke={e.color}
+              strokeWidth={2}
+              strokeDasharray={e.dashed ? FORECAST_DASH : undefined}
+            />
           </svg>
           <span>{e.label}</span>
         </div>
@@ -201,37 +104,24 @@ function WindReadoutStrip({
   observedSeries,
   pinned,
   showLive,
-  activeEvents,
 }: {
   t: number | null;
   forecastSeries: SeriesPoint[];
   observedSeries: SeriesPoint[];
   pinned: boolean;
   showLive: boolean;
-  activeEvents: ChartEvent[];
 }) {
   const time = t !== null ? format(new Date(t), 'HH:mm') : '—';
   const f = t !== null ? interp(forecastSeries, t) : null;
   const o = t !== null ? nearestWithin(observedSeries, t, READOUT_OBSERVED_TOLERANCE_MS) : null;
 
   return (
-    <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-1 pb-2 text-xs">
+    <div className="flex items-center justify-between gap-3 px-1 pb-2 text-xs">
       <div className="flex flex-col">
         <span className="text-muted-foreground text-[10px] uppercase tracking-wide">
           {pinned ? 'Hovered' : 'Latest'}
         </span>
         <span className="font-semibold tabular-nums">{time}</span>
-      </div>
-      <div className="min-w-0 text-center">
-        {activeEvents.length > 0 && (
-          <div className="truncate text-[11px] leading-tight">
-            <span className="font-semibold tabular-nums text-primary">{activeEvents[0].timeLabel}</span>
-            <span className="ml-1 text-muted-foreground">{activeEvents[0].name}</span>
-            {activeEvents.length > 1 && (
-              <span className="ml-1 text-[10px] text-muted-foreground/80">+{activeEvents.length - 1}</span>
-            )}
-          </div>
-        )}
       </div>
       <div className="flex flex-col gap-0.5">
         {showLive && (
@@ -249,12 +139,57 @@ export function WindChart({
   startRefLine,
   liveHistory = [],
   includePastHours = 0,
-  events = [],
 }: WindChartProps) {
   const [activeRow, setActiveRow] = useState<WindChartRow | null>(null);
+  const [interacted, setInteracted] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const rowsRef = useRef<WindChartRow[]>([]);
   const now = Date.now();
   const nowHour = startOfHour(new Date(now)).getTime();
   const forcedMin = includePastHours > 0 ? subHours(nowHour, includePastHours).getTime() : null;
+  const yAxisWidth = 52;
+  const rightMargin = 4;
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const pickFromClientX = (clientX: number) => {
+      const rs = rowsRef.current;
+      if (!rs.length) return;
+      const rect = el.getBoundingClientRect();
+      const plotLeft = rect.left + yAxisWidth;
+      const plotRight = rect.right - rightMargin;
+      const plotWidth = Math.max(1, plotRight - plotLeft);
+      const x = Math.min(plotRight, Math.max(plotLeft, clientX)) - plotLeft;
+      const minT = rs[0].t;
+      const maxT = rs[rs.length - 1].t;
+      const t = minT + (x / plotWidth) * (maxT - minT);
+      let best = rs[0];
+      let bestDelta = Math.abs(best.t - t);
+      for (let i = 1; i < rs.length; i++) {
+        const d = Math.abs(rs[i].t - t);
+        if (d < bestDelta) { best = rs[i]; bestDelta = d; }
+      }
+      setInteracted(true);
+      setActiveRow(prev => (prev?.t === best.t ? prev : best));
+    };
+    const onTouchStart = (e: TouchEvent) => {
+      if (!e.touches[0]) return;
+      e.preventDefault();
+      pickFromClientX(e.touches[0].clientX);
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (!e.touches[0]) return;
+      e.preventDefault();
+      pickFromClientX(e.touches[0].clientX);
+    };
+    el.addEventListener('touchstart', onTouchStart, { passive: false, capture: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: false, capture: true });
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart, { capture: true } as EventListenerOptions);
+      el.removeEventListener('touchmove', onTouchMove, { capture: true } as EventListenerOptions);
+    };
+  }, []);
 
   const forecastSeries = buildForecastSeries(historyForecasts, forecasts);
   const observedSeries = buildObservedSeries(liveHistory);
@@ -274,6 +209,7 @@ export function WindChart({
   const xMax = bucket10(Math.max(lastT, xMin + HOUR));
 
   const rows = buildWindChartRows(forecastSeries, observedSeries, xMin, xMax);
+  rowsRef.current = rows;
   if (!rows.length) return null;
 
   const xTicks: number[] = [];
@@ -286,22 +222,11 @@ export function WindChart({
   const hasObserved = observedSeries.length > 0;
   const showNow = now >= xMin && now <= xMax;
 
-  const displayRow: WindChartRow | null = activeRow ?? rows[rows.length - 1] ?? null;
-  const activeEvents = activeRow ? activeEventsAt(events, activeRow.t) : [];
-
-  const handleActive = (state: unknown) => {
-    const s = state as {
-      activeTooltipIndex?: number;
-      activeLabel?: number | string;
-      activePayload?: { payload: WindChartRow }[];
-    } | null | undefined;
-    if (!s) return;
-    const fromPayload = s.activePayload?.[0]?.payload;
-    const fromIndex = typeof s.activeTooltipIndex === 'number' ? rows[s.activeTooltipIndex] : undefined;
-    const fromLabel = s.activeLabel !== undefined ? rows.find(r => r.t === Number(s.activeLabel)) : undefined;
-    const next = fromPayload ?? fromIndex ?? fromLabel ?? null;
-    if (next && next.t !== activeRow?.t) setActiveRow(next);
-  };
+  const latestRow: WindChartRow = rows.reduce(
+    (best, r) => (Math.abs(r.t - now) < Math.abs(best.t - now) ? r : best),
+    rows[0],
+  );
+  const readoutRow: WindChartRow | null = activeRow ?? (interacted ? null : latestRow);
 
   const legendEntries: LegendEntry[] = [
     ...(hasObserved
@@ -316,24 +241,46 @@ export function WindChart({
 
   return (
     <div>
-      <WindReadoutStrip
-        t={displayRow?.t ?? null}
-        forecastSeries={forecastSeries}
-        observedSeries={observedSeries}
-        pinned={!!activeRow}
-        showLive={hasObserved}
-        activeEvents={activeEvents}
-      />
-      <div className="relative h-44">
-      <EventTopMarkers events={events} xMin={xMin} xMax={xMax} plotLeft={52} plotRight={4} />
+      {readoutRow && (
+        <WindReadoutStrip
+          t={readoutRow.t}
+          forecastSeries={forecastSeries}
+          observedSeries={observedSeries}
+          pinned={!!activeRow}
+          showLive={hasObserved}
+        />
+      )}
+      <div
+        ref={wrapperRef}
+        className="h-44 [&_*]:touch-none [&_.recharts-area]:pointer-events-none"
+        style={{ touchAction: 'none' }}
+        onMouseMove={(e) => {
+          const el = wrapperRef.current;
+          if (!el) return;
+          const rs = rowsRef.current;
+          if (!rs.length) return;
+          const rect = el.getBoundingClientRect();
+          const plotLeft = rect.left + yAxisWidth;
+          const plotRight = rect.right - rightMargin;
+          const plotWidth = Math.max(1, plotRight - plotLeft);
+          const x = Math.min(plotRight, Math.max(plotLeft, e.clientX)) - plotLeft;
+          const minT = rs[0].t;
+          const maxT = rs[rs.length - 1].t;
+          const t = minT + (x / plotWidth) * (maxT - minT);
+          let best = rs[0];
+          let bestDelta = Math.abs(best.t - t);
+          for (let i = 1; i < rs.length; i++) {
+            const d = Math.abs(rs[i].t - t);
+            if (d < bestDelta) { best = rs[i]; bestDelta = d; }
+          }
+          setInteracted(true);
+          setActiveRow(prev => (prev?.t === best.t ? prev : best));
+        }}
+      >
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ComposedChart
           data={rows}
           margin={{ top: 4, right: 4, left: 0, bottom: 0 }}
-          onMouseMove={handleActive}
-          onTouchStart={handleActive}
-          onTouchMove={handleActive}
-          onMouseLeave={() => setActiveRow(null)}
         >
           <defs>
             <linearGradient id="windObservedAvgFill" x1="0" y1="0" x2="0" y2="1">
@@ -383,7 +330,6 @@ export function WindChart({
               stroke="var(--muted-foreground)"
               strokeOpacity={0.6}
               strokeDasharray="2 4"
-              label={{ value: 'Now', fill: 'var(--muted-foreground)', fontSize: 10, position: 'insideTopRight' }}
             />
           )}
 
@@ -450,15 +396,100 @@ interface TideChartInnerProps {
   startRefLine?: number;
   nowRefLine?: number;
   height?: number;
-  events?: ChartEvent[];
+  flowPoints?: MarinePoint[];
+  arrowIntervalHours?: number;
 }
 
-export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalHours = 3, startRefLine, nowRefLine, height = 176, events = [] }: TideChartInnerProps) {
+const KMH_TO_KNOTS_CHART = 0.539957;
+
+function interpolateTideHeightAt(heights: { time: Date; height: number }[], at: number): number | null {
+  if (heights.length < 2) return null;
+  let before: { time: Date; height: number } | null = null;
+  let after: { time: Date; height: number } | null = null;
+  for (const h of heights) {
+    const t = h.time.getTime();
+    if (t <= at) before = h;
+    if (t >= at && !after) { after = h; break; }
+  }
+  if (!before || !after) return null;
+  if (before === after) return before.height;
+  const ratio = (at - before.time.getTime()) / (after.time.getTime() - before.time.getTime());
+  return before.height + ratio * (after.height - before.height);
+}
+
+interface FlowArrowsProps {
+  flowPoints: MarinePoint[];
+  arrowIntervalHours: number;
+  heights: { time: Date; height: number }[];
+  windowStart: Date;
+  windowEnd: Date;
+  xAxisMap?: Record<string, { scale: (v: number) => number }>;
+  yAxisMap?: Record<string, { scale: (v: number) => number }>;
+}
+
+function FlowArrows(props: FlowArrowsProps) {
+  const { flowPoints, arrowIntervalHours, heights, windowStart, windowEnd, xAxisMap, yAxisMap } = props;
+  const xAxis = xAxisMap && Object.values(xAxisMap)[0];
+  const yAxis = yAxisMap && Object.values(yAxisMap)[0];
+  if (!xAxis || !yAxis || !flowPoints.length) return null;
+
+  const first = new Date(windowStart);
+  first.setMinutes(0, 0, 0);
+  if (first.getTime() < windowStart.getTime()) first.setHours(first.getHours() + 1);
+  // Snap to a multiple of arrowIntervalHours from midnight for stable placement.
+  while (first.getHours() % arrowIntervalHours !== 0) first.setHours(first.getHours() + 1);
+
+  const intervalMs = arrowIntervalHours * 60 * 60 * 1000;
+  const nodes: React.ReactNode[] = [];
+  for (let t = first.getTime(); t <= windowEnd.getTime(); t += intervalMs) {
+    // Nearest marine point within 90 minutes.
+    let nearest: MarinePoint | null = null;
+    let bestDiff = Infinity;
+    for (const p of flowPoints) {
+      const d = Math.abs(p.time.getTime() - t);
+      if (d < bestDiff) { bestDiff = d; nearest = p; }
+    }
+    if (!nearest || bestDiff > 90 * 60 * 1000) continue;
+    if (nearest.currentDirection == null || nearest.currentVelocity == null) continue;
+
+    const h = interpolateTideHeightAt(heights, t);
+    if (h == null) continue;
+
+    const cx = xAxis.scale(t);
+    const cy = yAxis.scale(h);
+    if (!Number.isFinite(cx) || !Number.isFinite(cy)) continue;
+
+    const knots = nearest.currentVelocity * KMH_TO_KNOTS_CHART;
+    const dir = nearest.currentDirection;
+    // Size arrow by velocity: 0.1kt -> 10px, 1kt+ -> 18px.
+    const len = Math.min(18, 10 + Math.min(knots, 1) * 8);
+
+    nodes.push(
+      <g key={t} transform={`translate(${cx}, ${cy}) rotate(${dir})`}>
+        <circle r={9} fill="var(--background)" stroke="var(--primary)" strokeOpacity={0.4} strokeWidth={1} />
+        <path
+          d={`M 0 ${len / 2} L 0 ${-len / 2} M -3 ${-len / 2 + 4} L 0 ${-len / 2} L 3 ${-len / 2 + 4}`}
+          stroke="var(--primary)"
+          strokeWidth={1.6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      </g>
+    );
+  }
+
+  return <g>{nodes}</g>;
+}
+
+export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalHours = 3, startRefLine, nowRefLine, height = 176, flowPoints, arrowIntervalHours = 3 }: TideChartInnerProps) {
   const data = tideData.heights
     .filter(h => h.time >= windowStart && h.time <= windowEnd)
     .map(h => ({ t: h.time.getTime(), height: Math.round(h.height * 100) / 100 }));
-  const xMin = data[0]?.t ?? windowStart.getTime();
-  const xMax = data[data.length - 1]?.t ?? windowEnd.getTime();
+
+  const flowInWindow = flowPoints
+    ? flowPoints.filter(p => p.time >= windowStart && p.time <= windowEnd)
+    : [];
 
   const ticks = (() => {
     const result: number[] = [];
@@ -473,11 +504,9 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
   })();
 
   return (
-    <>
-      <div className="relative" style={{ height }}>
-        <EventTopMarkers events={events} xMin={xMin} xMax={xMax} plotLeft={40} plotRight={4} />
-        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-          <ComposedChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+    <div style={{ height }}>
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+        <ComposedChart data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="tideAreaGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.25} />
@@ -496,10 +525,31 @@ export function TideChartInner({ tideData, windowStart, windowEnd, tickIntervalH
           {startRefLine !== undefined && (
             <ReferenceLine x={startRefLine} stroke="var(--primary)" strokeDasharray="4 3" label={{ value: 'Start', fill: 'var(--primary)', fontSize: 10 }} />
           )}
-          <Area type="monotone" dataKey="height" stroke="var(--primary)" fill="url(#tideAreaGrad)" strokeWidth={2} dot={false} />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </div>
-    </>
+          <Area
+            type="monotone"
+            dataKey="height"
+            stroke="var(--primary)"
+            fill="url(#tideAreaGrad)"
+            strokeWidth={2}
+            dot={{ r: 1.6, strokeWidth: 0, fill: 'var(--primary)', fillOpacity: 0.55 }}
+            activeDot={{ r: 4, strokeWidth: 0, fill: 'var(--primary)' }}
+          />
+          {flowInWindow.length > 0 && (
+            <Customized
+              component={(ctx: unknown) => (
+                <FlowArrows
+                  flowPoints={flowInWindow}
+                  arrowIntervalHours={arrowIntervalHours}
+                  heights={tideData.heights}
+                  windowStart={windowStart}
+                  windowEnd={windowEnd}
+                  {...(ctx as { xAxisMap?: Record<string, { scale: (v: number) => number }>; yAxisMap?: Record<string, { scale: (v: number) => number }> })}
+                />
+              )}
+            />
+          )}
+        </ComposedChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
