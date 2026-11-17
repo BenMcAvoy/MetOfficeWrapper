@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# MetOfficeWrapper
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An independent, sailing-focused weather dashboard. I built it to bring wind, tides, forecasts and race-day conditions together around a location.
 
-Currently, two official plugins are available:
+[Open the live app](https://met-office-pooleyc.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What it does
 
-## React Compiler
+- Shows current conditions and an hourly forecast, with up to seven days ahead.
+- Compares Met Office forecasts with Google WeatherNext forecasts when enabled.
+- Puts forecast wind beside live observations and recent history.
+- Charts tide heights and high/low times, with marine conditions on a map.
+- Connects local sailing events to the weather around each race.
+- Remembers location, units and display preferences, and can be installed as a PWA.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The default location is Poole Harbour. The app is designed to work at other locations too.
 
-## Expanding the ESLint configuration
+## How it is put together
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The frontend is React and TypeScript, built with Vite. Charts and the tide map are rendered in the browser; API handlers keep data-provider requests and credentials on the server. The development server includes local API middleware, while the deployed app uses Vercel functions.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Forecasts come from the Met Office, with WeatherNext available as an alternate or comparison source. Tide predictions use the UKHO Admiralty API. Marine data comes from Open-Meteo.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Run locally
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+You will need Node.js and npm.
+
+```sh
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Copy `.env.example` to `.env` before using API-backed features. `UKHO_API_KEY` enables tide predictions. `METOFFICE_API_KEY` is used by the optional Met Office wind-history snapshot job; the normal forecast route reads the public Met Office forecast page. Keep real keys server-side and out of commits.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Useful commands
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm run build
+npm run lint
+npm run test
 ```
+
+This is a personal project and is not affiliated with the Met Office, UKHO or Open-Meteo.
