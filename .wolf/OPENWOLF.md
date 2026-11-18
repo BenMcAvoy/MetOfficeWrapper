@@ -11,7 +11,7 @@ You are working in an OpenWolf-managed project. These rules apply every turn.
 ## Code Generation
 
 1. Before generating code, read `.wolf/cerebrum.md` and respect every entry.
-2. Check the `## Do-Not-Repeat` section — these are past mistakes that must not recur.
+2. Check the `## Do-Not-Repeat` section - these are past mistakes that must not recur.
 3. Follow all conventions in `## Key Learnings` and `## User Preferences`.
 
 ## After Actions
@@ -20,7 +20,7 @@ You are working in an OpenWolf-managed project. These rules apply every turn.
    `| HH:MM | description | file(s) | outcome | ~tokens |`
 2. After creating, deleting, or renaming files: update `.wolf/anatomy.md`.
 
-## Cerebrum Learning (MANDATORY — every session)
+## Cerebrum Learning (MANDATORY - every session)
 
 OpenWolf's value comes from learning across sessions. You MUST update `.wolf/cerebrum.md` whenever you learn something useful. This is not optional.
 
@@ -28,7 +28,7 @@ OpenWolf's value comes from learning across sessions. You MUST update `.wolf/cer
 - Corrects your approach ("no, do it this way instead")
 - Expresses a style preference (naming, structure, formatting)
 - Shows a preferred workflow or tool choice
-- Rejects a suggestion — record what they preferred instead
+- Rejects a suggestion - record what they preferred instead
 - Asks for more/less detail, verbosity, explanation
 
 **Update `## Key Learnings` when you discover:**
@@ -64,7 +64,7 @@ OpenWolf's value comes from learning across sessions. You MUST update `.wolf/cer
 - You change error handling, try/catch blocks, or validation logic
 - The user says something "doesn't work", "is broken", or "shows wrong X"
 
-**Before fixing:** Read `.wolf/buglog.json` first — the fix may already be known.
+**Before fixing:** Read `.wolf/buglog.json` first - the fix may already be known.
 
 **After fixing:** ALWAYS append to `.wolf/buglog.json` with this structure:
 ```json
@@ -114,14 +114,14 @@ When the user asks you to check, evaluate, or improve the design/UI of their app
 
 **Token awareness:** Each screenshot costs ~2500 tokens. The command compresses images (JPEG quality 70, max width 1200px) to minimize cost. For large apps, use `--routes / /specific-page` to limit captures.
 
-## Reframe — UI Framework Selection
+## Reframe - UI Framework Selection
 
 When the user asks to change, pick, migrate, or "reframe" their project's UI framework:
 
 1. Read `.wolf/reframe-frameworks.md` for the full framework knowledge base.
 2. Ask the user the decision questions from the file (current stack, priority, Tailwind usage, theme preference, app type). Stop early once the choice narrows to 1-2 options.
 3. Present a recommendation with reasoning based on the comparison matrix.
-4. Once the user confirms, use the selected framework's prompt from the file — **adapted to the actual project** using `.wolf/anatomy.md` for real file paths, routes, and components.
+4. Once the user confirms, use the selected framework's prompt from the file - **adapted to the actual project** using `.wolf/anatomy.md` for real file paths, routes, and components.
 5. Execute the migration: install dependencies, update config, refactor components.
 6. After migration, run `openwolf designqc` to verify the new look.
 

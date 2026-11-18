@@ -12,10 +12,10 @@ Vite + React 19 + TS + Tailwind 4 + shadcn/ui + Recharts. Bun for installs, Verc
 
 ## Commands
 
-- `bun run dev` — Vite dev server (no API routes; uses deployed prod APIs via proxy)
-- `bun run dev:api` — `vercel dev` with API routes
-- `bunx tsc --noEmit -p tsconfig.app.json` — typecheck
-- `bun run build` — tsc + vite build
+- `bun run dev` - Vite dev server (no API routes; uses deployed prod APIs via proxy)
+- `bun run dev:api` - `vercel dev` with API routes
+- `bunx tsc --noEmit -p tsconfig.app.json` - typecheck
+- `bun run build` - tsc + vite build
 - `bun run lint`
 
 ## Layout
@@ -40,13 +40,13 @@ src/
     WindCard.tsx, WindChartCard.tsx, charts.tsx (WindChart + TideChartInner)
     TideChart.tsx, ForecastStrip.tsx, RaceCalendar.tsx
     WeatherOverview.tsx, InstallButton.tsx
-    ui/               shadcn primitives — don't hand-edit
+    ui/               shadcn primitives - don't hand-edit
 .wolf/                openwolf tooling, not source
 ```
 
 ## Conventions
 
-- **Units**: all wind speeds stored as **m/s** internally (Met Office native). Convert to knots at display via `msToKnots`. weatherfile.com `wsa`/`wsh`/`wsc` are also m/s — do NOT add a second conversion.
+- **Units**: all wind speeds stored as **m/s** internally (Met Office native). Convert to knots at display via `msToKnots`. weatherfile.com `wsa`/`wsh`/`wsc` are also m/s - do NOT add a second conversion.
 - **Times**: forecast and live-wind timestamps from upstream are UTC; both parsers append `Z` if missing. Render with `date-fns` `format` (local tz).
 - **Path alias**: `@/` → `src/`.
 - **Imports**: use `import type` for type-only.
@@ -57,17 +57,17 @@ src/
 ## Data flow gotchas
 
 - `App.tsx` owns all fetched state and passes down. Components are presentational + small derived calcs only.
-- `WindChart` (charts.tsx) takes two parallel forecast inputs — `historyForecasts` (past, from KV snapshots) and `forecasts` (current + future). They're merged into one continuous series; future overwrites history on time-key collisions.
+- `WindChart` (charts.tsx) takes two parallel forecast inputs - `historyForecasts` (past, from KV snapshots) and `forecasts` (current + future). They're merged into one continuous series; future overwrites history on time-key collisions.
 - Live wind history is bucketed to 10-min buckets in the chart; forecast is linearly interpolated to the same 10-min grid.
-- "Today" gating: live data only renders when `isSameDay(selectedDay, new Date())` — see `WindCard.tsx` and `RaceCalendar.tsx`.
+- "Today" gating: live data only renders when `isSameDay(selectedDay, new Date())` - see `WindCard.tsx` and `RaceCalendar.tsx`.
 - Forecast snapshot cron is configured in `vercel.json` and disabled in CI (see commit `0b55917`).
 
 ## Don'ts
 
 - Don't introduce new wind unit conversions; the codebase assumes m/s everywhere except display.
-- Don't bypass `getCached`/`setCached` — adds inconsistency vs the rest of the app.
+- Don't bypass `getCached`/`setCached` - adds inconsistency vs the rest of the app.
 - Don't add a second YAxis to `WindChart`; observed vs forecast comparison requires a shared scale.
-- Don't hand-edit `src/components/ui/*` — regenerate via shadcn.
+- Don't hand-edit `src/components/ui/*` - regenerate via shadcn.
 
 ## External APIs
 

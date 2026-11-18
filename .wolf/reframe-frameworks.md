@@ -1,4 +1,4 @@
-# OpenWolf Reframe — UI Framework Knowledge Base
+# OpenWolf Reframe - UI Framework Knowledge Base
 
 When the user asks to change, pick, migrate, or "reframe" their UI framework, use this file to guide the conversation and generate the right migration prompt.
 
@@ -46,7 +46,7 @@ Ask these in order. Stop early if the answer narrows to 1-2 frameworks.
 
 ## Framework Prompts
 
-After the user selects a framework, use the corresponding prompt below. **Adapt it to the user's actual project** — replace generic references with their real file structure, existing routes, and components from `.wolf/anatomy.md`.
+After the user selects a framework, use the corresponding prompt below. **Adapt it to the user's actual project** - replace generic references with their real file structure, existing routes, and components from `.wolf/anatomy.md`.
 
 ---
 
@@ -73,16 +73,16 @@ DESIGN PRINCIPLES:
 - Dark mode support via shadcn's theme provider
 
 SECTIONS TO BUILD:
-1. Navbar — sticky, transparent-to-solid on scroll, logo left, nav center, CTA button right
-2. Hero — large headline (max 8 words), subtext (max 2 lines), primary CTA button + secondary ghost button, optional hero image or abstract illustration
-3. Social proof — logo cloud of 5-6 partner/client logos in grayscale
-4. Features — 3-column bento grid with icon, title, description per card using shadcn Card component
-5. How it works — 3-step numbered process with connecting line
-6. Testimonials — carousel or grid of 3 testimonial cards with avatar, quote, name, role
-7. Pricing — 3-tier pricing table using shadcn Card, highlight the recommended plan with ring/border accent
-8. FAQ — accordion using shadcn Accordion component
-9. CTA — full-width section with headline, subtext, and primary action button
-10. Footer — 4-column grid (brand, product links, company links, legal), copyright at bottom
+1. Navbar - sticky, transparent-to-solid on scroll, logo left, nav center, CTA button right
+2. Hero - large headline (max 8 words), subtext (max 2 lines), primary CTA button + secondary ghost button, optional hero image or abstract illustration
+3. Social proof - logo cloud of 5-6 partner/client logos in grayscale
+4. Features - 3-column bento grid with icon, title, description per card using shadcn Card component
+5. How it works - 3-step numbered process with connecting line
+6. Testimonials - carousel or grid of 3 testimonial cards with avatar, quote, name, role
+7. Pricing - 3-tier pricing table using shadcn Card, highlight the recommended plan with ring/border accent
+8. FAQ - accordion using shadcn Accordion component
+9. CTA - full-width section with headline, subtext, and primary action button
+10. Footer - 4-column grid (brand, product links, company links, legal), copyright at bottom
 
 COMPONENT USAGE:
 - Button (primary, secondary, ghost, outline variants)
@@ -125,16 +125,16 @@ DESIGN PRINCIPLES:
 - Noise/grain texture overlays for visual richness
 
 SECTIONS TO BUILD WITH ACETERNITY COMPONENTS:
-1. Navbar — floating navbar with backdrop blur, animated on scroll
-2. Hero — use Aceternity's "Spotlight" or "Lamp" effect as background, massive headline with TextGenerateEffect or TypewriterEffect, gradient text on key words, two CTAs with HoverBorderGradient buttons
-3. Logo cloud — use InfiniteMovingCards for auto-scrolling partner logos
-4. Features — BentoGrid layout with animated cards, each card has BackgroundGradient or CardSpotlight hover effect
-5. Product showcase — use Aceternity's 3DCard or ParallaxScroll for product screenshots/mockups
-6. Testimonials — AnimatedTestimonials or InfiniteMovingCards with quote, avatar, name
-7. How it works — use TracingBeam component for a connected step-by-step flow
-8. Pricing — dark cards with GlowingStarsBackground, highlighted tier has animated border (MovingBorder)
-9. CTA — full-width with BackgroundBeams or Meteors effect behind headline and button
-10. Footer — clean 4-column layout with subtle separator
+1. Navbar - floating navbar with backdrop blur, animated on scroll
+2. Hero - use Aceternity's "Spotlight" or "Lamp" effect as background, massive headline with TextGenerateEffect or TypewriterEffect, gradient text on key words, two CTAs with HoverBorderGradient buttons
+3. Logo cloud - use InfiniteMovingCards for auto-scrolling partner logos
+4. Features - BentoGrid layout with animated cards, each card has BackgroundGradient or CardSpotlight hover effect
+5. Product showcase - use Aceternity's 3DCard or ParallaxScroll for product screenshots/mockups
+6. Testimonials - AnimatedTestimonials or InfiniteMovingCards with quote, avatar, name
+7. How it works - use TracingBeam component for a connected step-by-step flow
+8. Pricing - dark cards with GlowingStarsBackground, highlighted tier has animated border (MovingBorder)
+9. CTA - full-width with BackgroundBeams or Meteors effect behind headline and button
+10. Footer - clean 4-column layout with subtle separator
 
 ANIMATION GUIDELINES:
 - Page load: stagger hero elements (title → subtitle → buttons) with 0.15s delay each
@@ -170,22 +170,22 @@ ARCHITECTURE:
 DESIGN PRINCIPLES:
 - Clean and modern, inspired by Linear/Vercel aesthetic
 - Light or dark mode with smooth toggle transition
-- Restrained animation — purposeful motion that guides attention, not distracts
+- Restrained animation - purposeful motion that guides attention, not distracts
 - High contrast text, muted backgrounds (slate-50 light / slate-950 dark)
 - Monospace or geometric sans-serif for headings, clean sans for body
 - ONE signature color (blue-500, violet-500, or emerald-500) for accents
 
 SECTIONS TO BUILD WITH MAGIC UI COMPONENTS:
-1. Navbar — clean horizontal nav, use MagicUI ShimmerButton for primary CTA
-2. Hero — large headline with AnimatedGradientText on key phrase, NumberTicker for a live stat ("10,000+ users"), DotPattern or GridPattern as subtle background, two buttons (ShimmerButton primary + outline secondary)
-3. Social proof — Marquee component for auto-scrolling logos horizontally
-4. Features — use MagicCard components in a 3-column grid, each with icon + title + description, subtle hover glow effect
-5. Bento showcase — BentoGrid layout showing product capabilities, mix of large and small tiles with different content types (text, mini-demos, stats)
-6. Metrics — AnimatedList showing live activity feed OR NumberTicker showing key stats (users, uptime, speed)
-7. Testimonials — Marquee of testimonial cards (vertical or horizontal scroll)
-8. Pricing — 3 tiers with clean card design, NeonGradientCard for featured plan, BorderBeam on hover
-9. CTA — centered layout with AnimatedShinyText headline, Particles or Meteors background effect
-10. Footer — minimal 3-4 column grid, muted text, social icons
+1. Navbar - clean horizontal nav, use MagicUI ShimmerButton for primary CTA
+2. Hero - large headline with AnimatedGradientText on key phrase, NumberTicker for a live stat ("10,000+ users"), DotPattern or GridPattern as subtle background, two buttons (ShimmerButton primary + outline secondary)
+3. Social proof - Marquee component for auto-scrolling logos horizontally
+4. Features - use MagicCard components in a 3-column grid, each with icon + title + description, subtle hover glow effect
+5. Bento showcase - BentoGrid layout showing product capabilities, mix of large and small tiles with different content types (text, mini-demos, stats)
+6. Metrics - AnimatedList showing live activity feed OR NumberTicker showing key stats (users, uptime, speed)
+7. Testimonials - Marquee of testimonial cards (vertical or horizontal scroll)
+8. Pricing - 3 tiers with clean card design, NeonGradientCard for featured plan, BorderBeam on hover
+9. CTA - centered layout with AnimatedShinyText headline, Particles or Meteors background effect
+10. Footer - minimal 3-4 column grid, muted text, social icons
 
 ANIMATION STRATEGY:
 - Use BlurIn / FadeIn for section entrance animations
@@ -227,16 +227,16 @@ DESIGN PRINCIPLES:
 - Typography via DaisyUI's prose class for content sections
 
 SECTIONS TO BUILD WITH DAISYUI CLASSES:
-1. Navbar — "navbar" component with "dropdown" for mobile menu, "btn btn-primary" for CTA
-2. Hero — "hero" component with "hero-content", large headline, subtext, "btn btn-primary" + "btn btn-ghost"
-3. Social proof — logo row using "flex" with "opacity-50 grayscale" on images
-4. Features — "card" components in a responsive grid, each with "card-body", uses "bg-base-200" for contrast
-5. Stats — "stats" component with "stat" items showing key metrics
-6. Steps — "steps" component (horizontal on desktop, vertical on mobile)
-7. Testimonials — "chat" component styled as testimonials OR "card" grid with "avatar"
-8. Pricing — "card" components with "badge badge-primary" for recommended plan
-9. FAQ — "collapse" or "collapse-plus" components for expandable Q&A
-10. Footer — "footer" component with 3-4 columns, "footer-title" for headings
+1. Navbar - "navbar" component with "dropdown" for mobile menu, "btn btn-primary" for CTA
+2. Hero - "hero" component with "hero-content", large headline, subtext, "btn btn-primary" + "btn btn-ghost"
+3. Social proof - logo row using "flex" with "opacity-50 grayscale" on images
+4. Features - "card" components in a responsive grid, each with "card-body", uses "bg-base-200" for contrast
+5. Stats - "stats" component with "stat" items showing key metrics
+6. Steps - "steps" component (horizontal on desktop, vertical on mobile)
+7. Testimonials - "chat" component styled as testimonials OR "card" grid with "avatar"
+8. Pricing - "card" components with "badge badge-primary" for recommended plan
+9. FAQ - "collapse" or "collapse-plus" components for expandable Q&A
+10. Footer - "footer" component with 3-4 columns, "footer-title" for headings
 
 CODE QUALITY:
 - Fully responsive using Tailwind breakpoints
@@ -271,16 +271,16 @@ DESIGN PRINCIPLES:
 - Smooth transitions on all interactive elements (HeroUI provides these by default)
 
 SECTIONS TO BUILD WITH HEROUI COMPONENTS:
-1. Navbar — HeroUI Navbar with NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle for mobile
-2. Hero — large headline, descriptive subtext, Button (color="primary" size="lg") + Button (variant="bordered")
-3. Social proof — Avatar group for client logos or Chip components for trust badges
-4. Features — Card components in grid, each with CardHeader, CardBody, use Divider between sections
-5. Product demo — Tabs component to show different product views/features interactively
-6. Testimonials — Card grid with User component (avatar + name + role) inside each card
-7. Pricing — Card components with Chip for "Popular" badge, Listbox for feature lists
-8. FAQ — Accordion component with AccordionItem for each question
-9. CTA — centered section with Input + Button combo for email capture
-10. Footer — clean grid with Link components, Divider above copyright
+1. Navbar - HeroUI Navbar with NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle for mobile
+2. Hero - large headline, descriptive subtext, Button (color="primary" size="lg") + Button (variant="bordered")
+3. Social proof - Avatar group for client logos or Chip components for trust badges
+4. Features - Card components in grid, each with CardHeader, CardBody, use Divider between sections
+5. Product demo - Tabs component to show different product views/features interactively
+6. Testimonials - Card grid with User component (avatar + name + role) inside each card
+7. Pricing - Card components with Chip for "Popular" badge, Listbox for feature lists
+8. FAQ - Accordion component with AccordionItem for each question
+9. CTA - centered section with Input + Button combo for email capture
+10. Footer - clean grid with Link components, Divider above copyright
 
 CODE QUALITY:
 - Fully responsive with HeroUI's responsive props
@@ -314,16 +314,16 @@ DESIGN PRINCIPLES:
 - Accessible-first: every component follows WAI-ARIA by default
 
 SECTIONS TO BUILD WITH CHAKRA COMPONENTS:
-1. Navbar — Flex with HStack, IconButton for mobile menu, Button for CTA
-2. Hero — VStack centered, Heading size="4xl", Text, HStack with two Buttons
-3. Social proof — HStack/Wrap of grayscale Image components
-4. Features — SimpleGrid columns={{base:1, md:3}} of VStack cards with Icon, Heading, Text
-5. Stats — Stat component group with StatLabel, StatNumber, StatHelpText
-6. Testimonials — SimpleGrid of Card with Avatar, Text (quote), Heading (name)
-7. Pricing — SimpleGrid of Card, Badge for "Popular", List for features
-8. FAQ — Accordion with AccordionItem, AccordionButton, AccordionPanel
-9. CTA — Box with bg gradient, VStack centered, Heading, Text, Button
-10. Footer — SimpleGrid columns={{base:2, md:4}} with VStack, Heading, Link
+1. Navbar - Flex with HStack, IconButton for mobile menu, Button for CTA
+2. Hero - VStack centered, Heading size="4xl", Text, HStack with two Buttons
+3. Social proof - HStack/Wrap of grayscale Image components
+4. Features - SimpleGrid columns={{base:1, md:3}} of VStack cards with Icon, Heading, Text
+5. Stats - Stat component group with StatLabel, StatNumber, StatHelpText
+6. Testimonials - SimpleGrid of Card with Avatar, Text (quote), Heading (name)
+7. Pricing - SimpleGrid of Card, Badge for "Popular", List for features
+8. FAQ - Accordion with AccordionItem, AccordionButton, AccordionPanel
+9. CTA - Box with bg gradient, VStack centered, Heading, Text, Button
+10. Footer - SimpleGrid columns={{base:2, md:4}} with VStack, Heading, Link
 
 THEME EXTENSION:
 const theme = extendTheme({
@@ -361,16 +361,16 @@ DESIGN PRINCIPLES:
 - Focus on readability and clear information hierarchy
 
 SECTIONS TO BUILD WITH FLOWBITE COMPONENTS:
-1. Navbar — Flowbite Navbar with Navbar.Brand, Navbar.Toggle, Navbar.Collapse
-2. Hero — Jumbotron-style, large Heading, Button group
-3. Social proof — row of client logos
-4. Features — Card components in responsive grid with icon badge, title, description
-5. Content — alternating image + text rows
-6. Testimonials — Blockquote or Card with Rating component for stars
-7. Pricing — Card with List for features, Badge for highlighted plan
-8. FAQ — Accordion component
-9. Newsletter CTA — TextInput + Button in a styled Banner
-10. Footer — Flowbite Footer with Footer.LinkGroup, Footer.Brand, Footer.Copyright
+1. Navbar - Flowbite Navbar with Navbar.Brand, Navbar.Toggle, Navbar.Collapse
+2. Hero - Jumbotron-style, large Heading, Button group
+3. Social proof - row of client logos
+4. Features - Card components in responsive grid with icon badge, title, description
+5. Content - alternating image + text rows
+6. Testimonials - Blockquote or Card with Rating component for stars
+7. Pricing - Card with List for features, Badge for highlighted plan
+8. FAQ - Accordion component
+9. Newsletter CTA - TextInput + Button in a styled Banner
+10. Footer - Flowbite Footer with Footer.LinkGroup, Footer.Brand, Footer.Copyright
 
 CODE QUALITY:
 - Fully responsive (components are responsive by default)
@@ -401,16 +401,16 @@ DESIGN PRINCIPLES:
 - Large section padding (py-16 to py-24)
 
 SECTIONS TO BUILD WITH PRELINE PATTERNS:
-1. Navbar — header component with mega menu support, sticky on scroll
-2. Hero — centered or split layout, large headline with gradient text, two CTA buttons
-3. Social proof — logo ticker or static row with grayscale filter
-4. Features — icon + text cards in 3-column grid
-5. Tabs showcase — tab component showing different product features per tab
-6. Testimonials — grid or slider of testimonial cards
-7. Pricing — pricing table pattern with toggle for monthly/annual
-8. Stats — counter section with large numbers + labels
-9. FAQ — accordion component with smooth expand/collapse
-10. CTA + Footer — email input + button CTA above multi-column footer
+1. Navbar - header component with mega menu support, sticky on scroll
+2. Hero - centered or split layout, large headline with gradient text, two CTA buttons
+3. Social proof - logo ticker or static row with grayscale filter
+4. Features - icon + text cards in 3-column grid
+5. Tabs showcase - tab component showing different product features per tab
+6. Testimonials - grid or slider of testimonial cards
+7. Pricing - pricing table pattern with toggle for monthly/annual
+8. Stats - counter section with large numbers + labels
+9. FAQ - accordion component with smooth expand/collapse
+10. CTA + Footer - email input + button CTA above multi-column footer
 
 CODE QUALITY:
 - Fully responsive with Tailwind breakpoints
@@ -442,16 +442,16 @@ DESIGN PRINCIPLES:
 - Light/dark mode via Park UI's built-in theme tokens
 
 SECTIONS TO BUILD WITH PARK UI COMPONENTS:
-1. Navbar — navigation components, clean horizontal layout, mobile drawer
-2. Hero — Heading + Text with proper token sizing, Button pair (solid + outline)
-3. Social proof — subtle logo row with muted styling
-4. Features — Card components in grid with Icon, Heading, Text
-5. Tabs showcase — Tabs component for interactive product feature display
-6. Testimonials — Card-based layout with Avatar + quote
-7. Pricing — Card grid with Badge for recommended tier
-8. FAQ — Accordion component (Ark UI primitive, styled via Park UI)
-9. CTA — centered section with Input + Button
-10. Footer — grid layout with Link groups and Separator
+1. Navbar - navigation components, clean horizontal layout, mobile drawer
+2. Hero - Heading + Text with proper token sizing, Button pair (solid + outline)
+3. Social proof - subtle logo row with muted styling
+4. Features - Card components in grid with Icon, Heading, Text
+5. Tabs showcase - Tabs component for interactive product feature display
+6. Testimonials - Card-based layout with Avatar + quote
+7. Pricing - Card grid with Badge for recommended tier
+8. FAQ - Accordion component (Ark UI primitive, styled via Park UI)
+9. CTA - centered section with Input + Button
+10. Footer - grid layout with Link groups and Separator
 
 CODE QUALITY:
 - Fully responsive and accessible
@@ -483,16 +483,16 @@ DESIGN PRINCIPLES:
 - Focus on component quality and consistency over flashy animation
 
 SECTIONS TO BUILD:
-1. Navbar — choose from Origin UI's multiple navbar variants
-2. Hero — select a hero variant (centered, split, with background pattern)
-3. Social proof — logo cloud variant
-4. Features — pick feature section variant (grid, list, bento, with images)
-5. Content — alternating image/text sections
-6. Testimonials — choose testimonial variant (cards, quotes, carousel)
-7. Pricing — select pricing table variant (simple, comparison, with toggle)
-8. FAQ — accordion variant
-9. CTA — pick CTA variant (centered, with input, split layout)
-10. Footer — choose footer variant (simple, multi-column, with newsletter)
+1. Navbar - choose from Origin UI's multiple navbar variants
+2. Hero - select a hero variant (centered, split, with background pattern)
+3. Social proof - logo cloud variant
+4. Features - pick feature section variant (grid, list, bento, with images)
+5. Content - alternating image/text sections
+6. Testimonials - choose testimonial variant (cards, quotes, carousel)
+7. Pricing - select pricing table variant (simple, comparison, with toggle)
+8. FAQ - accordion variant
+9. CTA - pick CTA variant (centered, with input, split layout)
+10. Footer - choose footer variant (simple, multi-column, with newsletter)
 
 CODE QUALITY:
 - Fully responsive (all components are mobile-first)
@@ -515,43 +515,43 @@ Build a custom-designed, fully accessible landing page using Next.js 14+, TypeSc
 ARCHITECTURE:
 - Next.js App Router with Tailwind CSS for all styling
 - Headless UI only for interactive behavior (menus, dialogs, tabs, disclosure, transitions)
-- All visual design is custom Tailwind — Headless UI provides zero styling
+- All visual design is custom Tailwind - Headless UI provides zero styling
 - Organize: /app, /components/ui (custom-styled wrappers), /components/sections
 
 DESIGN PRINCIPLES:
-- Completely custom aesthetic — you control every pixel
+- Completely custom aesthetic - you control every pixel
 - Minimalist, editorial-quality design (think Stripe, Linear, Vercel)
 - Monochrome base with ONE signature accent color
 - Large whitespace, precise typography, meticulous alignment
 - Every interactive element is keyboard-navigable and screen-reader friendly
 
 SECTIONS TO BUILD:
-1. Navbar — custom with Headless UI Popover for dropdowns, Disclosure for mobile menu
-2. Hero — pure Tailwind, dramatic typography, clean CTAs
-3. Social proof — pure Tailwind logo row
-4. Features — custom card grid, optional Tab component for tabbed showcase
-5. Product showcase — TabGroup for interactive product views
-6. Testimonials — pure Tailwind card grid
-7. Pricing — RadioGroup for plan selection, Switch for monthly/annual toggle
-8. FAQ — Disclosure component for accessible expand/collapse
-9. CTA — pure Tailwind centered section
-10. Footer — pure Tailwind grid layout
+1. Navbar - custom with Headless UI Popover for dropdowns, Disclosure for mobile menu
+2. Hero - pure Tailwind, dramatic typography, clean CTAs
+3. Social proof - pure Tailwind logo row
+4. Features - custom card grid, optional Tab component for tabbed showcase
+5. Product showcase - TabGroup for interactive product views
+6. Testimonials - pure Tailwind card grid
+7. Pricing - RadioGroup for plan selection, Switch for monthly/annual toggle
+8. FAQ - Disclosure component for accessible expand/collapse
+9. CTA - pure Tailwind centered section
+10. Footer - pure Tailwind grid layout
 
 HEADLESS UI COMPONENTS TO LEVERAGE:
-- Popover — navbar dropdowns
-- Disclosure — mobile menu, FAQ items
-- Dialog — modals/overlays
-- Transition — smooth enter/leave animations
-- RadioGroup — plan selection
-- Switch — toggles
-- TabGroup — tabbed content
+- Popover - navbar dropdowns
+- Disclosure - mobile menu, FAQ items
+- Dialog - modals/overlays
+- Transition - smooth enter/leave animations
+- RadioGroup - plan selection
+- Switch - toggles
+- TabGroup - tabbed content
 
 CODE QUALITY:
 - 100% accessible (Headless UI's core guarantee)
 - Fully responsive custom Tailwind design
 - Keyboard navigation on all interactive elements
 - TypeScript with proper generics
-- Zero design dependencies — total creative control
+- Zero design dependencies - total creative control
 ```
 
 ---
@@ -578,16 +578,16 @@ DESIGN PRINCIPLES:
 - Purposeful animation that communicates AI/tech sophistication
 
 SECTIONS TO BUILD:
-1. Navbar — modern floating nav with glass effect
-2. Hero — bold headline with animated text effect, live demo or interactive element, gradient mesh background
-3. Features — AI blocks for feature cards, animated icons or micro-interactions
-4. Live demo — interactive component showing product in action
-5. Code showcase — syntax-highlighted code examples using Cult UI's code block components
-6. Testimonials — modern card layout with subtle animation
-7. Pricing — clean tier comparison with feature matrix
-8. Open source / community — GitHub stars counter, contributor avatars
-9. CTA — compelling action section with email input or waitlist signup
-10. Footer — developer-friendly footer with docs links, API reference, status page
+1. Navbar - modern floating nav with glass effect
+2. Hero - bold headline with animated text effect, live demo or interactive element, gradient mesh background
+3. Features - AI blocks for feature cards, animated icons or micro-interactions
+4. Live demo - interactive component showing product in action
+5. Code showcase - syntax-highlighted code examples using Cult UI's code block components
+6. Testimonials - modern card layout with subtle animation
+7. Pricing - clean tier comparison with feature matrix
+8. Open source / community - GitHub stars counter, contributor avatars
+9. CTA - compelling action section with email input or waitlist signup
+10. Footer - developer-friendly footer with docs links, API reference, status page
 
 CODE QUALITY:
 - Full-stack patterns (API routes + client components)

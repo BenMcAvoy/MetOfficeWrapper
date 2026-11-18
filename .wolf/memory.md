@@ -8,9 +8,9 @@
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
 | 08:54 | Edited src/lib/cache.ts | added error handling | ~105 |
-| 08:54 | Created src/lib/settings.ts | — | ~507 |
+| 08:54 | Created src/lib/settings.ts | - | ~507 |
 | 08:54 | Edited src/lib/units.ts | modified msToKnots() | ~258 |
-| 08:55 | Created src/components/SettingsPage.tsx | — | ~3128 |
+| 08:55 | Created src/components/SettingsPage.tsx | - | ~3128 |
 | 08:56 | Edited src/App.tsx | added 2 import(s) | ~314 |
 | 08:56 | Edited src/App.tsx | CSS: geohash, name, liveWindId | ~97 |
 | 08:56 | Edited src/App.tsx | modified catch() | ~270 |
@@ -41,7 +41,7 @@
 | 09:00 | Edited src/components/RaceCalendar.tsx | 1→3 lines | ~42 |
 | 09:00 | Edited src/components/RaceCalendar.tsx | inline fix | ~50 |
 | 09:00 | Edited src/components/RaceCalendar.tsx | inline fix | ~52 |
-| 19:00 | Edited src/components/WindCard.tsx | — | ~0 |
+| 19:00 | Edited src/components/WindCard.tsx | - | ~0 |
 | 19:00 | Edited src/components/WindCard.tsx | 3→2 lines | ~30 |
 | 19:01 | Edited src/components/RaceCalendar.tsx | modified if() | ~117 |
 | 19:01 | Session end: 37 writes across 8 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 9 reads | ~19140 tok |
@@ -49,10 +49,10 @@
 | 19:23 | Edited src/App.tsx | removed 24 lines | ~45 |
 | 19:24 | Edited src/App.tsx | added 1 condition(s) | ~268 |
 | 19:24 | Session end: 40 writes across 8 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 10 reads | ~23579 tok |
-| 19:38 | Created src/lib/metofficeScrape.ts | — | ~2671 |
+| 19:38 | Created src/lib/metofficeScrape.ts | - | ~2671 |
 | 19:41 | Edited src/lib/metofficeScrape.ts | modified sliceSection() | ~162 |
 | 19:42 | Edited src/lib/metofficeScrape.ts | 4→6 lines | ~90 |
-| 19:42 | Created api/forecast.ts | — | ~232 |
+| 19:42 | Created api/forecast.ts | - | ~232 |
 | 19:43 | Edited vite.config.ts | added 1 import(s) | ~105 |
 | 19:43 | Edited vite.config.ts | added error handling | ~165 |
 | 19:43 | Edited src/lib/api.ts | added error handling | ~289 |
@@ -73,12 +73,12 @@
 | 20:47 | Edited src/lib/cache.ts | 15 → 30 | ~8 |
 | 20:47 | Session end: 57 writes across 12 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 13 reads | ~28240 tok |
 | 20:59 | Edited src/lib/metofficeScrape.ts | added 1 condition(s) | ~162 |
-| 21:00 | Created api/admin/clear-cache.ts | — | ~427 |
+| 21:00 | Created api/admin/clear-cache.ts | - | ~427 |
 | 21:00 | Edited vite.config.ts | inline fix | ~27 |
 | 21:00 | Edited vite.config.ts | added optional chaining | ~204 |
 | 21:00 | Edited api/forecast.ts | 4→5 lines | ~111 |
 | 21:01 | Session end: 62 writes across 13 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 13 reads | ~29171 tok |
-| 21:02 | Created api/admin/clear-cache.ts | — | ~314 |
+| 21:02 | Created api/admin/clear-cache.ts | - | ~314 |
 | 21:02 | Edited vite.config.ts | modified if() | ~140 |
 | 21:02 | Session end: 64 writes across 13 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 13 reads | ~29625 tok |
 | 16:50 | Session end: 64 writes across 13 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 13 reads | ~29625 tok |
@@ -88,14 +88,14 @@
 | 16:58 | Edited src/components/charts.tsx | CSS: position | ~284 |
 | 16:58 | Edited src/components/charts.tsx | modified TideChartInner() | ~114 |
 | 16:58 | Edited src/components/charts.tsx | added optional chaining | ~294 |
-| 16:58 | Created src/components/WindChartCard.tsx | — | ~362 |
+| 16:58 | Created src/components/WindChartCard.tsx | - | ~362 |
 | 16:58 | Edited src/components/WindCard.tsx | added 1 import(s) | ~248 |
 | 16:58 | Edited src/components/WindCard.tsx | inline fix | ~47 |
 | 16:58 | Edited src/components/WindCard.tsx | 7→8 lines | ~84 |
 | 16:58 | Edited src/components/TideChart.tsx | added 1 import(s) | ~151 |
 | 16:59 | Edited src/components/TideChart.tsx | inline fix | ~28 |
 | 16:59 | Edited src/components/TideChart.tsx | 7→8 lines | ~74 |
-| 16:59 | Created src/components/EventsStrip.tsx | — | ~2232 |
+| 16:59 | Created src/components/EventsStrip.tsx | - | ~2232 |
 | 16:59 | Edited src/App.tsx | added 2 import(s) | ~384 |
 | 17:00 | Edited src/App.tsx | 6→5 lines | ~70 |
 | 17:00 | Edited src/App.tsx | 11→6 lines | ~62 |
@@ -104,7 +104,7 @@
 | 17:01 | Session end: 83 writes across 17 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 20 reads | ~35058 tok |
 | 17:02 | Edited src/App.tsx | added 2 condition(s) | ~176 |
 | 17:02 | Session end: 84 writes across 17 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 20 reads | ~35234 tok |
-| 17:04 | Created src/components/EventsStrip.tsx | — | ~2044 |
+| 17:04 | Created src/components/EventsStrip.tsx | - | ~2044 |
 | 17:04 | Edited src/components/charts.tsx | removed 2 lines | ~10 |
 | 17:04 | Edited src/App.tsx | inline fix | ~21 |
 | 17:04 | Edited src/App.tsx | 32→37 lines | ~514 |
@@ -148,7 +148,7 @@
 | 17:26 | Edited src/components/charts.tsx | 13→15 lines | ~162 |
 | 17:27 | Edited src/components/charts.tsx | modified TideChartInner() | ~145 |
 | 17:27 | Edited src/components/charts.tsx | reduced (-9 lines) | ~383 |
-| 17:27 | Created src/components/WindChartCard.tsx | — | ~355 |
+| 17:27 | Created src/components/WindChartCard.tsx | - | ~355 |
 | 17:27 | Edited src/components/WindCard.tsx | inline fix | ~16 |
 | 17:27 | Edited src/components/WindCard.tsx | 3→2 lines | ~8 |
 | 17:27 | Edited src/components/WindCard.tsx | inline fix | ~45 |
@@ -169,9 +169,9 @@
 | 17:33 | Edited src/components/charts.tsx | modified WindReadoutStrip() | ~315 |
 | 17:33 | Edited src/components/charts.tsx | 8→7 lines | ~59 |
 | 17:33 | Edited src/components/charts.tsx | CSS: fillOpacity | ~178 |
-| 17:33 | Edited src/components/charts.tsx | — | ~0 |
+| 17:33 | Edited src/components/charts.tsx | - | ~0 |
 | 17:33 | Session end: 144 writes across 17 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 20 reads | ~55183 tok |
-| 17:34 | Edited src/App.tsx | — | ~0 |
+| 17:34 | Edited src/App.tsx | - | ~0 |
 | 17:34 | Edited src/App.tsx | inline fix | ~17 |
 | 17:34 | Session end: 146 writes across 17 files (cache.ts, settings.ts, units.ts, SettingsPage.tsx, App.tsx) | 20 reads | ~55200 tok |
 
@@ -219,7 +219,7 @@
 | 20:47 | Edited src/components/charts.tsx | 11→6 lines | ~114 |
 | 20:47 | Edited src/components/charts.tsx | removed 2 lines | ~2 |
 | 20:47 | Edited src/components/charts.tsx | 7→9 lines | ~67 |
-| 20:47 | Edited src/components/charts.tsx | — | ~0 |
+| 20:47 | Edited src/components/charts.tsx | - | ~0 |
 | 20:47 | Session end: 13 writes across 1 files (charts.tsx) | 1 reads | ~5554 tok |
 | 20:49 | Edited src/main.tsx | added optional chaining | ~559 |
 | 20:49 | Session end: 14 writes across 2 files (charts.tsx, main.tsx) | 1 reads | ~6113 tok |
@@ -255,7 +255,7 @@
 | 21:03 | designqc: captured 4 screenshots (122KB, ~10000 tok) | / | ready for eval | ~0 |
 | 21:03 | mobile polish: scroll fade on date selector, relative "Xm ago" header timestamp, fixed Hourly Breakdown header alignment | App.tsx, WindCard.tsx | ok | ~3k |
 | 21:03 | Session end: 7 writes across 2 files (App.tsx, WindCard.tsx) | 4 reads | ~766 tok |
-| 21:07 | Created src/lib/haptics.ts | — | ~213 |
+| 21:07 | Created src/lib/haptics.ts | - | ~213 |
 | 21:07 | Edited src/App.tsx | added 1 import(s) | ~23 |
 | 21:07 | Edited src/App.tsx | 4→4 lines | ~39 |
 | 21:07 | Edited src/App.tsx | modified if() | ~61 |
@@ -267,7 +267,7 @@
 | 21:08 | Edited src/components/RaceCalendar.tsx | 3→3 lines | ~31 |
 | 21:08 | Edited src/index.css | expanded (+26 lines) | ~244 |
 | 21:08 | Edited src/components/RaceCalendar.tsx | modified if() | ~136 |
-| 21:08 | Created src/lib/useSwipe.ts | — | ~634 |
+| 21:08 | Created src/lib/useSwipe.ts | - | ~634 |
 | 21:09 | Edited src/components/RaceCalendar.tsx | added 1 import(s) | ~32 |
 | 21:09 | Edited src/components/RaceCalendar.tsx | modified if() | ~132 |
 | 21:09 | Edited src/components/RaceCalendar.tsx | modified EventDetailContainer() | ~111 |
@@ -313,25 +313,25 @@
 | 21:21 | Edited src/lib/calendar.ts | "CHRISTMAS EVE" → "Christmas Eve" | ~5 |
 | 21:21 | Edited src/lib/calendar.ts | "CHRISTMAS DAY (BANK HOLID" → "Christmas Day (Bank Holid" | ~9 |
 | 21:22 | Edited src/lib/calendar.ts | "BOXING DAY (BANK HOLIDAY)" → "Boxing Day (Bank Holiday)" | ~8 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - ALDERNEY R" → "PYRA — Poole to Alderney " | ~9 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA - ALDERNEY - POOLE R" → "PYRA — Alderney to Poole " | ~9 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - COWES RACE" → "PYRA — Poole to Cowes Rac" | ~8 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - LYMINGTON" → "PYRA — Poole to Lymington" | ~8 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA -LYMINGTON - POOLE" → "PYRA — Lymington to Poole" | ~8 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - CHERBOURG" → "PYRA — Poole to Cherbourg" | ~8 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA -CHERBOURG - POOLE" → "PYRA — Cherbourg to Poole" | ~8 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA -POOLE - HAMBLE" → "PYRA — Poole to Hamble" | ~7 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA -HAMBLE - POOLE" → "PYRA — Hamble to Poole" | ~7 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA -POOLE - ALDERNEY" → "PYRA — Poole to Alderney" | ~8 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA - ALDERNEY - GUERNSE" → "PYRA — Alderney to Guerns" | ~9 |
-| 21:22 | Edited src/lib/calendar.ts | "PYRA - 2 HANDED RACE" → "PYRA — Two Handed Race" | ~7 |
-| 21:23 | Edited src/lib/calendar.ts | "PYRA - RNLI PURSUIT RACE" → "PYRA — RNLI Pursuit Race" | ~8 |
-| 21:23 | Edited src/lib/calendar.ts | "PYRA - POOLE - ST VAAST" → "PYRA — Poole to St Vaast" | ~8 |
-| 21:23 | Edited src/lib/calendar.ts | "PYRA - ST VAAST - POOLE" → "PYRA — St Vaast to Poole" | ~8 |
-| 21:23 | Edited src/lib/calendar.ts | "PYRA - POOLE - COWES" → "PYRA — Poole to Cowes" | ~7 |
-| 21:23 | Edited src/lib/calendar.ts | "PYRA - COWES - POOLE" → "PYRA — Cowes to Poole" | ~7 |
-| 21:23 | Edited src/lib/calendar.ts | "PYRA - POOLE - WEYMOUTH" → "PYRA — Poole to Weymouth" | ~8 |
-| 21:23 | Edited src/lib/calendar.ts | "PYRA - WEYMOUTH - POOLE" → "PYRA — Weymouth to Poole" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - ALDERNEY R" → "PYRA - Poole to Alderney " | ~9 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - ALDERNEY - POOLE R" → "PYRA - Alderney to Poole " | ~9 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - COWES RACE" → "PYRA - Poole to Cowes Rac" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - LYMINGTON" → "PYRA - Poole to Lymington" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -LYMINGTON - POOLE" → "PYRA - Lymington to Poole" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - POOLE - CHERBOURG" → "PYRA - Poole to Cherbourg" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -CHERBOURG - POOLE" → "PYRA - Cherbourg to Poole" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -POOLE - HAMBLE" → "PYRA - Poole to Hamble" | ~7 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -HAMBLE - POOLE" → "PYRA - Hamble to Poole" | ~7 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA -POOLE - ALDERNEY" → "PYRA - Poole to Alderney" | ~8 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - ALDERNEY - GUERNSE" → "PYRA - Alderney to Guerns" | ~9 |
+| 21:22 | Edited src/lib/calendar.ts | "PYRA - 2 HANDED RACE" → "PYRA - Two Handed Race" | ~7 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - RNLI PURSUIT RACE" → "PYRA - RNLI Pursuit Race" | ~8 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - POOLE - ST VAAST" → "PYRA - Poole to St Vaast" | ~8 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - ST VAAST - POOLE" → "PYRA - St Vaast to Poole" | ~8 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - POOLE - COWES" → "PYRA - Poole to Cowes" | ~7 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - COWES - POOLE" → "PYRA - Cowes to Poole" | ~7 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - POOLE - WEYMOUTH" → "PYRA - Poole to Weymouth" | ~8 |
+| 21:23 | Edited src/lib/calendar.ts | "PYRA - WEYMOUTH - POOLE" → "PYRA - Weymouth to Poole" | ~8 |
 | 21:23 | Edited src/lib/calendar.ts | "STUDLAND TROPHY RACE" → "Studland Trophy Race" | ~7 |
 | 21:23 | Edited src/lib/calendar.ts | "LAKESHORE CUP" → "Lakeshore Cup" | ~5 |
 | 21:23 | Edited src/lib/calendar.ts | "WAREHAM TROPHY RACE" → "Wareham Trophy Race" | ~6 |
@@ -358,7 +358,7 @@
 | 21:25 | Edited src/lib/calendar.ts | "IOCA UK CHAMPIONSHIPS" → "IOCA UK Championships" | ~7 |
 | 21:25 | Edited src/lib/calendar.ts | "ZENITH, ZEN & ZEN2 NATION" → "Zenith, Zen & Zen2 Nation" | ~9 |
 | 21:25 | Edited src/lib/calendar.ts | "ITCA (topper) INVITATIONA" → "ITCA Topper Invitational " | ~13 |
-| 21:25 | Edited src/lib/calendar.ts | "ISC - ROUND THE ISLAND RA" → "ISC — Round the Island Ra" | ~10 |
+| 21:25 | Edited src/lib/calendar.ts | "ISC - ROUND THE ISLAND RA" → "ISC - Round the Island Ra" | ~10 |
 | 21:26 | Edited src/lib/calendar.ts | added 15 condition(s) | ~626 |
 | 21:26 | Edited src/components/RaceCalendar.tsx | added 1 import(s) | ~194 |
 | 21:26 | Edited src/components/RaceCalendar.tsx | modified parseEventTime() | ~811 |
@@ -411,13 +411,13 @@
 | 23:32 | Session end: 4 writes across 2 files (calendar.ts, RaceCalendar.tsx) | 2 reads | ~578 tok |
 | 23:34 | Edited src/lib/calendar.ts | added 1 condition(s) | ~224 |
 | 23:34 | Edited src/lib/calendar.ts | 5→5 lines | ~118 |
-| 23:35 | Created _cat_audit.ts | — | ~128 |
+| 23:35 | Created _cat_audit.ts | - | ~128 |
 | 23:35 | Session end: 7 writes across 3 files (calendar.ts, RaceCalendar.tsx, _cat_audit.ts) | 2 reads | ~1048 tok |
 | 23:37 | Edited src/lib/calendar.ts | added 2 condition(s) | ~268 |
 | 23:37 | Edited src/lib/calendar.ts | 13→15 lines | ~66 |
 | 23:37 | Edited src/components/RaceCalendar.tsx | inline fix | ~56 |
 | 23:38 | Edited src/components/RaceCalendar.tsx | CSS: pursuit, special | ~178 |
-| 23:38 | Created _cat_audit.ts | — | ~128 |
+| 23:38 | Created _cat_audit.ts | - | ~128 |
 | 23:38 | Session end: 12 writes across 3 files (calendar.ts, RaceCalendar.tsx, _cat_audit.ts) | 2 reads | ~1744 tok |
 
 ## Session: 2026-05-20 23:39
@@ -453,7 +453,7 @@
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 08:25 | Created api/marine.ts | — | ~464 |
+| 08:25 | Created api/marine.ts | - | ~464 |
 | 08:25 | Edited src/lib/api.ts | expanded (+11 lines) | ~89 |
 | 08:25 | Edited src/lib/api.ts | added nullish coalescing | ~324 |
 | 08:25 | Edited src/lib/cache.ts | "1" → "2" | ~8 |
@@ -484,10 +484,10 @@
 | 08:38 | Edited src/components/charts.tsx | expanded (+14 lines) | ~213 |
 | 08:38 | Edited src/components/TideChart.tsx | added optional chaining | ~89 |
 | 08:39 | Session end: 19 writes across 6 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 7 reads | ~12413 tok |
-| 08:50 | Created api/marine.ts | — | ~729 |
+| 08:50 | Created api/marine.ts | - | ~729 |
 | 08:50 | Edited src/lib/api.ts | expanded (+10 lines) | ~61 |
 | 08:50 | Edited src/lib/api.ts | added nullish coalescing | ~477 |
-| 08:51 | Created src/components/TideMap.tsx | — | ~1503 |
+| 08:51 | Created src/components/TideMap.tsx | - | ~1503 |
 | 08:51 | Edited src/components/TideChart.tsx | CSS: lat, lon, locationName | ~46 |
 | 08:51 | Edited src/components/TideChart.tsx | 1→4 lines | ~44 |
 | 08:51 | Edited src/components/TideChart.tsx | inline fix | ~33 |
@@ -584,9 +584,9 @@
 | 10:05 | Edited src/components/TideMap.tsx | modified cellDegForZoom() | ~256 |
 | 10:05 | Edited src/components/TideMap.tsx | modified buildGridPoints() | ~139 |
 | 10:05 | Edited src/components/TideMap.tsx | inline fix | ~20 |
-| 10:05 | Edited src/components/TideMap.tsx | — | ~0 |
+| 10:05 | Edited src/components/TideMap.tsx | - | ~0 |
 | 10:06 | Edited src/components/TideMap.tsx | 11→10 lines | ~76 |
-| 10:06 | Edited src/components/TideMap.tsx | — | ~0 |
+| 10:06 | Edited src/components/TideMap.tsx | - | ~0 |
 | 10:06 | Edited src/components/TideMap.tsx | inline fix | ~16 |
 | 10:06 | designqc: captured 2 screenshots (65KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
 | 10:08 | Edited src/components/TideMap.tsx | CSS: sampling | ~76 |
@@ -609,7 +609,7 @@
 | 10:20 | designqc: captured 2 screenshots (65KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
 | 10:20 | designqc: captured 2 screenshots (65KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
 | 10:22 | Edited src/components/TideMap.tsx | modified for() | ~406 |
-| 10:22 | Edited src/components/TideMap.tsx | — | ~0 |
+| 10:22 | Edited src/components/TideMap.tsx | - | ~0 |
 | 10:23 | Edited src/components/TideMap.tsx | 7→7 lines | ~134 |
 | 10:24 | designqc: captured 2 screenshots (67KB, ~5000 tok) | /?tab=tides | ready for eval | ~0 |
 | 10:24 | Session end: 115 writes across 8 files (marine.ts, api.ts, cache.ts, App.tsx, TideChart.tsx) | 11 reads | ~37992 tok |
@@ -630,7 +630,7 @@
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 13:37 | Created src/components/HomePage.tsx | — | ~3976 |
+| 13:37 | Created src/components/HomePage.tsx | - | ~3976 |
 | 13:38 | Edited src/components/HomePage.tsx | 3→3 lines | ~56 |
 | 13:38 | Edited src/App.tsx | 7→7 lines | ~80 |
 | 13:38 | Edited src/App.tsx | 2→2 lines | ~39 |
@@ -642,7 +642,7 @@
 | 12:45 | add HomePage + Home tab; lift ConditionsHeader off Wind tab | src/components/HomePage.tsx, src/App.tsx | ok, tsc clean | ~2k |
 | 13:39 | Session end: 9 writes across 2 files (HomePage.tsx, App.tsx) | 6 reads | ~25239 tok |
 | 14:44 | Edited src/App.tsx | 9→11 lines | ~109 |
-| 14:45 | Created src/components/HomePage.tsx | — | ~5051 |
+| 14:45 | Created src/components/HomePage.tsx | - | ~5051 |
 | 14:45 | Edited src/components/HomePage.tsx | 3→3 lines | ~32 |
 | 12:55 | rebuild HomePage cards as charts (forecast-vs-live wind, 24h tide curve); drop Today card | src/components/HomePage.tsx, src/App.tsx | ok, tsc clean | ~3k |
 | 14:46 | Session end: 12 writes across 2 files (HomePage.tsx, App.tsx) | 8 reads | ~36157 tok |
@@ -706,17 +706,17 @@
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 17:06 | Created ../.claude/projects/C--Users-Ben-metofficewrapper/memory/sailing-suitability-feature-goal.md | — | ~1830 |
-| 17:06 | Created ../.claude/projects/C--Users-Ben-metofficewrapper/memory/MEMORY.md | — | ~43 |
+| 17:06 | Created ../.claude/projects/C--Users-Ben-metofficewrapper/memory/sailing-suitability-feature-goal.md | - | ~1830 |
+| 17:06 | Created ../.claude/projects/C--Users-Ben-metofficewrapper/memory/MEMORY.md | - | ~43 |
 | 17:06 | Session end: 2 writes across 2 files (sailing-suitability-feature-goal.md, MEMORY.md) | 3 reads | ~15765 tok |
 
 ## Session: 2026-05-21 17:06
 
 | Time | Action | File(s) | Outcome | ~Tokens |
 |------|--------|---------|---------|--------|
-| 17:10 | Created src/lib/sailingScore.ts | — | ~3282 |
+| 17:10 | Created src/lib/sailingScore.ts | - | ~3282 |
 | 17:10 | Edited src/lib/sailingScore.ts | modified directionFactor() | ~136 |
-| 17:10 | Edited src/lib/sailingScore.ts | — | ~0 |
+| 17:10 | Edited src/lib/sailingScore.ts | - | ~0 |
 | 17:11 | Edited src/components/HomePage.tsx | expanded (+7 lines) | ~154 |
 | 17:11 | Edited src/components/HomePage.tsx | added nullish coalescing | ~3282 |
 | 17:12 | Edited src/components/HomePage.tsx | inline fix | ~17 |
